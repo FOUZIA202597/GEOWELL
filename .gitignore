@@ -1,0 +1,95 @@
+node_modules/
+
+# Large data files (too big for GitHub)
+data/qgis_live_data.js
+data/georeferenced/
+.env
+git_push_log.txt
+_geowell_deploy/
+
+# Archives
+*.zip
+*.rar
+
+# QGIS backups
+*.qgs~
+*.qgs
+GeoWell_Project.qgs
+GeoWell_Project.qgs~
+GeoWell_Project_attachments.zip
+GeoWell_Simple.qgs
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Large binary files
+*.vsix
+ms-python.python-*.vsix
+
+# Shapefiles (generated locally)
+shapefiles/
+
+# Prisma
+prisma/
+
+# Server (not needed for static deploy)
+server.js
+package.json
+package-lock.json
+
+# Scripts not needed on server
+fix_analytics.js
+fix_analytics.ps1
+fix_analytics.py
+fix_button.py
+fix_encoding.py
+cleanup_index.py
+generate_shapefiles.py
+convert_qgis_data.bat
+install_automation.bat
+inject_ai_panels.ps1
+launch_full_system.bat
+launch_qgis_auto.bat
+setup_qgis_auto.ps1
+setup_qgis_bridge.bat
+push_to_geowell.bat
+push_to_github.ps1
+qgis_auto_connect.py
+qgis_sync_tool.py
+DEPLOY_NOW.bat
+فتح_بدون_كلمة_سر.bat
+start_server.bat
+RUN_GENERATE_SHAPEFILES.bat
+Launch_Everything.bat
+
+# QGIS plugin (local only)
+QGIS GEO WELL/
+qgis_plugin/
+
+# MD guides (keep README)
+QGIS_CONNECTION_GUIDE.md
+QGIS_GUIDE_FINAL_AR.md
+QGIS_INTEGRATION_FINAL.md
+QGIS_REALTIME_GUIDE.md
+README_AR.md
+
+# Other large/unnecessary
+pg_service.conf
+test_bridge.html
+Edit)
+SCR.geojson
+SCR.qmd
+create_dummy_layers.sql
+create_gis_layers.sql
+database_setup.sql
+landing-react/
