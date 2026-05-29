@@ -1465,24 +1465,37 @@ window.updateGISDairas = function (wilaya) {
 };
 
 function initFullMap() {
-    // Initialize full map if it doesn't exist yet
-    if (!window.fullMap && typeof wellMap !== 'undefined') {
-        const container = document.getElementById('map-full');
-        if (container) {
-            try {
-                window.fullMap = new wellMap('map-full');
-                console.log("Full screen map initialized.");
-            } catch (e) {
-                console.error("Full Map Init Error:", e);
+    // Initialize full map if it doesn't exist yet, defer execution to allow DOM repaint
+    setTimeout(() => {
+        if (!window.fullMap && typeof wellMap !== 'undefined') {
+            const container = document.getElementById('map-full');
+            if (container) {
+                try {
+                    window.fullMap = new wellMap('map-full');
+                    console.log("Full screen map initialized.");
+                } catch (e) {
+                    console.error("Full Map Init Error:", e);
+                }
             }
         }
-    }
-    
-    // Leaflet Resize - required when container becomes visible
-    if (window.fullMap && window.fullMap.map) {
-        setTimeout(() => window.fullMap.map.invalidateSize(), 50);
-        setTimeout(() => window.fullMap.map.invalidateSize(), 200);
-    }
+        
+        // Leaflet Resize - required when container becomes visible
+        if (window.fullMap && window.fullMap.map) {
+            window.fullMap.map.invalidateSize();
+            setTimeout(() => window.fullMap.map.invalidateSize(), 300);
+            
+            // Force fitBounds after invalidateSize just in case it was missed
+            if (window.mockData && window.mockData.rigs) {
+                try {
+                    const group = L.featureGroup();
+                    window.mockData.rigs.forEach(r => {
+                        group.addLayer(L.marker([r.lat, r.lng]));
+                    });
+                    window.fullMap.map.fitBounds(group.getBounds());
+                } catch(e){}
+            }
+        }
+    }, 50);
 }
 
 // Auto-run on load
