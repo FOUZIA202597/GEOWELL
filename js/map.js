@@ -335,30 +335,7 @@ class wellMap {
 window.mainMap = null; // Dashboard map
 window.fullMap = null; // Fullscreen map
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Dashboard Map
-    if (document.getElementById('map')) {
-        window.mainMap = new wellMap('map');
-    }
-    
-    // Full Screen Map
-    if (document.getElementById('map-full')) {
-        console.log("[Leaflet] Initializing Full Screen Map...");
-        window.fullMap = new wellMap('map-full');
-        
-        // ADD LAYER CONTROLS
-        const baseMaps = {
-            "Normal Map": L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }),
-            "Satellite (Google Earth)": L.tileLayer('http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}', { attribution: '&copy; Google Maps' })
-        };
-        L.control.layers(baseMaps).addTo(window.fullMap.map);
-
-        // FORCE INITIAL RESIZE
-        setTimeout(() => {
-            if (window.fullMap && window.fullMap.map) window.fullMap.map.invalidateSize();
-        }, 500);
-    }
-});
+// Removed redundant DOMContentLoaded block to prevent double-initialization and conflicting base maps
 
 window.resetWellPosition = function(wellId) {
     const well = mockData.rigs.find(w => w.id === wellId);
@@ -376,12 +353,17 @@ window.changeBasemap = function(type) {
     try {
         if (window.mainMap) window.mainMap.changeBaseLayer(type);
         if (window.fullMap) window.fullMap.changeBaseLayer(type);
+        
+        if (typeof showToast === 'function') {
+            showToast("Map changed to: " + type, 'info');
+        }
     } catch (e) {
         console.error("Error changing basemap:", e);
+        if (typeof showToast === 'function') showToast("Error changing map", 'error');
     }
 
     // Update active button state for any button that triggers this map type
-    document.querySelectorAll('button[onclick^="changeBasemap"]').forEach(btn => {
+    document.querySelectorAll('button[onclick*="changeBasemap"]').forEach(btn => {
         btn.classList.remove('active');
         if (btn.getAttribute('onclick').includes("'" + type + "'")) {
             btn.classList.add('active');
