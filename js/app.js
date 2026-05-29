@@ -1465,6 +1465,19 @@ window.updateGISDairas = function (wilaya) {
 };
 
 function initFullMap() {
+    // Initialize full map if it doesn't exist yet
+    if (!window.fullMap && typeof wellMap !== 'undefined') {
+        const container = document.getElementById('map-full');
+        if (container) {
+            try {
+                window.fullMap = new wellMap('map-full');
+                console.log("Full screen map initialized.");
+            } catch (e) {
+                console.error("Full Map Init Error:", e);
+            }
+        }
+    }
+    
     // Leaflet Resize - required when container becomes visible
     if (window.fullMap && window.fullMap.map) {
         setTimeout(() => window.fullMap.map.invalidateSize(), 50);

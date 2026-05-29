@@ -372,9 +372,8 @@ window.resetWellPosition = function(wellId) {
 };
 
 function changeBasemap(type) {
-    if (!mainMap) return;
-
-    mainMap.changeBaseLayer(type);
+    if (window.mainMap) window.mainMap.changeBaseLayer(type);
+    if (window.fullMap) window.fullMap.changeBaseLayer(type);
 
     // Update active button state
     document.querySelectorAll('.card-actions .sm-btn').forEach(btn => btn.classList.remove('active'));
