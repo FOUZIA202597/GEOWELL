@@ -372,20 +372,19 @@ window.resetWellPosition = function(wellId) {
     }
 };
 
-function changeBasemap(type) {
-    if (window.mainMap) window.mainMap.changeBaseLayer(type);
-    if (window.fullMap) window.fullMap.changeBaseLayer(type);
-
-    // Update active button state
-    document.querySelectorAll('.card-actions .sm-btn').forEach(btn => btn.classList.remove('active'));
-    if (type === 'street-map') {
-        const btn = document.getElementById('btnMapStreets');
-        if (btn) btn.classList.add('active');
-    } else if (type === 'satellite') {
-        const btn = document.getElementById('btnMapSatellite');
-        if (btn) btn.classList.add('active');
-    } else if (type === 'earth') {
-        const btn = document.getElementById('btnMapEarth');
-        if (btn) btn.classList.add('active');
+window.changeBasemap = function(type) {
+    try {
+        if (window.mainMap) window.mainMap.changeBaseLayer(type);
+        if (window.fullMap) window.fullMap.changeBaseLayer(type);
+    } catch (e) {
+        console.error("Error changing basemap:", e);
     }
-}
+
+    // Update active button state for any button that triggers this map type
+    document.querySelectorAll('button[onclick^="changeBasemap"]').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick').includes("'" + type + "'")) {
+            btn.classList.add('active');
+        }
+    });
+};
