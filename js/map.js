@@ -15,11 +15,10 @@ class wellMap {
             editable: true 
         }).setView([31.5, 5.5], 8);
 
-        // Start with OpenStreetMap (Street View)
-        this.baseLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
-            attribution: '&copy; Google Maps',
-            maxZoom: 22,
-            maxNativeZoom: 20
+        // Start with OpenStreetMap (Street View) — free, no CORS
+        this.baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
         }).addTo(this.map);
 
         // Initialize marker layer group
@@ -187,23 +186,24 @@ class wellMap {
         let attribution = '';
 
         if (type === 'street-map') {
-            // GOOGLE TERRAIN (Requested: Relief/Plan)
-            url = 'https://mt1.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}';
-            attribution = '&copy; Google Maps Terrain';
+            // OpenTopoMap — Terrain/Relief (free, no CORS)
+            url = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+            attribution = '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> | &copy; OpenStreetMap contributors';
         } else if (type === 'satellite') {
-            // GOOGLE HYBRID (Requested: Satellite + Legend/Labels)
-            url = 'https://mt1.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}';
-            attribution = '&copy; Google Maps Satellite';
+            // Esri World Imagery — Satellite (free, works everywhere)
+            url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+            attribution = '&copy; Esri, Maxar, Earthstar Geographics';
         } else if (type === 'earth') {
-            // GOOGLE SATELLITE (No labels - Earth Style)
-            url = 'https://mt1.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}';
-            attribution = '&copy; Google Earth Imagery';
+            // Esri World Imagery with labels overlay
+            url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+            attribution = '&copy; Esri World Imagery';
         } else if (type === 'dark') {
             url = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-            attribution = '&copy; CARTO';
+            attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | &copy; <a href="https://carto.com/">CARTO</a>';
         } else {
-            url = 'https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}';
-            attribution = '&copy; Google Maps';
+            // Default: OpenStreetMap Standard
+            url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+            attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
         }
 
         this.baseLayer = L.tileLayer(url, {
