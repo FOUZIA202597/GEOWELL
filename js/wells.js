@@ -607,6 +607,37 @@ window.openMeasurementFromMap = function(id) {
     document.getElementById('logModal').classList.add('active');
 };
 
+// Handle Well Image Upload
+window.handleWellImageUpload = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const wellIdEl = document.getElementById('detailWellId');
+    if (!wellIdEl) return;
+    const wellId = wellIdEl.innerText;
+    
+    const well = mockData.rigs.find(w => w.id === wellId);
+    if (!well) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        well.image = dataUrl;
+        
+        // Update images in UI
+        const images = document.querySelectorAll('#detailWellImage, #detailWellImageLarge');
+        images.forEach(img => img.src = dataUrl);
+        
+        // Save to storage
+        saveToLocalStorage();
+        
+        if (typeof showToast === 'function') {
+            showToast('تم رفع الصورة بنجاح', 'success');
+        }
+    };
+    reader.readAsDataURL(file);
+};
+
 // --- PERSISTENCE HELPERS ---
 function saveToLocalStorage() {
     localStorage.setItem('geoWell_rigs', JSON.stringify(mockData.rigs));
