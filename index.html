@@ -755,38 +755,35 @@
                             <h3 id="detailWellName">Well Name</h3>
                         </div>
                         <div class="profile-content" style="padding: 1rem;">
-                            <div class="well-image-large"
-                                style="width: 100%; height: 200px; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
-                                <img id="detailWellImage" src="" alt="Well Image"
-                                    style="width: 100%; height: 100%; object-fit: cover;">
+                            <!-- Well Avatar Icon (No Duplicate Image) -->
+                            <div style="width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem;">
+                                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #00d4ff22, #0a4d6633); border: 3px solid var(--accent-primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0,212,255,0.3);">
+                                    <i class="fa-solid fa-water-ladder" style="font-size: 2rem; color: var(--accent-primary);"></i>
+                                </div>
                             </div>
-                            <div class="status-indicator" style="margin-bottom: 1rem;">
+                            <div class="status-indicator" style="margin-bottom: 1rem; text-align: center;">
                                 <span id="detailWellStatus" class="status-badge">Status</span>
                             </div>
                             <div class="mini-stats" style="display: flex; flex-direction: column; gap: 0.8rem;">
                                 <div class="mini-stat-item">
-                                    <label
-                                        style="display: block; color: var(--text-muted); font-size: 0.8em; text-transform: uppercase;">Well
-                                        ID</label>
-                                    <span id="detailWellId"
-                                        style="font-weight: 500; color: var(--accent-primary);"></span>
+                                    <label style="display: block; color: var(--text-muted); font-size: 0.8em; text-transform: uppercase;">Well ID</label>
+                                    <span id="detailWellId" style="font-weight: 500; color: var(--accent-primary);"></span>
                                 </div>
                                 <div class="mini-stat-item">
-                                    <label
-                                        style="display: block; color: var(--text-muted); font-size: 0.8em; text-transform: uppercase;">Hierarchy</label>
-                                    <span style="font-size: 0.9em;"><span id="detailWellCountry"></span> > <span
-                                            id="detailWellState"></span> > <span id="detailWellDistrict"></span></span>
+                                    <label style="display: block; color: var(--text-muted); font-size: 0.8em; text-transform: uppercase;">Hierarchy</label>
+                                    <span style="font-size: 0.9em;">
+                                        <span id="detailWellCountry"></span> &gt; 
+                                        <span id="detailWellState"></span> &gt; 
+                                        <span id="detailWellDistrict"></span>
+                                    </span>
                                 </div>
                                 <div class="mini-stat-item">
-                                    <label
-                                        style="display: block; color: var(--text-muted); font-size: 0.8em; text-transform: uppercase;">Type
-                                        / Usage</label>
+                                    <label style="display: block; color: var(--text-muted); font-size: 0.8em; text-transform: uppercase;">Type / Usage</label>
                                     <span id="detailWellType" style="font-weight: 500;"></span>
                                 </div>
                             </div>
-                            <!-- Mini Map Placeholder -->
-                            <div id="miniMap"
-                                style="height: 180px; border-radius: 8px; margin-top: 1.5rem; border: 1px solid var(--border-color); background: #111; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                            <!-- Mini Map -->
+                            <div id="miniMap" style="height: 180px; border-radius: 8px; margin-top: 1.5rem; border: 1px solid var(--border-color); background: #111; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
                                 <span><i class="fa-solid fa-map-location-dot"></i> Mini Map</span>
                             </div>
                         </div>
@@ -2546,21 +2543,21 @@
     <script src="js/qgisData.js"></script>
        <!-- Custom JS -->
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-    <script src="js/app.js?v=4"></script>
-    <script src="js/map.js?v=4"></script>
-    <script src="js/piezometric.js?v=4"></script>
-    <script src="js/ai-analyst.js?v=4"></script>
-    <script src="js/ai-ui.js?v=4"></script>
+    <script src="js/app.js?v=5"></script>
+    <script src="js/map.js?v=5"></script>
+    <script src="js/piezometric.js?v=5"></script>
+    <script src="js/ai-analyst.js?v=5"></script>
+    <script src="js/ai-ui.js?v=5"></script>
     
-    <script src="js/i18n.js?v=4"></script>
-    <script src="js/assetInnovations.js?v=4"></script>
-    <script src="js/userHub.js?v=4"></script>
-    <script src="js/aiInsights.js?v=4"></script>
+    <script src="js/i18n.js?v=5"></script>
+    <script src="js/assetInnovations.js?v=5"></script>
+    <script src="js/userHub.js?v=5"></script>
+    <script src="js/aiInsights.js?v=5"></script>
 
-    <script src="js/charts.js?v=4"></script>
-    <script src="js/analytics.js?v=4"></script>
-    <script src="js/ai_insights.js?v=4"></script>
-    <script src="js/wells.js?v=4"></script>
+    <script src="js/charts.js?v=5"></script>
+    <script src="js/analytics.js?v=5"></script>
+    <script src="js/ai_insights.js?v=5"></script>
+    <script src="js/wells.js?v=5"></script>
     <script>
         function toggleGISSubmenu(e) {
             if (e) e.preventDefault();

@@ -335,11 +335,11 @@ function viewWellDetails(id) {
         if (el) el.innerText = value;
     }
 
-    // Handle multiple image placeholders
-    const images = document.querySelectorAll('#detailWellImage, #detailWellImageLarge');
-    images.forEach(img => {
-        img.src = well.image || "https://dummyimage.com/600x400/1a1a1a/00d4ff&text=Well+Site";
-    });
+    // Handle image placeholder - only the main image now (no sidebar duplicate)
+    const mainImg = document.getElementById('detailWellImageLarge');
+    if (mainImg) {
+        mainImg.src = well.image || "https://dummyimage.com/800x300/1a1a1a/00d4ff&text=Well+Site";
+    }
 
     const statusBadge = document.getElementById('detailWellStatus');
     if (statusBadge) {
@@ -624,8 +624,8 @@ window.handleWellImageUpload = function(event) {
         const dataUrl = e.target.result;
         well.image = dataUrl;
         
-        // Update images in UI
-        const images = document.querySelectorAll('#detailWellImage, #detailWellImageLarge');
+        // Update only the main image (sidebar duplicate removed)
+        const images = document.querySelectorAll('#detailWellImageLarge');
         images.forEach(img => img.src = dataUrl);
         
         // Save to storage
