@@ -83,6 +83,15 @@
                     <label data-i18n="pass_label">PASSWORD</label>
                     <input type="password" id="login-pass" placeholder="••••••••">
                 </div>
+                <div class="auth-input-group">
+                    <label data-i18n="role_label">ROLE CATEGORY</label>
+                    <select id="login-role" style="width:100%; padding: 0.75rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,212,255,0.3); border-radius: 8px; color: #fff; font-size: 0.95rem; cursor:pointer;">
+                        <option value="ADMIN" data-i18n="role_admin">Superior (Government/DRE)</option>
+                        <option value="ENGINEER" data-i18n="role_engineer">Premium (GIS Engineer)</option>
+                        <option value="STUDENT" data-i18n="role_student">Academic (Student)</option>
+                        <option value="FARMER" data-i18n="role_farmer">Field User (Farmer)</option>
+                    </select>
+                </div>
                 <button class="btn-auth" onclick="handleAuthAction(event, false)" data-i18n="btn_login">LOG IN TO DASHBOARD</button>
             </div>
 
@@ -138,53 +147,64 @@
             </div>
 
             <nav class="nav-menu">
-                <a href="#" class="nav-item active" data-view="dashboard">
+                <!-- ALL roles can see Dashboard -->
+                <a href="#" class="nav-item active" data-view="dashboard" data-role-access="ALL">
                     <i class="fa-solid fa-grip"></i>
                     <span data-i18n="nav_dashboard">Dashboard</span>
                 </a>
-                <a href="#" class="nav-item" data-view="map">
+                <!-- ALL roles can see Map -->
+                <a href="#" class="nav-item" data-view="map" data-role-access="ALL">
                     <i class="fa-solid fa-map-location-dot"></i>
                     <span data-i18n="nav_map">Map View</span>
                 </a>
-                <a href="#" class="nav-item" data-view="analytics">
+                <!-- ADMIN, ENGINEER, STUDENT -->
+                <a href="#" class="nav-item" data-view="analytics" data-role-access="ADMIN,ENGINEER,STUDENT">
                     <i class="fa-solid fa-chart-line"></i>
                     <span data-i18n="nav_analytics">Analytics</span>
                 </a>
-                <a href="#" class="nav-item" data-view="alerts">
+                <!-- ALL roles can see Alerts -->
+                <a href="#" class="nav-item" data-view="alerts" data-role-access="ALL">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span data-i18n="nav_alerts">Alerts</span>
                     <span class="badge danger">3</span>
                 </a>
-                <a href="#" class="nav-item" data-view="wells">
+                <!-- ADMIN, ENGINEER only -->
+                <a href="#" class="nav-item" data-view="wells" data-role-access="ADMIN,ENGINEER">
                     <i class="fa-solid fa-bore-hole"></i>
                     <span data-i18n="nav_wells">Wells Manager</span>
                 </a>
-                <a href="#" class="nav-item" data-view="assets">
+                <!-- ADMIN, ENGINEER only -->
+                <a href="#" class="nav-item" data-view="assets" data-role-access="ADMIN,ENGINEER">
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                     <span data-i18n="nav_assets">Assets</span>
                 </a>
-                <a href="#" class="nav-item" data-view="library">
+                <!-- ADMIN, ENGINEER, STUDENT -->
+                <a href="#" class="nav-item" data-view="library" data-role-access="ADMIN,ENGINEER,STUDENT">
                     <i class="fa-solid fa-book-bookmark"></i>
                     <span data-i18n="nav_library">Library</span>
                 </a>
-                <a href="#" class="nav-item" data-view="qgis">
+                <!-- ADMIN, ENGINEER only -->
+                <a href="#" class="nav-item" data-view="qgis" data-role-access="ADMIN,ENGINEER">
                     <i class="fa-solid fa-earth-americas"></i>
                     <span data-i18n="nav_qgis">QGIS Platform</span>
                 </a>
 
-                <a href="#" class="nav-item" data-view="gis" id="gisLayersNavItem">
+                <!-- ADMIN only -->
+                <a href="#" class="nav-item" data-view="gis" id="gisLayersNavItem" data-role-access="ADMIN,ENGINEER">
                     <i class="fa-solid fa-satellite"></i>
                     <span data-i18n="nav_layers">GIS Layers</span>
                 </a>
 
-                <a href="#" class="nav-item" data-view="community">
+                <!-- ADMIN, ENGINEER, STUDENT -->
+                <a href="#" class="nav-item" data-view="community" data-role-access="ALL">
                     <i class="fa-solid fa-users"></i>
                     <span data-i18n-asset="nav_community">Community</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
-                <a href="#" class="nav-item" data-view="settings">
+                <!-- ADMIN only for settings -->
+                <a href="#" class="nav-item" data-view="settings" data-role-access="ADMIN,ENGINEER">
                     <i class="fa-solid fa-gear"></i>
                     <span>Settings</span>
                 </a>
@@ -2543,21 +2563,21 @@
     <script src="js/qgisData.js"></script>
        <!-- Custom JS -->
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-    <script src="js/app.js?v=5"></script>
-    <script src="js/map.js?v=5"></script>
-    <script src="js/piezometric.js?v=5"></script>
-    <script src="js/ai-analyst.js?v=5"></script>
-    <script src="js/ai-ui.js?v=5"></script>
+    <script src="js/app.js?v=6"></script>
+    <script src="js/map.js?v=6"></script>
+    <script src="js/piezometric.js?v=6"></script>
+    <script src="js/ai-analyst.js?v=6"></script>
+    <script src="js/ai-ui.js?v=6"></script>
     
-    <script src="js/i18n.js?v=5"></script>
-    <script src="js/assetInnovations.js?v=5"></script>
-    <script src="js/userHub.js?v=5"></script>
-    <script src="js/aiInsights.js?v=5"></script>
+    <script src="js/i18n.js?v=6"></script>
+    <script src="js/assetInnovations.js?v=6"></script>
+    <script src="js/userHub.js?v=6"></script>
+    <script src="js/aiInsights.js?v=6"></script>
 
-    <script src="js/charts.js?v=5"></script>
-    <script src="js/analytics.js?v=5"></script>
-    <script src="js/ai_insights.js?v=5"></script>
-    <script src="js/wells.js?v=5"></script>
+    <script src="js/charts.js?v=6"></script>
+    <script src="js/analytics.js?v=6"></script>
+    <script src="js/ai_insights.js?v=6"></script>
+    <script src="js/wells.js?v=6"></script>
     <script>
         function toggleGISSubmenu(e) {
             if (e) e.preventDefault();

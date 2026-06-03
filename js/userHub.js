@@ -89,14 +89,16 @@ window.switchAuthMode = function(mode) {
 };
 
 window.handleAuthAction = function(e, isSignup) {
-    const btn = e.currentTarget; // Using currentTarget for reliable delegation
+    const btn = e.currentTarget;
     const originalText = btn.innerHTML;
     
-    // Validate Inputs
-    const name = isSignup ? document.getElementById('signup-name').value : "Houra Fouzia";
-    const email = isSignup ? document.getElementById('signup-email').value : document.getElementById('login-email').value;
-    const inst = isSignup ? document.getElementById('signup-inst').value : "DRE Batna - Gov";
-    const role = isSignup ? document.getElementById('signup-role').value : "ADMIN";
+    // Read inputs - for login, read role from the new login-role dropdown
+    const name    = isSignup ? document.getElementById('signup-name').value  : "Houra Fouzia";
+    const email   = isSignup ? document.getElementById('signup-email').value : document.getElementById('login-email').value;
+    const inst    = isSignup ? document.getElementById('signup-inst').value  : "GeoWell Portal";
+    const role    = isSignup
+        ? document.getElementById('signup-role').value
+        : document.getElementById('login-role').value;
 
     if (!email) {
         showToast("Please enter a valid email address.", "error");
@@ -106,20 +108,23 @@ window.handleAuthAction = function(e, isSignup) {
     btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> SECURING SESSION...';
     btn.disabled = true;
 
-    // Simulate Network Latency
     setTimeout(() => {
-        // Dynamic User Synchronization
-        window.mockData.activeUser.name = name;
-        window.mockData.activeUser.role = role;
-        window.mockData.activeUser.institution = inst;
-        window.mockData.activeUser.tier = getTierName(role);
+        // Set active user
+        window.mockData.activeUser.name        = name;
+        window.mockData.activeUser.role        = role;
+        window.mockData.activeUser.institution = inst || getRoleInstitution(role);
+        window.mockData.activeUser.tier        = getTierName(role);
         
+        updateUserUI();
         applyRolePermissions();
         
         document.getElementById('auth-overlay').style.opacity = '0';
         setTimeout(() => {
             document.getElementById('auth-overlay').style.visibility = 'hidden';
-            showToast(`Authentication Successful. Welcome ${name}.`, "success");
+            const welcomeMsg = getRoleWelcomeMessage(role, name);
+            showToast(welcomeMsg, "success");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
         }, 500);
     }, 1800);
 };
@@ -129,55 +134,55 @@ function getTierName(role) {
     return tiers[role] || 'Academic';
 }
 
-window.handleLogin = function() {
-    // Legacy support for older triggers
-    handleAuthAction(false);
-};
+function getRoleInstitution(role) {
+    const insts = {
+        'ADMIN':    'DRE / Government',
+        'ENGINEER': 'GIS Engineering Office',
+        'STUDENT':  'University / Research',
+        'FARMER':   'Agricultural Field'
+    };
+    return insts[role] || 'GeoWell Portal';
+}
 
-window.openUserAccount = function() {
-    const user = window.mockData.activeUser;
-    
-    // Populate Modal
-    document.getElementById('modal-ac-credits').textContent = user.credits;
-    document.getElementById('modal-ac-days').textContent = user.daysLeft;
-    document.getElementById('modal-ac-role').textContent = user.tier;
-    document.getElementById('modal-ac-inst').textContent = user.institution;
-    
-    document.getElementById('modal-user-account').classList.add('active');
-};
-
-window.setLang = function(lang) {
-    // Update active button state in the Auth Screen
-    document.querySelectorAll('.lang-btn').forEach(b => {
-        b.classList.remove('active');
-        if (b.innerText.trim().toLowerCase() === lang.toLowerCase()) {
-            b.classList.add('active');
-        }
-    });
-
-    // Initialize/Update Translation Engine
-    if (typeof window.i18nInit === 'function') {
-        window.i18nInit(lang);
-    }
-
-    // Success Feedback
-    const toastMsg = window.getText('lng_toast') || "Language Updated";
-    showToast(toastMsg, "success");
-
-    // Persist and Sync Global Dashboard (If logged in)
-    if (typeof window.applyTranslations === 'function') {
-        window.applyTranslations();
-    }
-};
+function getRoleWelcomeMessage(role, name) {
+    const msgs = {
+        'ADMIN':    `🏛️ مرحباً ${name} — تم تسجيل الدخول كـ Superior (حكومي/DRE). جميع الأقسام متاحة.`,
+        'ENGINEER': `🛰️ مرحباً ${name} — تم تسجيل الدخول كـ Premium (مهندس GIS). الأدوات المتقدمة متاحة.`,
+        'STUDENT':  `📚 مرحباً ${name} — تم تسجيل الدخول كـ Academic (طالب). المحتوى البحثي متاح.`,
+        'FARMER':   `🌾 مرحباً ${name} — تم تسجيل الدخول كـ Field User (مزارع). الواجهة المبسطة جاهزة.`
+    };
+    return msgs[role] || `✅ مرحباً ${name}`;
+}
 
 window.applyRolePermissions = function() {
     const user = window.mockData.activeUser;
     const role = user.role;
 
-    // Update ALL Profile instances
+    // 1. Update user UI (badge, name)
     updateUserUI();
 
-    // 1. Lock GIS Export for Students/Farmers
+    // 2. Show/Hide sidebar nav items based on role
+    document.querySelectorAll('.nav-item[data-role-access]').forEach(item => {
+        const access = item.getAttribute('data-role-access');
+        if (access === 'ALL') {
+            item.style.display = '';
+        } else {
+            const allowedRoles = access.split(',').map(r => r.trim());
+            if (allowedRoles.includes(role)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+                // If user is currently on a restricted view, redirect to dashboard
+                const view = item.getAttribute('data-view');
+                const activeViewEl = document.getElementById('view-' + view);
+                if (activeViewEl && activeViewEl.classList.contains('active')) {
+                    if (typeof switchView === 'function') switchView('dashboard');
+                }
+            }
+        }
+    });
+
+    // 3. Role-specific feature locks
     const exportBtn = document.querySelector('.btn-export-gis');
     if (exportBtn) {
         if (role === 'STUDENT' || role === 'FARMER') {
@@ -187,27 +192,66 @@ window.applyRolePermissions = function() {
         }
     }
 
-    // 2. Lock Neural Analysis for Students
     const neuralBtn = document.getElementById('btnNeuralMap');
-    if (neuralBtn && (role === 'STUDENT' || role === 'FARMER')) {
-        neuralBtn.style.opacity = '0.5';
-        neuralBtn.title = "Upgrade to Premium for Neural Analysis";
-    } else if (neuralBtn) {
-        neuralBtn.style.opacity = '1';
+    if (neuralBtn) {
+        if (role === 'STUDENT' || role === 'FARMER') {
+            neuralBtn.style.opacity = '0.4';
+            neuralBtn.title = "⚠️ يتطلب ترقية إلى Premium";
+            neuralBtn.onclick = () => { showToast("هذه الميزة تتطلب اشتراك Premium", 'error'); openPricingModal(); return false; };
+        } else {
+            neuralBtn.style.opacity = '1';
+            neuralBtn.title = '';
+            neuralBtn.onclick = null;
+        }
     }
 
-    // 3. Simplified Arabic UI for Farmers
-    toggleFarmerUI(role === 'FARMER');
+    // 4. Farmer mode: apply simplified Arabic UI indicators
+    if (role === 'FARMER') {
+        document.body.setAttribute('data-farmer-mode', 'true');
+        showToast("🌾 وضع الحقل المبسط — Field Mode Active", "info");
+    } else {
+        document.body.removeAttribute('data-farmer-mode');
+    }
+
+    // 5. Show role-specific info banner on dashboard
+    const dashHeader = document.querySelector('#view-dashboard .section-header h2, #view-dashboard h2');
+    if (dashHeader) {
+        const roleTitles = {
+            'ADMIN':    '🏛️ لوحة التحكم — Superior (حكومي)',
+            'ENGINEER': '🛰️ لوحة التحكم — Premium Engineer',
+            'STUDENT':  '📚 لوحة التحكم — Academic',
+            'FARMER':   '🌾 لوحة التحكم — Field User'
+        };
+        dashHeader.textContent = roleTitles[role] || 'Dashboard';
+    }
 };
 
-function toggleFarmerUI(isFarmer) {
-    const mainView = document.getElementById('view-map');
-    if (isFarmer) {
-        // Simple mock of language and UI simplification
-        showToast("Switching to Field Mode (Simplified Arabic UI)", "warning");
-        // In a real app, we'd trigger i18n here
-    }
-}
+window.handleLogin = function() {
+    // Legacy support for older triggers
+    handleAuthAction(false);
+};
+
+window.openUserAccount = function() {
+    const user = window.mockData.activeUser;
+    document.getElementById('modal-ac-credits').textContent = user.credits;
+    document.getElementById('modal-ac-days').textContent = user.daysLeft;
+    document.getElementById('modal-ac-role').textContent = user.tier;
+    document.getElementById('modal-ac-inst').textContent = user.institution;
+    document.getElementById('modal-user-account').classList.add('active');
+};
+
+window.setLang = function(lang) {
+    document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.remove('active');
+        if (b.innerText.trim().toLowerCase() === lang.toLowerCase()) {
+            b.classList.add('active');
+        }
+    });
+    if (typeof window.i18nInit === 'function') window.i18nInit(lang);
+    const toastMsg = window.getText ? (window.getText('lng_toast') || "Language Updated") : "Language Updated";
+    showToast(toastMsg, "success");
+    if (typeof window.applyTranslations === 'function') window.applyTranslations();
+};
 
 window.openBaridiMob = function() {
     closeInnovationModal('modal-pricing');
