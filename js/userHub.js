@@ -520,6 +520,19 @@ function updateUserUI() {
     if (modalRoleEl) modalRoleEl.textContent = user.tier || sector || '';
     if (modalInstEl) modalInstEl.textContent = user.institution || sector || '';
 
+    const planNameEl = document.getElementById('modal-ac-plan-name');
+    const cycleEl = document.getElementById('modal-ac-cycle');
+    if (planNameEl) {
+        let pName = user.plan || user.tier || 'Gratuit (Free)';
+        if (pName === 'gov-pro') pName = 'Institutionnel Pro';
+        if (pName === 'gov-enterprise') pName = 'Souveraineté (Enterprise)';
+        if (pName === 'eng-premium') pName = 'Premium GIS';
+        planNameEl.textContent = pName;
+    }
+    if (cycleEl) {
+        cycleEl.textContent = (user.plan && user.plan.includes('gov')) ? 'Annual (سنوي)' : 'Monthly (شهري)';
+    }
+
     const badge = document.getElementById('user-role-badge');
     if (badge) {
         badge.textContent = user.tier || sector || '';
