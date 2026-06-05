@@ -359,12 +359,14 @@
                     <i class="fa-solid fa-gear"></i>
                     <span>Settings</span>
                 </a>
-                <div class="user-profile-mini" onclick="openUserAccount()">
-                    <div class="profile-top">
-                        <img src="https://i.pravatar.cc/150?u=houra" alt="User" id="user-avatar">
-                        <div class="user-info">
-                            <span class="user-name" id="user-display-name">Houra Fouzia (حورة فوزية)</span>
-                            <span class="role-badge role-superior" id="user-role-badge">Superior</span>
+                <div class="user-profile-mini" onclick="openInnovationModal('modal-user-account')" style="cursor:pointer; transition:0.2s; padding:10px; border:1px solid transparent; border-radius:10px;">
+                    <div class="profile-top" style="display:flex; align-items:center; gap:10px;">
+                        <div class="user-avatar-icon" id="user-avatar-container" style="width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid var(--accent-primary); background:rgba(0,212,255,0.1);">
+                            <i class="fa-solid fa-user" id="user-avatar-icon" style="color:var(--accent-primary); font-size:1.2rem;"></i>
+                        </div>
+                        <div class="user-info" style="overflow:hidden; flex:1;">
+                            <span class="user-name" id="user-display-name" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff; font-weight:bold; font-size:0.9rem;">Loading...</span>
+                            <span class="role-badge" id="user-role-badge" style="display:inline-block; margin-top:3px; padding:2px 8px; background:#333; color:var(--accent-primary); border-radius:4px; font-size:0.65rem; font-weight:bold; text-transform:uppercase;">--</span>
                         </div>
                     </div>
                 </div>
@@ -2801,39 +2803,89 @@
         </div>
 
         <!-- MODAL: USER ACCOUNT DASHBOARD [NEW] -->
+        <!-- MODAL: ACCOUNT INTELLIGENCE -->
         <div id="modal-user-account" class="modal-overlay">
-            <div class="modal-content" style="width: 500px;">
+            <div class="modal-content account-modal" style="width:500px; max-width:95vw;">
                 <div class="modal-header">
-                    <h3><i class="fa-solid fa-user-gear"></i> Account Intelligence</h3>
+                    <h3><i class="fa-solid fa-id-badge"></i> Account Intelligence</h3>
                     <button class="close-btn" onclick="closeInnovationModal('modal-user-account')">&times;</button>
                 </div>
-                <div class="account-tabs">
-                    <div class="ac-tab active">Overview</div>
-                    <div class="ac-tab">Subscription</div>
-                    <div class="ac-tab">Settings</div>
+                
+                <div class="account-tabs-header" style="display:flex; border-bottom:1px solid #333; margin-bottom:1rem;">
+                    <button class="acc-tab-btn active" onclick="switchAccTab('acc-overview', this)" style="flex:1; background:transparent; border:none; color:#fff; padding:10px; cursor:pointer; border-bottom:2px solid var(--accent-primary);">Overview</button>
+                    <button class="acc-tab-btn" onclick="switchAccTab('acc-subscription', this)" style="flex:1; background:transparent; border:none; color:#888; padding:10px; cursor:pointer; border-bottom:2px solid transparent;">Subscription</button>
+                    <button class="acc-tab-btn" onclick="switchAccTab('acc-settings', this)" style="flex:1; background:transparent; border:none; color:#888; padding:10px; cursor:pointer; border-bottom:2px solid transparent;">Settings</button>
                 </div>
-                <div class="account-stat-grid">
-                    <div class="ac-stat-box">
-                        <label style="font-size:0.6rem; color:var(--text-muted);">CREDITS</label>
-                        <div style="color:var(--accent-success); font-weight:bold; font-size:1.2rem;" id="modal-ac-credits">99</div>
+
+                <div class="account-body">
+                    <!-- OVERVIEW TAB -->
+                    <div id="acc-overview" class="acc-tab-content" style="display:block;">
+                        <div class="account-stat-grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                            <div class="ac-stat-box" style="background:#1a1d24; padding:15px; border-radius:10px; text-align:center;">
+                                <i class="fa-solid fa-bolt" style="color:var(--accent-primary); margin-bottom:5px;"></i>
+                                <div style="color:var(--accent-success); font-weight:bold; font-size:1.5rem;" id="modal-ac-credits">99</div>
+                                <label style="font-size:0.6rem; color:var(--text-muted);">CREDITS</label>
+                            </div>
+                            <div class="ac-stat-box" style="background:#1a1d24; padding:15px; border-radius:10px; text-align:center;">
+                                <i class="fa-solid fa-hourglass-half" style="color:var(--accent-primary); margin-bottom:5px;"></i>
+                                <div style="color:var(--accent-primary); font-weight:bold; font-size:1.5rem;" id="modal-ac-days">30</div>
+                                <label style="font-size:0.6rem; color:var(--text-muted);">DAYS LEFT</label>
+                            </div>
+                            <div class="ac-stat-box" style="background:#1a1d24; padding:15px; border-radius:10px; text-align:center;">
+                                <i class="fa-solid fa-shield-halved" style="color:var(--accent-primary); margin-bottom:5px;"></i>
+                                <div style="color:#fff; font-weight:bold; font-size:0.9rem; margin-top:5px;" id="modal-ac-role">Premium</div>
+                                <label style="font-size:0.6rem; color:var(--text-muted);">ROLE</label>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid var(--border-color);">
+                            <label style="font-size:0.7rem; color:var(--text-muted);">INSTITUTION / SECTOR</label>
+                            <div style="font-weight:bold; margin-top:5px; color:#fff;" id="modal-ac-inst">Bureau d'Études</div>
+                        </div>
+
+                        <button class="btn-save" style="width:100%; margin-top:1.5rem;" onclick="closeInnovationModal('modal-user-account'); openInnovationModal('modal-pricing');">
+                            <i class="fa-solid fa-gem"></i> UPGRADE HUB
+                        </button>
                     </div>
-                    <div class="ac-stat-box">
-                        <label style="font-size:0.6rem; color:var(--text-muted);">DAYS LEFT</label>
-                        <div style="color:var(--accent-primary); font-weight:bold; font-size:1.2rem;" id="modal-ac-days">365</div>
+
+                    <!-- SUBSCRIPTION TAB -->
+                    <div id="acc-subscription" class="acc-tab-content" style="display:none;">
+                        <div style="margin-top:10px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px;">
+                            <label style="font-size:0.7rem; color:var(--text-muted);">NEXT BILLING DATE</label>
+                            <div style="font-weight:bold; margin-top:5px; color:#fff;">12 Oct 2026</div>
+                        </div>
+                        <div style="margin-top:10px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px;">
+                            <label style="font-size:0.7rem; color:var(--text-muted);">PAYMENT METHOD</label>
+                            <div style="font-weight:bold; margin-top:5px; color:#fff;"><i class="fa-solid fa-credit-card"></i> BaridiMob ending in 1234</div>
+                        </div>
+                        <button class="btn-cancel" style="width:100%; margin-top:1.5rem; background:rgba(255,255,255,0.1); color:#fff; border:1px solid #444;">
+                            <i class="fa-solid fa-file-pdf"></i> Download Last Invoice
+                        </button>
                     </div>
-                    <div class="ac-stat-box">
-                        <label style="font-size:0.6rem; color:var(--text-muted);">ROLE</label>
-                        <div style="color:#fff; font-weight:bold; font-size:0.8rem;" id="modal-ac-role">Superior</div>
+
+                    <!-- SETTINGS & LOGOUT TAB -->
+                    <div id="acc-settings" class="acc-tab-content" style="display:none;">
+                        <div style="margin-top:10px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px;">
+                            <label style="font-size:0.7rem; color:var(--text-muted);">CHANGE PASSWORD</label>
+                            <input type="password" placeholder="New Password" style="width:100%; padding:8px; margin-top:5px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius:5px; font-family:inherit;">
+                            <input type="password" placeholder="Confirm Password" style="width:100%; padding:8px; margin-top:5px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius:5px; font-family:inherit;">
+                            <button class="btn-save" style="margin-top:10px; font-size:0.8rem; padding:5px 15px;">Update</button>
+                        </div>
+                        
+                        <div style="margin-top:10px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <div style="font-weight:bold; color:#fff; font-size:0.9rem;">Enable 2FA</div>
+                                <div style="font-size:0.7rem; color:var(--text-muted);">Two-Factor Authentication</div>
+                            </div>
+                            <input type="checkbox" checked style="accent-color:var(--accent-primary); transform:scale(1.2);">
+                        </div>
+
+                        <div style="margin-top:20px; border-top:1px solid #333; padding-top:20px;">
+                            <button class="btn-logout-action" onclick="logoutAction()" style="width:100%; padding:12px; background:#e74c3c; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px; transition:0.2s;" onmouseover="this.style.background='#c0392b'" onmouseout="this.style.background='#e74c3c'">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i> LOG OUT SECURELY
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid var(--border-color);">
-                    <label style="font-size:0.7rem; color:var(--text-muted);">INSTITUTION</label>
-                    <div style="font-weight:bold; margin-top:5px;" id="modal-ac-inst">DRE Batna - Gov</div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn-save" style="width:100%;" onclick="openPricingModal(); closeInnovationModal('modal-user-account');">
-                        <i class="fa-solid fa-gem"></i> UPGRADE HUB
-                    </button>
                 </div>
             </div>
         </div>

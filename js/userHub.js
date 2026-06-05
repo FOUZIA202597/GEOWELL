@@ -501,29 +501,28 @@ function updateUserUI() {
     if (instEl) instEl.textContent = user.institution || sector || '';
 
     // Avatar → sector icon
-    const avatarEl = document.getElementById('user-avatar');
-    if (avatarEl) {
-        avatarEl.style.display = 'none';
-        let iconWrap = document.getElementById('user-avatar-icon');
-        if (!iconWrap) {
-            iconWrap = document.createElement('div');
-            iconWrap.id = 'user-avatar-icon';
-            iconWrap.style.cssText = `width:40px;height:40px;border-radius:50%;border:2px solid ${color};display:flex;align-items:center;justify-content:center;background:${color}22;font-size:1.1rem;flex-shrink:0;transition:border-color 0.3s;`;
-            avatarEl.parentNode.insertBefore(iconWrap, avatarEl);
-        }
-        iconWrap.innerHTML = `<i class="fa-solid ${icon}" style="color:${color};"></i>`;
-        iconWrap.style.borderColor = color;
+    const avatarContainer = document.getElementById('user-avatar-container');
+    const avatarIcon = document.getElementById('user-avatar-icon');
+    if (avatarContainer && avatarIcon) {
+        avatarContainer.style.borderColor = color;
+        avatarContainer.style.background = color + '15';
+        avatarIcon.className = `fa-solid ${icon}`;
+        avatarIcon.style.color = color;
     }
 
     const creditsEl = document.getElementById('user-credits') || document.getElementById('modal-ac-credits');
     const daysEl    = document.getElementById('sub-days') || document.getElementById('modal-ac-days');
-    if (creditsEl) creditsEl.textContent = user.credits ?? 0;
+    if (creditsEl) creditsEl.textContent = user.credits ?? 99;
     if (daysEl)    daysEl.textContent    = user.daysLeft ?? 30;
+
+    const modalRoleEl = document.getElementById('modal-ac-role');
+    const modalInstEl = document.getElementById('modal-ac-inst');
+    if (modalRoleEl) modalRoleEl.textContent = user.tier || sector || '';
+    if (modalInstEl) modalInstEl.textContent = user.institution || sector || '';
 
     const badge = document.getElementById('user-role-badge');
     if (badge) {
         badge.textContent = user.tier || sector || '';
-        badge.className   = 'role-badge';
         badge.style.color       = color;
         badge.style.borderColor = color + '44';
         badge.style.background  = color + '15';
@@ -680,5 +679,69 @@ window.checkActionPermission = function(req) {
 
 // Legacy
 window.handleAuthAction = window.handleLogin;
+
+// ── Account Modal Logic ──────────────────────────────────────
+window.switchAccTab = function(tabId, btn) {
+    // Hide all tabs
+    document.querySelectorAll('.acc-tab-content').forEach(el => el.style.display = 'none');
+    // Remove active class from buttons
+    document.querySelectorAll('.acc-tab-btn').forEach(el => {
+        el.classList.remove('active');
+        el.style.color = '#888';
+        el.style.borderBottomColor = 'transparent';
+    });
+    
+    // Show selected tab
+    const target = document.getElementById(tabId);
+    if (target) target.style.display = 'block';
+    
+    // Activate button
+    if (btn) {
+        btn.classList.add('active');
+        btn.style.color = '#fff';
+        btn.style.borderBottomColor = 'var(--accent-primary)';
+    }
+};
+
+window.logoutAction = function() {
+    // Destroy Session
+    window.mockData.activeUser = {
+        name: null, role: null, sector: null, institution: null, plan: null
+    };
+    
+    // Clear display data
+    updateUserUI();
+    
+    // Close modal
+    if (typeof closeInnovationModal === 'function') {
+        closeInnovationModal('modal-user-account');
+    }
+    
+    // Show auth overlay to block UI and require fresh login
+    const overlay = document.getElementById('auth-overlay');
+    if (overlay) {
+        overlay.style.visibility = 'visible';
+        overlay.style.opacity = '1';
+        
+        // Reset auth steps to step 1
+        const step1 = document.getElementById('auth-step-1');
+        const step2 = document.getElementById('auth-step-2');
+        if (step1) step1.style.display = 'block';
+        if (step2) step2.style.display = 'none';
+        
+        // Clear inputs
+        const inputs = overlay.querySelectorAll('input');
+        inputs.forEach(input => input.value = '');
+    }
+    
+    if (typeof showToast === 'function') {
+        showToast('تم تسجيل الخروج بنجاح. جلستك الآن آمنة.', 'info');
+    }
+    
+    // Redirect to Dashboard view to reset state
+    if (typeof switchView === 'function') {
+        switchView('dashboard');
+    }
+};
 
 
