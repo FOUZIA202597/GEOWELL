@@ -183,7 +183,7 @@ window.handleLogin = function(e) {
     setTimeout(() => {
         const role  = SECTOR_ROLE_MAP[sector] || 'STUDENT';
         const color = SECTOR_COLORS[sector] || '#00d4ff';
-        window._pendingUser = {
+        const userObj = {
             name:        emailName,
             email,
             role,
@@ -196,7 +196,17 @@ window.handleLogin = function(e) {
         };
         btn.innerHTML = orig;
         btn.disabled  = false;
-        showSubscriptionScreen(window._pendingUser);
+
+        // DB Check Simulation (Phase 1):
+        // If email is admin@anrh.dz or active, go straight to dashboard. Else, show plan screen.
+        const hasActiveSubscription = (email === 'admin@anrh.dz' || email === 'fouzia@geowell.dz');
+
+        if (hasActiveSubscription) {
+            activateUserSession(userObj, 'gov-pro');
+        } else {
+            window._pendingUser = userObj;
+            showSubscriptionScreen(userObj);
+        }
     }, 1400);
 };
 
@@ -355,36 +365,66 @@ window.confirmPlan = function(planId, e) {
     if (!user) return;
 
     const btn = e.currentTarget;
+    const plans = getPlansByRole(user.role, user.sector);
+    const selectedPlan = plans.find(p => p.id === planId);
+    if (!selectedPlan) return;
+
+    // Phase 2 Logic: State Sovereignty / Superior
+    if (planId === 'gov-enterprise') {
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+        btn.disabled = true;
+        setTimeout(() => {
+            showToast('✅ تم إرسال الطلب لمديرية الموارد المائية (DRE) للمراجعة', 'success');
+            btn.innerHTML = 'Request Sent';
+        }, 1200);
+        return; // Halt flow until admin approves
+    }
+
+    // Phase 2 Logic: Requires Payment
+    if (selectedPlan.price > 0) {
+        window._pendingPlanId = planId;
+        const priceEl = document.querySelector('.baridimob-container div[style*="font-size:1.8rem"]');
+        if (priceEl) priceEl.textContent = `${selectedPlan.price.toLocaleString()} DZD`;
+        openBaridiMob();
+        return;
+    }
+
+    // Phase 2 Logic: Free Plan -> Activate instantly
     btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
     btn.disabled = true;
 
     setTimeout(() => {
-        // Apply user to session
-        window.mockData.activeUser.name        = user.name;
-        window.mockData.activeUser.role        = user.role;
-        window.mockData.activeUser.sector      = user.sector;
-        window.mockData.activeUser.institution = user.institution;
-        window.mockData.activeUser.tier        = user.tier;
-        window.mockData.activeUser.sectorColor = user.sectorColor;
-        window.mockData.activeUser.credits     = user.credits;
-        window.mockData.activeUser.daysLeft    = user.daysLeft;
-        window.mockData.activeUser.plan        = planId;
-        window.mockData.activeUser.email       = user.email;
-
-        updateUserUI();
-        applyRolePermissions();
-
-        // Hide auth overlay
-        const overlay = document.getElementById('auth-overlay');
-        overlay.style.opacity = '0';
-        setTimeout(() => {
-            overlay.style.visibility = 'hidden';
-            const welcomeKey = 'welcome_' + user.sector;
-            const welcomeMsg = window.getText ? window.getText(welcomeKey) : `✅ ${user.sector}`;
-            showToast(`✅ ${welcomeMsg}`, 'success');
-            window._pendingUser = null;
-        }, 400);
+        activateUserSession(user, planId);
     }, 800);
+};
+
+// ── Phase 3: Activation & Redirect ────────────────────────────
+window.activateUserSession = function(user, planId) {
+    // Refresh Session
+    window.mockData.activeUser.name        = user.name;
+    window.mockData.activeUser.role        = user.role;
+    window.mockData.activeUser.sector      = user.sector;
+    window.mockData.activeUser.institution = user.institution;
+    window.mockData.activeUser.tier        = user.tier;
+    window.mockData.activeUser.sectorColor = user.sectorColor;
+    window.mockData.activeUser.credits     = user.credits;
+    window.mockData.activeUser.daysLeft    = user.daysLeft;
+    window.mockData.activeUser.plan        = planId;
+    window.mockData.activeUser.email       = user.email;
+
+    updateUserUI();
+    applyRolePermissions();
+
+    // Redirect to custom view (hide auth overlay smoothly)
+    const overlay = document.getElementById('auth-overlay');
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+        overlay.style.visibility = 'hidden';
+        const welcomeKey = 'welcome_' + user.sector;
+        const welcomeMsg = window.getText ? window.getText(welcomeKey) : `✅ ${user.sector}`;
+        showToast(`✅ ${welcomeMsg}`, 'success');
+        window._pendingUser = null;
+    }, 400);
 };
 
 window.selectPlan = function(planId, card) {
@@ -568,8 +608,15 @@ window.processPayment = function() {
     if (!btn) return;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> TRAITEMENT...'; btn.disabled = true;
     setTimeout(() => {
-        showToast('Paiement réussi ! Bienvenue Premium.', 'success');
-        simulateRoleChange('ENGINEER'); closeInnovationModal('modal-baridimob');
+        showToast('Paiement réussi ! Session Activée.', 'success');
+        
+        if (window._pendingUser) {
+            activateUserSession(window._pendingUser, window._pendingPlanId || 'premium');
+        } else {
+            simulateRoleChange('ENGINEER'); 
+        }
+        
+        closeInnovationModal('modal-baridimob');
         btn.innerHTML = 'PAYER MAINTENANT'; btn.disabled = false;
     }, 2500);
 };
