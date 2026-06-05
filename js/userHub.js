@@ -681,22 +681,4 @@ window.checkActionPermission = function(req) {
 // Legacy
 window.handleAuthAction = window.handleLogin;
 
-// getText shorthand
-function getText(key) { return window.getText ? window.getText(key) : key; }
 
-window.addEventListener('error', function(e) {
-    console.error('GLOBAL ERROR:', e.message, e.filename, e.lineno);
-    const errDiv = document.createElement('div');
-    errDiv.style.cssText = 'position:fixed;top:0;left:0;background:red;color:white;z-index:9999;padding:10px;';
-    errDiv.innerHTML = e.message + ' at line ' + e.lineno;
-    document.body.appendChild(errDiv);
-});
-
-const originalShowSub = showSubscriptionScreen;
-window.showSubscriptionScreen = function(user) {
-    try {
-        originalShowSub(user);
-    } catch(err) {
-        document.getElementById('plan-cards-grid').innerHTML = '<div style="color:red; background:white; padding:10px;">ERROR: ' + err.message + '<br>' + err.stack + '</div>';
-    }
-}
