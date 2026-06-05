@@ -164,50 +164,59 @@ window.switchAuthMode = function(mode) {
 
 // ── LOGIN ─────────────────────────────────────────────────────
 window.handleLogin = function(e) {
-    const btn = e.currentTarget;
-    const email    = document.getElementById('login-email')?.value.trim();
-    const password = document.getElementById('login-pass')?.value;
-    const sector   = document.getElementById('login-role')?.value || 'ANRH';
+    try {
+        const btn = e.currentTarget;
+        const email    = document.getElementById('login-email')?.value.trim();
+        const password = document.getElementById('login-pass')?.value;
+        const sector   = document.getElementById('login-role')?.value || 'ANRH';
 
-    if (!email) { showToast('⚠️ يرجى إدخال البريد الإلكتروني', 'error'); return; }
-    if (!password) { showToast('⚠️ يرجى إدخال كلمة المرور', 'error'); return; }
+        if (!email) { showToast('⚠️ يرجى إدخال البريد الإلكتروني', 'error'); return; }
+        if (!password) { showToast('⚠️ يرجى إدخال كلمة المرور', 'error'); return; }
 
-    // Derive name from email
-    const emailName = email.split('@')[0].replace(/[._]/g, ' ')
-        .split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        const emailName = email.split('@')[0].replace(/[._]/g, ' ')
+            .split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
-    btn.disabled = true;
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
+        btn.disabled = true;
 
-    setTimeout(() => {
-        const role  = SECTOR_ROLE_MAP[sector] || 'STUDENT';
-        const color = SECTOR_COLORS[sector] || '#00d4ff';
-        const userObj = {
-            name:        emailName,
-            email,
-            role,
-            sector,
-            institution: SECTOR_INSTITUTIONS[sector] || sector,
-            tier:        getTierName(role, sector),
-            sectorColor: color,
-            credits:     role === 'ADMIN' ? 99 : role === 'ENGINEER' ? 50 : 10,
-            daysLeft:    30
-        };
-        btn.innerHTML = orig;
-        btn.disabled  = false;
+        setTimeout(() => {
+            try {
+                const role  = SECTOR_ROLE_MAP[sector] || 'STUDENT';
+                const color = SECTOR_COLORS[sector] || '#00d4ff';
+                const userObj = {
+                    name:        emailName,
+                    email,
+                    role,
+                    sector,
+                    institution: SECTOR_INSTITUTIONS[sector] || sector,
+                    tier:        getTierName(role, sector),
+                    sectorColor: color,
+                    credits:     role === 'ADMIN' ? 99 : role === 'ENGINEER' ? 50 : 10,
+                    daysLeft:    30
+                };
+                btn.innerHTML = orig;
+                btn.disabled  = false;
 
-        // DB Check Simulation (Phase 1):
-        // If email is admin@anrh.dz or active, go straight to dashboard. Else, show plan screen.
-        const hasActiveSubscription = (email === 'admin@anrh.dz' || email === 'fouzia@geowell.dz');
+                const hasActiveSubscription = (email === 'admin@anrh.dz' || email === 'fouzia@geowell.dz');
 
-        if (hasActiveSubscription) {
-            activateUserSession(userObj, 'gov-pro');
-        } else {
-            window._pendingUser = userObj;
-            showSubscriptionScreen(userObj);
-        }
-    }, 1400);
+                if (hasActiveSubscription) {
+                    activateUserSession(userObj, 'gov-pro');
+                } else {
+                    window._pendingUser = userObj;
+                    showSubscriptionScreen(userObj);
+                }
+            } catch (err) {
+                document.getElementById('auth-step-1').style.display = 'none';
+                document.getElementById('auth-step-2').style.display = 'block';
+                document.getElementById('auth-step-2').innerHTML = '<div style="color:red;padding:20px;font-family:monospace;text-align:left;"><b>Error inside timeout:</b><br>' + err.message + '<br>' + err.stack + '</div>';
+            }
+        }, 1400);
+    } catch (err) {
+        document.getElementById('auth-step-1').style.display = 'none';
+        document.getElementById('auth-step-2').style.display = 'block';
+        document.getElementById('auth-step-2').innerHTML = '<div style="color:red;padding:20px;font-family:monospace;text-align:left;"><b>Error in handleLogin:</b><br>' + err.message + '<br>' + err.stack + '</div>';
+    }
 };
 
 // ── SIGNUP ────────────────────────────────────────────────────
@@ -256,47 +265,71 @@ window.handleSignup = function(e) {
 
 // ── Subscription Screen (Step 2) ──────────────────────────────
 function showSubscriptionScreen(user) {
-    // Switch to step 2
-    document.getElementById('auth-step-1').style.display = 'none';
-    const step2 = document.getElementById('auth-step-2');
-    step2.style.display = 'block';
-    step2.style.animation = 'fadeSlideIn 0.4s ease';
+    try {
+        // Switch to step 2
+        const step1 = document.getElementById('auth-step-1');
+        const step2 = document.getElementById('auth-step-2');
+        if (step1) step1.style.display = 'none';
+        if (step2) {
+            step2.style.display = 'block';
+            step2.style.animation = 'fadeSlideIn 0.4s ease';
+        }
 
-    // Hello card
-    const color = SECTOR_COLORS[user.sector] || '#00d4ff';
-    const icon  = SECTOR_ICONS[user.sector]  || 'fa-user';
-    document.getElementById('plan-hello-name').textContent = `${getText('hello_prefix') || '👋 Welcome'}, ${user.name}!`;
-    document.getElementById('plan-hello-sector').textContent = user.institution;
-    const avatarEl = document.getElementById('plan-avatar-icon');
-    if (avatarEl) {
-        avatarEl.innerHTML = `<i class="fa-solid ${icon}" style="color:${color};font-size:1.5rem;"></i>`;
-        avatarEl.style.borderColor = color;
-        avatarEl.style.background = color + '18';
+        // Hello card
+        const color = (SECTOR_COLORS && SECTOR_COLORS[user?.sector]) || '#00d4ff';
+        const icon  = (SECTOR_ICONS && SECTOR_ICONS[user?.sector]) || 'fa-user';
+        
+        const nameEl = document.getElementById('plan-hello-name');
+        if (nameEl) {
+            const prefix = (typeof window.getText === 'function') ? window.getText('hello_prefix') : '👋 Welcome';
+            nameEl.textContent = `${prefix}, ${user?.name || 'User'}!`;
+        }
+        
+        const sectorEl = document.getElementById('plan-hello-sector');
+        if (sectorEl) {
+            sectorEl.textContent = user?.institution || '';
+        }
+        
+        const avatarEl = document.getElementById('plan-avatar-icon');
+        if (avatarEl) {
+            avatarEl.innerHTML = `<i class="fa-solid ${icon}" style="color:${color};font-size:1.5rem;"></i>`;
+            avatarEl.style.borderColor = color;
+            avatarEl.style.background = color + '18';
+        }
+
+        // Render plan cards
+        const plans = typeof getPlansByRole === 'function' ? getPlansByRole(user?.role, user?.sector) : [];
+        const grid = document.getElementById('plan-cards-grid');
+        if (grid) {
+            grid.innerHTML = plans.map((plan, i) => `
+                <div class="plan-card ${plan.recommended ? 'plan-recommended' : ''}" onclick="selectPlan('${plan.id}',this)">
+                    ${plan.recommended ? `<div class="plan-badge">✨ ${(typeof window.getText === 'function' ? window.getText('recommended') : 'Recommended')}</div>` : ''}
+                    <div class="plan-icon" style="color:${plan.color};background:${plan.color}18;border-color:${plan.color}33;">
+                        <i class="fa-solid ${plan.icon}"></i>
+                    </div>
+                    <h3 class="plan-name">${plan.name}</h3>
+                    <div class="plan-price">
+                        ${plan.price === 0
+                            ? `<span class="plan-free">${typeof window.getText === 'function' ? window.getText('free') : 'FREE'}</span>`
+                            : `<span class="plan-amount">${plan.price.toLocaleString()} <span class="plan-currency">DZD</span></span><span class="plan-period">/ ${typeof window.getText === 'function' ? window.getText('month') : 'mo'}</span>`
+                        }
+                    </div>
+                    <ul class="plan-features">
+                        ${(plan.features || []).map(f => `<li><i class="fa-solid fa-check"></i> ${f}</li>`).join('')}
+                    </ul>
+                    <button class="btn-plan ${plan.recommended ? 'btn-plan-primary' : ''}" onclick="confirmPlan('${plan.id}',event)">
+                        ${plan.price === 0 ? (typeof window.getText === 'function' ? window.getText('start_free') : 'Start Free') : (typeof window.getText === 'function' ? window.getText('choose_plan_btn') : 'Choose Plan')}
+                    </button>
+                </div>
+            `).join('');
+        }
+    } catch (err) {
+        const grid = document.getElementById('plan-cards-grid');
+        if (grid) {
+            grid.innerHTML = `<div style="color:red;padding:15px;">Error loading plans: ${err.message}</div>`;
+        }
+        console.error(err);
     }
-
-    // Render plan cards
-    const plans = getPlansByRole(user.role, user.sector);
-    document.getElementById('plan-cards-grid').innerHTML = plans.map((plan, i) => `
-        <div class="plan-card ${plan.recommended ? 'plan-recommended' : ''}" onclick="selectPlan('${plan.id}',this)">
-            ${plan.recommended ? `<div class="plan-badge">✨ ${getText('recommended') || 'Recommended'}</div>` : ''}
-            <div class="plan-icon" style="color:${plan.color};background:${plan.color}18;border-color:${plan.color}33;">
-                <i class="fa-solid ${plan.icon}"></i>
-            </div>
-            <h3 class="plan-name">${plan.name}</h3>
-            <div class="plan-price">
-                ${plan.price === 0
-                    ? `<span class="plan-free">${getText('free') || 'FREE'}</span>`
-                    : `<span class="plan-amount">${plan.price.toLocaleString()} <span class="plan-currency">DZD</span></span><span class="plan-period">/ ${getText('month') || 'mo'}</span>`
-                }
-            </div>
-            <ul class="plan-features">
-                ${plan.features.map(f => `<li><i class="fa-solid fa-check"></i> ${f}</li>`).join('')}
-            </ul>
-            <button class="btn-plan ${plan.recommended ? 'btn-plan-primary' : ''}" onclick="confirmPlan('${plan.id}',event)">
-                ${plan.price === 0 ? (getText('start_free') || 'Start Free') : (getText('choose_plan_btn') || 'Choose Plan')}
-            </button>
-        </div>
-    `).join('');
 }
 
 // ── Plan definitions per role ─────────────────────────────────
@@ -650,3 +683,20 @@ window.handleAuthAction = window.handleLogin;
 
 // getText shorthand
 function getText(key) { return window.getText ? window.getText(key) : key; }
+
+window.addEventListener('error', function(e) {
+    console.error('GLOBAL ERROR:', e.message, e.filename, e.lineno);
+    const errDiv = document.createElement('div');
+    errDiv.style.cssText = 'position:fixed;top:0;left:0;background:red;color:white;z-index:9999;padding:10px;';
+    errDiv.innerHTML = e.message + ' at line ' + e.lineno;
+    document.body.appendChild(errDiv);
+});
+
+const originalShowSub = showSubscriptionScreen;
+window.showSubscriptionScreen = function(user) {
+    try {
+        originalShowSub(user);
+    } catch(err) {
+        document.getElementById('plan-cards-grid').innerHTML = '<div style="color:red; background:white; padding:10px;">ERROR: ' + err.message + '<br>' + err.stack + '</div>';
+    }
+}
