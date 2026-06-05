@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Role Card Selector ────────────────────────────────────────
 window.selectRole = function(formPrefix, sector, card) {
-    // Clear all in this grid
+    // Clear all selected in this grid
     const grid = document.getElementById(formPrefix + '-role-grid');
     if (grid) {
         grid.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
@@ -49,20 +49,31 @@ window.selectRole = function(formPrefix, sector, card) {
     const hidden = document.getElementById(formPrefix + '-role');
     if (hidden) hidden.value = sector;
 
-    // Auto-fill institution placeholder
-    const instInput = document.getElementById(formPrefix === 'signup' ? 'signup-inst' : null);
-    if (instInput && SECTOR_INSTITUTIONS[sector]) {
-        instInput.placeholder = SECTOR_INSTITUTIONS[sector];
+    // Auto-fill institution placeholder for signup
+    if (formPrefix === 'signup') {
+        const instInput = document.getElementById('signup-inst');
+        if (instInput && SECTOR_INSTITUTIONS[sector]) {
+            instInput.placeholder = SECTOR_INSTITUTIONS[sector];
+        }
     }
 
-    // Show email domain hint if institutional
+    // Show email domain hint
     const emailInput = document.getElementById(formPrefix + '-email');
-    const domainHints = { ANRH: 'name@anrh.dz', ADE: 'name@ade.dz', DRE: 'name@dre.gov.dz', ONA: 'name@ona.dz' };
-    if (emailInput && domainHints[sector]) {
-        emailInput.placeholder = domainHints[sector];
-    } else if (emailInput) {
-        emailInput.placeholder = 'name@institution.dz';
+    const domainHints = {
+        ANRH: 'name@anrh.dz',
+        ADE:  'name@ade.dz',
+        DRE:  'name@dre.gov.dz',
+        ONA:  'name@ona.dz'
+    };
+    if (emailInput) {
+        emailInput.placeholder = domainHints[sector] || 'name@institution.dz';
     }
+
+    // Visual feedback
+    const color = SECTOR_COLORS[sector] || '#00d4ff';
+    card.style.borderColor = color;
+    card.style.boxShadow = `0 0 14px ${color}44`;
+    card.querySelector('i').style.color = color;
 };
 
 // ── Auth Action ───────────────────────────────────────────────
@@ -83,17 +94,21 @@ window.handleAuthAction = function(e, isSignup) {
     const btn = e.currentTarget;
     const originalHTML = btn.innerHTML;
 
-    const name  = isSignup ? (document.getElementById('signup-name')?.value || '') : 'Houra Fouzia';
-    const email = isSignup ? document.getElementById('signup-email')?.value : document.getElementById('login-email')?.value;
-    const inst  = isSignup ? document.getElementById('signup-inst')?.value  : '';
+    // Read all inputs — both login and signup
+    const nameInput  = document.getElementById(isSignup ? 'signup-name'  : 'login-name');
+    const emailInput = document.getElementById(isSignup ? 'signup-email' : 'login-email');
+    const instInput  = document.getElementById(isSignup ? 'signup-inst'  : 'login-inst');
 
-    // Read sector/role from hidden inputs
-    const sector = isSignup
-        ? (document.getElementById('signup-role')?.value || 'ANRH')
-        : (document.getElementById('login-role')?.value  || 'ANRH');
+    const email = emailInput?.value?.trim() || '';
+    const name  = nameInput?.value?.trim()  || (email ? email.split('@')[0] : 'Utilisateur');
+    const inst  = instInput?.value?.trim()  || '';
+
+    // Sector from hidden input (set by selectRole)
+    const sectorId = isSignup ? 'signup-role' : 'login-role';
+    const sector = document.getElementById(sectorId)?.value || 'ANRH';
 
     if (!email) {
-        showToast(window.getText ? window.getText('email_label') + ' is required' : 'Please enter your email.', 'error');
+        showToast('⚠️ يرجى إدخال البريد الإلكتروني', 'error');
         return;
     }
 
