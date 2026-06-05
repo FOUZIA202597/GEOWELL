@@ -53,10 +53,16 @@
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/assets-new.css">
+    <link rel="stylesheet" href="css/admin.css">
 <script src="js/ai_engine.js"></script>
 </head>
 
 <body>
+    <!-- IMPERSONATION BANNER -->
+    <div id="impersonation-banner">
+        <span></span>
+        <button onclick="stopImpersonation()"><i class="fa-solid fa-stop"></i> إيقاف المحاكاة والعودة</button>
+    </div>
     <!-- AUTH OVERLAY [AWARD FEATURE] -->
     <div id="auth-overlay">
         <div class="lang-selector-auth">
@@ -199,6 +205,12 @@
                 <a href="#" class="nav-item" data-view="community" data-role-access="ALL">
                     <i class="fa-solid fa-users"></i>
                     <span data-i18n-asset="nav_community">Community</span>
+                </a>
+                <!-- ADMIN only - Admin Supervision -->
+                <a href="#" class="nav-item" data-view="admin-supervision" data-role-access="ADMIN" onclick="initAdminDashboard()">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>لوحة الإدارة</span>
+                    <span class="badge danger" id="admin-pending-badge">0</span>
                 </a>
             </nav>
 
@@ -2099,6 +2111,202 @@
             </div>
 
 
+
+
+            <!-- ═══════════════════════════════════════════════════ -->
+            <!-- VIEW: ADMIN SUPERVISION DASHBOARD                  -->
+            <!-- ═══════════════════════════════════════════════════ -->
+            <div id="view-admin-supervision" class="view-section" style="overflow-y: auto; padding: 1.5rem; direction: rtl;">
+
+                <!-- ── KPI ROW ─────────────────────────────────── -->
+                <div class="admin-section-header">
+                    <h3><i class="fa-solid fa-shield-halved"></i> لوحة التحكم الإدارية المتقدمة</h3>
+                    <div style="display:flex;gap:0.5rem;align-items:center;">
+                        <button id="btn-mask-coords" class="action-btn" onclick="toggleCoordsMasking()" style="font-size:0.8rem;">
+                            <i class="fa-solid fa-eye-slash"></i> حجب الإحداثيات
+                        </button>
+                        <button class="action-btn" onclick="refreshAdminData()" style="font-size:0.8rem;">
+                            <i class="fa-solid fa-rotate"></i> تحديث
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPIs Grid -->
+                <div class="admin-kpi-grid">
+                    <div class="admin-kpi-card" style="--kpi-color:#00d4ff;">
+                        <div class="kpi-icon" style="color:#fff;"><i class="fa-solid fa-users"></i></div>
+                        <div class="kpi-value" id="kpi-total-users">0</div>
+                        <div class="kpi-label">إجمالي المستخدمين</div>
+                        <div class="kpi-sub" id="kpi-active-users">0 نشط</div>
+                    </div>
+                    <div class="admin-kpi-card" style="--kpi-color:#e74c3c;">
+                        <div class="kpi-icon" style="color:#fff;"><i class="fa-solid fa-clock"></i></div>
+                        <div class="kpi-value" id="kpi-pending">0</div>
+                        <div class="kpi-label">طلبات معلقة</div>
+                        <div class="kpi-sub">تنتظر المراجعة</div>
+                    </div>
+                    <div class="admin-kpi-card" style="--kpi-color:#9b59b6;">
+                        <div class="kpi-icon" style="color:#fff;"><i class="fa-solid fa-drafting-compass"></i></div>
+                        <div class="kpi-value" id="kpi-engineers">0</div>
+                        <div class="kpi-label">مهندسون/خبراء</div>
+                        <div class="kpi-sub">Premium</div>
+                    </div>
+                    <div class="admin-kpi-card" style="--kpi-color:#3498db;">
+                        <div class="kpi-icon" style="color:#fff;"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div class="kpi-value" id="kpi-students">0</div>
+                        <div class="kpi-label">طلاب أكاديميون</div>
+                        <div class="kpi-sub">Academic</div>
+                    </div>
+                    <div class="admin-kpi-card" style="--kpi-color:#27ae60;">
+                        <div class="kpi-icon" style="color:#fff;"><i class="fa-solid fa-tractor"></i></div>
+                        <div class="kpi-value" id="kpi-farmers">0</div>
+                        <div class="kpi-label">مستخدمو الميدان</div>
+                        <div class="kpi-sub">Field User</div>
+                    </div>
+                    <div class="admin-kpi-card" style="--kpi-color:#f39c12;">
+                        <div class="kpi-icon" style="color:#fff;"><i class="fa-solid fa-lock"></i></div>
+                        <div class="kpi-value" id="kpi-secure-sessions">0</div>
+                        <div class="kpi-label">جلسات آمنة نشطة</div>
+                        <div class="kpi-sub" id="kpi-data-flow">0 MB/s</div>
+                    </div>
+                    <div class="admin-kpi-card" style="--kpi-color:#1abc9c;">
+                        <div class="kpi-icon" style="color:#fff;"><i class="fa-solid fa-bore-hole"></i></div>
+                        <div class="kpi-value" id="kpi-wells-count">0</div>
+                        <div class="kpi-label">الآبار المسجلة</div>
+                        <div class="kpi-sub">في قاعدة البيانات</div>
+                    </div>
+                    <div class="admin-kpi-card" style="--kpi-color:#e67e22;">
+                        <div class="kpi-icon" style="color:#fff;"><i class="fa-solid fa-list-check"></i></div>
+                        <div class="kpi-value" id="kpi-audit-count">0</div>
+                        <div class="kpi-label">سجلات المراجعة</div>
+                        <div class="kpi-sub">مُشفرة وآمنة</div>
+                    </div>
+                </div>
+
+                <!-- ── SUPERVISION TABS ─────────────────────────── -->
+                <div class="card" style="margin-bottom:1.5rem;">
+                    <div class="admin-section-header" style="padding: 1rem 1rem 0;">
+                        <h3 id="sup-page-title"><i class="fa-solid fa-landmark"></i> مراقبة الأدوار</h3>
+                        <div style="display:flex;gap:0.5rem;">
+                            <button class="admin-action-btn impersonate" onclick="openImpersonateModal()" style="padding:0.4rem 0.9rem;">
+                                <i class="fa-solid fa-masks-theater"></i> وضع المحاكاة
+                            </button>
+                        </div>
+                    </div>
+                    <div style="padding: 0 1rem;">
+                        <div class="sup-tabs-bar">
+                            <div class="sup-tab active" data-role="ADMIN" onclick="renderSupervisionPage('ADMIN')">
+                                <i class="fa-solid fa-landmark"></i> المديريات الحكومية
+                            </div>
+                            <div class="sup-tab" data-role="ENGINEER" onclick="renderSupervisionPage('ENGINEER')">
+                                <i class="fa-solid fa-drafting-compass"></i> مكاتب الخبراء
+                            </div>
+                            <div class="sup-tab" data-role="STUDENT" onclick="renderSupervisionPage('STUDENT')">
+                                <i class="fa-solid fa-graduation-cap"></i> القطاع الأكاديمي
+                            </div>
+                            <div class="sup-tab" data-role="FARMER" onclick="renderSupervisionPage('FARMER')">
+                                <i class="fa-solid fa-tractor"></i> مستخدمو الميدان
+                            </div>
+                        </div>
+                        <div id="supervision-users-list" style="padding-bottom:1rem;">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── PERMISSIONS MATRIX ───────────────────────── -->
+                <div class="card" style="margin-bottom:1.5rem;">
+                    <div class="admin-section-header" style="padding: 1rem 1rem 0;">
+                        <h3><i class="fa-solid fa-table-cells"></i> مصفوفة الصلاحيات الديناميكية</h3>
+                        <button class="action-btn" onclick="savePermissionsMatrix()" style="font-size:0.8rem;background:var(--accent-success);color:#000;">
+                            <i class="fa-solid fa-floppy-disk"></i> حفظ وتطبيق
+                        </button>
+                    </div>
+                    <div style="padding: 1rem; overflow-x: auto;" id="permissions-matrix-grid">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- ── AUDIT LOG ─────────────────────────────────── -->
+                <div class="card">
+                    <div class="admin-section-header" style="padding: 1rem 1rem 0;">
+                        <h3><i class="fa-solid fa-file-shield"></i> سجلات المراجعة الأمنية (Audit Log)</h3>
+                        <button class="action-btn" onclick="exportAuditLog()" style="font-size:0.8rem;">
+                            <i class="fa-solid fa-download"></i> تصدير CSV
+                        </button>
+                    </div>
+                    <div style="padding: 1rem; overflow-x: auto;">
+                        <table class="audit-log-table">
+                            <thead>
+                                <tr>
+                                    <th>المعرف</th>
+                                    <th>التوقيت</th>
+                                    <th>المسؤول</th>
+                                    <th>الإجراء</th>
+                                    <th>الهدف</th>
+                                    <th>التفاصيل</th>
+                                </tr>
+                            </thead>
+                            <tbody id="audit-log-body">
+                                <tr><td colspan="6" style="text-align:center;padding:2rem;color:#666;">جارٍ التحميل...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL: Impersonate Role Picker -->
+            <div id="modal-impersonate" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+                <div class="modal-box" style="max-width:420px;direction:rtl;">
+                    <div class="modal-header">
+                        <h3><i class="fa-solid fa-masks-theater"></i> وضع المحاكاة — عرض كمستخدم</h3>
+                        <button class="modal-close" onclick="document.getElementById('modal-impersonate').classList.remove('active')">✕</button>
+                    </div>
+                    <div style="padding:1.5rem;">
+                        <p style="color:var(--text-muted);margin-bottom:1.2rem;font-size:0.9rem;">
+                            اختر الدور الذي تريد محاكاته. ستتحول الواجهة لتظهر تماماً كما يراها هذا الدور.
+                        </p>
+                        <div style="display:flex;flex-direction:column;gap:0.7rem;">
+                            <button class="admin-action-btn impersonate" onclick="startImpersonation('ENGINEER');document.getElementById('modal-impersonate').classList.remove('active')" style="width:100%;justify-content:flex-start;padding:0.8rem 1rem;">
+                                <i class="fa-solid fa-drafting-compass"></i> محاكاة دور Premium (مهندس GIS)
+                            </button>
+                            <button class="admin-action-btn view" onclick="startImpersonation('STUDENT');document.getElementById('modal-impersonate').classList.remove('active')" style="width:100%;justify-content:flex-start;padding:0.8rem 1rem;">
+                                <i class="fa-solid fa-graduation-cap"></i> محاكاة دور Academic (طالب)
+                            </button>
+                            <button class="admin-action-btn approve" onclick="startImpersonation('FARMER');document.getElementById('modal-impersonate').classList.remove('active')" style="width:100%;justify-content:flex-start;padding:0.8rem 1rem;">
+                                <i class="fa-solid fa-tractor"></i> محاكاة دور Field User (مزارع)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL: User Security Record -->
+            <div id="modal-user-record" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+                <div class="modal-box" style="max-width:550px;direction:rtl;">
+                    <div class="modal-header">
+                        <h3><i class="fa-solid fa-shield-halved"></i> السجل الأمني للمستخدم</h3>
+                        <button class="modal-close" onclick="document.getElementById('modal-user-record').classList.remove('active')">✕</button>
+                    </div>
+                    <div style="padding:1.5rem;">
+                        <div class="record-grid">
+                            <div class="record-item"><label>الاسم الكامل</label><span id="record-name">—</span></div>
+                            <div class="record-item"><label>المعرف</label><span id="record-id" style="color:var(--accent-primary);">—</span></div>
+                            <div class="record-item"><label>الدور</label><span id="record-role">—</span></div>
+                            <div class="record-item"><label>البريد الإلكتروني</label><span id="record-email">—</span></div>
+                            <div class="record-item"><label>المؤسسة</label><span id="record-inst">—</span></div>
+                            <div class="record-item"><label>الحالة</label><span id="record-status">—</span></div>
+                            <div class="record-item"><label>الموقع</label><span id="record-location">—</span></div>
+                            <div class="record-item"><label>آخر دخول</label><span id="record-lastlogin">—</span></div>
+                        </div>
+                        <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:1rem;">
+                            <h4 style="margin:0 0 0.7rem;color:var(--text-muted);font-size:0.8rem;text-transform:uppercase;">آخر الأنشطة الأمنية</h4>
+                            <div id="record-audit"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- VIEW: SETTINGS -->
             <div id="view-settings" class="view-section">
                 <div class="dashboard-grid">
@@ -2578,7 +2786,63 @@
     <script src="js/analytics.js?v=6"></script>
     <script src="js/ai_insights.js?v=6"></script>
     <script src="js/wells.js?v=6"></script>
+    <script src="js/adminDashboard.js?v=1"></script>
     <script>
+        // ═══ ADMIN DASHBOARD INIT ═══════════════════════════════
+        function initAdminDashboard() {
+            setTimeout(() => {
+                if (typeof updateKPIs === 'function') updateKPIs();
+                if (typeof renderSupervisionPage === 'function') renderSupervisionPage('ADMIN');
+                if (typeof renderPermissionsMatrix === 'function') renderPermissionsMatrix();
+                if (typeof renderAuditLog === 'function') renderAuditLog();
+                // Update pending badge
+                const pending = (window.mockUsers || []).filter(u => u.status === 'PENDING').length;
+                const badge = document.getElementById('admin-pending-badge');
+                if (badge) badge.textContent = pending;
+            }, 100);
+        }
+
+        function openImpersonateModal() {
+            document.getElementById('modal-impersonate').classList.add('active');
+        }
+
+        function refreshAdminData() {
+            if (typeof updateKPIs === 'function') updateKPIs();
+            if (typeof renderSupervisionPage === 'function') renderSupervisionPage(window._currentSupPage || 'ADMIN');
+            if (typeof renderAuditLog === 'function') renderAuditLog();
+            showToast('🔄 تم تحديث بيانات لوحة الإدارة', 'info');
+        }
+
+        function savePermissionsMatrix() {
+            try {
+                localStorage.setItem('geowell_permissions', JSON.stringify(window.permissionsMatrix));
+                if (typeof logAuditEvent === 'function') {
+                    logAuditEvent('PERMISSIONS_SAVED', 'ALL_ROLES', 'Permissions matrix saved to database');
+                }
+                if (typeof applyRolePermissions === 'function') applyRolePermissions();
+                showToast('✅ تم حفظ وتطبيق مصفوفة الصلاحيات بنجاح', 'success');
+            } catch(e) {
+                showToast('❌ فشل حفظ الصلاحيات', 'error');
+            }
+        }
+
+        function exportAuditLog() {
+            const log = window.auditLog || [];
+            if (!log.length) { showToast('لا توجد سجلات للتصدير', 'warning'); return; }
+            let csv = 'ID,Timestamp,Admin,Action,Target,Details\n';
+            log.forEach(e => {
+                csv += `"${e.id}","${e.timestamp}","${e.adminId}","${e.action}","${e.target}","${e.details}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `GeoWell_AuditLog_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            if (typeof logAuditEvent === 'function') logAuditEvent('AUDIT_EXPORTED', 'CSV', `${log.length} entries exported`);
+            showToast('📥 تم تصدير سجلات المراجعة بنجاح', 'success');
+        }
+
         function toggleGISSubmenu(e) {
             if (e) e.preventDefault();
             const panel = document.getElementById('layerControl');

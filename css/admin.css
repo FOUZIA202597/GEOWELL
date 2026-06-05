@@ -1,0 +1,345 @@
+/* ============================================================
+   GEOWELL ADMIN DASHBOARD STYLES
+   ============================================================ */
+
+/* ── Impersonation Banner ─────────────────────────────────── */
+#impersonation-banner {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 99999;
+    background: linear-gradient(90deg, #f39c12, #e67e22);
+    color: #000;
+    padding: 10px 20px;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 20px rgba(243,156,18,0.5);
+    animation: slideDownBanner 0.4s ease;
+}
+@keyframes slideDownBanner { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+#impersonation-banner button {
+    background: rgba(0,0,0,0.2);
+    border: 2px solid rgba(0,0,0,0.4);
+    color: #000;
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+#impersonation-banner button:hover { background: rgba(0,0,0,0.35); }
+
+/* ── Admin KPI Cards ──────────────────────────────────────── */
+.admin-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.admin-kpi-card {
+    background: linear-gradient(135deg, #0d121b, #111827);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.admin-kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,212,255,0.1);
+}
+.admin-kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--kpi-color, var(--accent-primary));
+    border-radius: 12px 12px 0 0;
+}
+.admin-kpi-card .kpi-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    background: var(--kpi-color, var(--accent-primary));
+    opacity: 0.85;
+}
+.admin-kpi-card .kpi-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+}
+.admin-kpi-card .kpi-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.admin-kpi-card .kpi-sub {
+    font-size: 0.72rem;
+    color: var(--accent-primary);
+    margin-top: 2px;
+}
+
+/* ── Supervision Tabs ─────────────────────────────────────── */
+.sup-tabs-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+}
+.sup-tab {
+    padding: 0.55rem 1.2rem;
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+}
+.sup-tab:hover { background: rgba(0,212,255,0.08); color: #fff; }
+.sup-tab.active {
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,212,255,0.05));
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+/* ── User Admin Cards ─────────────────────────────────────── */
+.user-card-admin {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    transition: border-color 0.2s, background 0.2s;
+}
+.user-card-admin.pending  { border-left: 4px solid #f39c12; }
+.user-card-admin.suspended{ border-left: 4px solid #e74c3c; }
+.user-card-admin.active   { border-left: 4px solid #2ecc71; }
+.user-card-admin.rejected { border-left: 4px solid #666; }
+.user-card-admin:hover { background: rgba(0,212,255,0.04); }
+
+.user-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+}
+.user-avatar-admin {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    border: 2px solid;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+.user-card-info { flex: 1; }
+.user-card-info strong { display: block; color: #fff; font-size: 0.95rem; }
+.user-card-info small { display: block; color: var(--text-muted); font-size: 0.78rem; margin-top: 2px; }
+.user-status-col { display: flex; flex-direction: column; align-items: flex-end; }
+
+.user-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.admin-action-btn {
+    padding: 0.4rem 0.9rem;
+    border-radius: 7px;
+    border: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 5px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+.admin-action-btn.view      { background: rgba(0,212,255,0.1);  color: var(--accent-primary); border-color: rgba(0,212,255,0.3); }
+.admin-action-btn.approve   { background: rgba(46,204,113,0.12); color: #2ecc71; border-color: rgba(46,204,113,0.3); }
+.admin-action-btn.reject    { background: rgba(231,76,60,0.1);  color: #e74c3c; border-color: rgba(231,76,60,0.3); }
+.admin-action-btn.suspend   { background: rgba(231,76,60,0.1);  color: #e74c3c; border-color: rgba(231,76,60,0.3); }
+.admin-action-btn.impersonate{ background: rgba(155,89,182,0.12); color: #9b59b6; border-color: rgba(155,89,182,0.3); }
+.admin-action-btn:hover { opacity: 0.8; transform: translateY(-1px); }
+
+/* ── Status Pills ─────────────────────────────────────────── */
+.status-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.status-pill.active    { background: rgba(46,204,113,0.15); color: #2ecc71; }
+.status-pill.pending   { background: rgba(243,156,18,0.15); color: #f39c12; }
+.status-pill.suspended { background: rgba(231,76,60,0.15);  color: #e74c3c; }
+.status-pill.rejected  { background: rgba(100,100,100,0.15);color: #999; }
+
+/* ── Permissions Matrix Table ─────────────────────────────── */
+.perms-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.perms-table th, .perms-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    text-align: center;
+    font-size: 0.85rem;
+}
+.perms-table th {
+    background: rgba(0,212,255,0.05);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.perms-table td:first-child { text-align: right; color: #ccc; }
+.perms-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+/* ── Toggle Switch ────────────────────────────────────────── */
+.perm-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px; height: 24px;
+    cursor: pointer;
+}
+.perm-toggle input { opacity: 0; width: 0; height: 0; }
+.perm-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 24px;
+    transition: 0.3s;
+}
+.perm-slider::before {
+    content: '';
+    position: absolute;
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+.perm-toggle input:checked + .perm-slider { background: var(--accent-primary); }
+.perm-toggle input:checked + .perm-slider::before { transform: translateX(20px); }
+.perm-toggle.locked .perm-slider { background: rgba(231,76,60,0.3); cursor: not-allowed; }
+.perm-toggle.locked input:checked + .perm-slider { background: rgba(0,212,255,0.4); }
+
+/* ── Audit Log Table ──────────────────────────────────────── */
+.audit-log-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+.audit-log-table th {
+    padding: 0.6rem 0.8rem;
+    background: rgba(0,212,255,0.05);
+    color: var(--text-muted);
+    text-align: right;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+.audit-log-table td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: #ccc;
+    text-align: right;
+}
+.audit-log-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+.audit-action-badge {
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.audit-action-badge.success { background: rgba(46,204,113,0.15); color: #2ecc71; }
+.audit-action-badge.danger  { background: rgba(231,76,60,0.15);  color: #e74c3c; }
+.audit-action-badge.warning { background: rgba(243,156,18,0.15); color: #f39c12; }
+.audit-action-badge.info    { background: rgba(0,212,255,0.1);   color: #00d4ff; }
+
+/* ── Role Chart Bars ──────────────────────────────────────── */
+.role-dist-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+.role-dist-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.role-dist-label { width: 110px; font-size: 0.8rem; color: var(--text-muted); text-align: right; flex-shrink: 0; }
+.role-dist-bar-wrap { flex: 1; background: rgba(255,255,255,0.05); border-radius: 6px; height: 10px; overflow: hidden; }
+.role-dist-bar { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
+.role-dist-count { width: 28px; text-align: left; font-size: 0.8rem; font-weight: 700; color: #fff; }
+
+/* ── Admin Modal - User Record ────────────────────────────── */
+.record-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 1.2rem;
+}
+.record-item label { display: block; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; margin-bottom: 3px; }
+.record-item span  { font-size: 0.9rem; color: #fff; font-weight: 500; }
+
+.audit-mini-row {
+    display: flex; justify-content: space-between;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.78rem;
+    color: #aaa;
+}
+.audit-mini-row .audit-action { color: var(--accent-primary); font-weight: 600; }
+
+/* ── Coord Mask Indicator ─────────────────────────────────── */
+.coord-mask-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    background: rgba(231,76,60,0.15);
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+/* ── Section Headers ──────────────────────────────────────── */
+.admin-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(0,212,255,0.15);
+}
+.admin-section-header h3 {
+    display: flex; align-items: center; gap: 8px;
+    color: #fff; font-size: 1rem; margin: 0;
+}
+
+/* ── Empty State ──────────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+}
+.empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.4; }
