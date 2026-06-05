@@ -83,20 +83,55 @@
             <div id="auth-view-login" class="auth-form-view active">
                 <div class="auth-input-group">
                     <label data-i18n="email_label">EMAIL ADDRESS</label>
-                    <input type="email" id="login-email" placeholder="name@company.dz">
+                    <input type="email" id="login-email" placeholder="name@anrh.dz">
                 </div>
                 <div class="auth-input-group">
                     <label data-i18n="pass_label">PASSWORD</label>
                     <input type="password" id="login-pass" placeholder="••••••••">
                 </div>
+                <!-- Role Selector Visual -->
                 <div class="auth-input-group">
                     <label data-i18n="role_label">ROLE CATEGORY</label>
-                    <select id="login-role" style="width:100%; padding: 0.75rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,212,255,0.3); border-radius: 8px; color: #fff; font-size: 0.95rem; cursor:pointer;">
-                        <option value="ADMIN" data-i18n="role_admin">Superior (Government/DRE)</option>
-                        <option value="ENGINEER" data-i18n="role_engineer">Premium (GIS Engineer)</option>
-                        <option value="STUDENT" data-i18n="role_student">Academic (Student)</option>
-                        <option value="FARMER" data-i18n="role_farmer">Field User (Farmer)</option>
-                    </select>
+                    <div class="role-card-grid" id="login-role-grid">
+                        <!-- Institutional -->
+                        <div class="role-card institutional selected" data-value="ANRH" onclick="selectRole('login','ANRH',this)">
+                            <i class="fa-solid fa-water"></i>
+                            <span class="role-card-name">ANRH</span>
+                            <span class="role-card-sub" data-i18n="role_anrh_sub">Res. Hydrauliques</span>
+                        </div>
+                        <div class="role-card institutional" data-value="ADE" onclick="selectRole('login','ADE',this)">
+                            <i class="fa-solid fa-faucet-drip"></i>
+                            <span class="role-card-name">ADE</span>
+                            <span class="role-card-sub" data-i18n="role_ade_sub">Algérienne des Eaux</span>
+                        </div>
+                        <div class="role-card institutional" data-value="DRE" onclick="selectRole('login','DRE',this)">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <span class="role-card-name">DRE</span>
+                            <span class="role-card-sub" data-i18n="role_dre_sub">Direction Wilaya</span>
+                        </div>
+                        <div class="role-card institutional" data-value="ONA" onclick="selectRole('login','ONA',this)">
+                            <i class="fa-solid fa-recycle"></i>
+                            <span class="role-card-name">ONA</span>
+                            <span class="role-card-sub" data-i18n="role_ona_sub">Assainissement</span>
+                        </div>
+                        <!-- General -->
+                        <div class="role-card general" data-value="ENGINEER" onclick="selectRole('login','ENGINEER',this)">
+                            <i class="fa-solid fa-drafting-compass"></i>
+                            <span class="role-card-name" data-i18n="role_engineer_short">Expert</span>
+                            <span class="role-card-sub" data-i18n="role_engineer_sub">GIS / Hydrology</span>
+                        </div>
+                        <div class="role-card general" data-value="STUDENT" onclick="selectRole('login','STUDENT',this)">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span class="role-card-name" data-i18n="role_student_short">Academic</span>
+                            <span class="role-card-sub" data-i18n="role_student_sub">University</span>
+                        </div>
+                        <div class="role-card general" data-value="FARMER" onclick="selectRole('login','FARMER',this)">
+                            <i class="fa-solid fa-tractor"></i>
+                            <span class="role-card-name" data-i18n="role_farmer_short">Field</span>
+                            <span class="role-card-sub" data-i18n="role_farmer_sub">Agriculture</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="login-role" value="ANRH">
                 </div>
                 <button class="btn-auth" onclick="handleAuthAction(event, false)" data-i18n="btn_login">LOG IN TO DASHBOARD</button>
             </div>
@@ -109,26 +144,59 @@
                 </div>
                 <div class="auth-input-group">
                     <label data-i18n="email_label">EMAIL ADDRESS</label>
-                    <input type="email" id="signup-email" placeholder="contact@houra.dz">
+                    <input type="email" id="signup-email" placeholder="contact@anrh.dz">
                 </div>
                 <div class="auth-input-group">
                     <label data-i18n="inst_label">INSTITUTION / COMPANY</label>
-                    <input type="text" id="signup-inst" placeholder="DRE Batna / Enterprise">
+                    <input type="text" id="signup-inst" placeholder="ANRH / DRE / ADE / ONA ...">
                 </div>
+                <!-- Role Selector Visual -->
                 <div class="auth-input-group">
                     <label data-i18n="role_label">ROLE CATEGORY</label>
-                    <select id="signup-role">
-                        <option value="ADMIN" data-i18n="role_admin">Superior (Government/DRE)</option>
-                        <option value="ENGINEER" data-i18n="role_engineer">Premium (GIS Engineer)</option>
-                        <option value="STUDENT" data-i18n="role_student">Academic (Student)</option>
-                        <option value="FARMER" data-i18n="role_farmer">Field User (Farmer)</option>
-                    </select>
+                    <div class="role-card-grid" id="signup-role-grid">
+                        <div class="role-card institutional selected" data-value="ANRH" onclick="selectRole('signup','ANRH',this)">
+                            <i class="fa-solid fa-water"></i>
+                            <span class="role-card-name">ANRH</span>
+                            <span class="role-card-sub" data-i18n="role_anrh_sub">Res. Hydrauliques</span>
+                        </div>
+                        <div class="role-card institutional" data-value="ADE" onclick="selectRole('signup','ADE',this)">
+                            <i class="fa-solid fa-faucet-drip"></i>
+                            <span class="role-card-name">ADE</span>
+                            <span class="role-card-sub" data-i18n="role_ade_sub">Algérienne des Eaux</span>
+                        </div>
+                        <div class="role-card institutional" data-value="DRE" onclick="selectRole('signup','DRE',this)">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <span class="role-card-name">DRE</span>
+                            <span class="role-card-sub" data-i18n="role_dre_sub">Direction Wilaya</span>
+                        </div>
+                        <div class="role-card institutional" data-value="ONA" onclick="selectRole('signup','ONA',this)">
+                            <i class="fa-solid fa-recycle"></i>
+                            <span class="role-card-name">ONA</span>
+                            <span class="role-card-sub" data-i18n="role_ona_sub">Assainissement</span>
+                        </div>
+                        <div class="role-card general" data-value="ENGINEER" onclick="selectRole('signup','ENGINEER',this)">
+                            <i class="fa-solid fa-drafting-compass"></i>
+                            <span class="role-card-name" data-i18n="role_engineer_short">Expert</span>
+                            <span class="role-card-sub" data-i18n="role_engineer_sub">GIS / Hydrology</span>
+                        </div>
+                        <div class="role-card general" data-value="STUDENT" onclick="selectRole('signup','STUDENT',this)">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span class="role-card-name" data-i18n="role_student_short">Academic</span>
+                            <span class="role-card-sub" data-i18n="role_student_sub">University</span>
+                        </div>
+                        <div class="role-card general" data-value="FARMER" onclick="selectRole('signup','FARMER',this)">
+                            <i class="fa-solid fa-tractor"></i>
+                            <span class="role-card-name" data-i18n="role_farmer_short">Field</span>
+                            <span class="role-card-sub" data-i18n="role_farmer_sub">Agriculture</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="signup-role" value="ANRH">
                 </div>
                 <div class="auth-input-group">
                     <label data-i18n="pass_label">PASSWORD</label>
                     <input type="password" id="signup-pass" placeholder="••••••••">
                 </div>
-                <button class="btn-auth" onclick="handleAuthAction(event, true)" data-i18n="btn_signup">CREATE & LAUNCH HUB</button>
+                <button class="btn-auth" onclick="handleAuthAction(event, true)" data-i18n="btn_signup">CREATE &amp; LAUNCH HUB</button>
             </div>
 
             <div class="social-auth">
@@ -138,10 +206,10 @@
 
             <button class="btn-auth" style="margin-top: 1rem; background: rgba(0, 212, 255, 0.1); border: 1px dashed var(--accent-primary); color: var(--accent-primary);" onclick="handleCommitteeBypass()" data-i18n="btn_committee">COMMITTEE / GUEST ACCESS</button>
 
-            
-            <p style="font-size:0.6rem; color:rgba(255,255,255,0.2); margin-top:1.5rem;">V.2026.04 &bull; Secure Encrypted Session</p>
+            <p style="font-size:0.6rem; color:rgba(255,255,255,0.2); margin-top:1.5rem;">V.2026.06 &bull; Secure Encrypted Session</p>
         </div>
     </div>
+
 
     <div class="dashboard-container">
     <div class="app-container">

@@ -1,10 +1,11 @@
 /**
- * GeoWell Super-Multilingual Engine (MutationObserver Edition)
- * Provides 100% Guaranteed Asset & UI Translation Logic
+ * GeoWell Super-Multilingual Engine — v3.0 Sectorielle
+ * EN / FR / AR — All roles, sectors, UI strings
  */
 
 const translations = {
     'en': {
+        // Auth
         'brand': 'GEOWELL',
         'tagline': 'Intelligence Water Management Platform',
         'sign_in': 'SIGN IN',
@@ -16,10 +17,29 @@ const translations = {
         'role_label': 'ROLE CATEGORY',
         'btn_login': 'LOG IN TO DASHBOARD',
         'btn_signup': 'CREATE & LAUNCH HUB',
-        'role_admin': 'Superior (Government/DRE)',
-        'role_engineer': 'Premium (GIS Engineer)',
-        'role_student': 'Academic (Student)',
-        'role_farmer': 'Field User (Farmer)',
+        'btn_committee': 'COMMITTEE / GUEST ACCESS',
+        'social_google': 'Google',
+        'social_microsoft': 'Microsoft',
+        // Sector roles
+        'role_anrh_sub': 'Hydraulic Resources',
+        'role_ade_sub': 'Water Supply',
+        'role_dre_sub': 'Regional Direction',
+        'role_ona_sub': 'Sanitation',
+        'role_engineer_short': 'Expert',
+        'role_engineer_sub': 'GIS / Hydrology',
+        'role_student_short': 'Academic',
+        'role_student_sub': 'University',
+        'role_farmer_short': 'Field',
+        'role_farmer_sub': 'Agriculture',
+        // Welcome messages per role
+        'welcome_ANRH':     '🌊 ANRH — Hydraulic Resources Agency. Full read/write access enabled.',
+        'welcome_ADE':      '🚿 ADE — Algérienne des Eaux. Monitoring & alerts access enabled.',
+        'welcome_DRE':      '🏛 DRE — Regional Direction. Regional supervision access enabled.',
+        'welcome_ONA':      '♻️ ONA — National Sanitation Office. Environmental layers access enabled.',
+        'welcome_ENGINEER': '🛰️ Premium Engineer — GIS & advanced tools unlocked.',
+        'welcome_STUDENT':  '📚 Academic access — Research & analytics enabled.',
+        'welcome_FARMER':   '🌾 Field User — Simplified interface enabled.',
+        // Nav
         'nav_dashboard': 'Dashboard',
         'nav_map': 'Map View',
         'nav_layers': 'GIS Layers',
@@ -29,6 +49,8 @@ const translations = {
         'nav_assets': 'Asset Inventory',
         'nav_library': 'Knowledge Hub',
         'nav_qgis': 'QGIS Live',
+        'nav_admin': 'Admin Panel',
+        // UI
         'search_placeholder': 'Search Name, ID...',
         'neural_btn': 'Neural Analysis',
         'total_wells': 'TOTAL WELLS',
@@ -37,10 +59,6 @@ const translations = {
         'efficiency': 'SYSTEM EFFICIENCY',
         'recent_activity': 'Recent Activity',
         'well_passport': 'Well Passport',
-        'lng_toast': 'Language set to English',
-        'social_google': 'Google',
-        'social_microsoft': 'Microsoft',
-        'btn_committee': 'COMMITTEE / GUEST ACCESS',
         'wqi_report': 'WQI Report',
         'methodology': 'Methodology',
         'refresh': 'Refresh',
@@ -56,9 +74,12 @@ const translations = {
         'analyze': 'Analyze Dashboard',
         'street_map': 'Street Map',
         'satellite_view': 'Satellite View',
-        'earth_view': 'Earth'
+        'earth_view': 'Earth',
+        'lng_toast': 'Language set to English',
+        'settings': 'Settings',
     },
     'fr': {
+        // Auth
         'brand': 'GEOWELL',
         'tagline': 'Plateforme Intelligente de Gestion de l\'Eau',
         'sign_in': 'SE CONNECTER',
@@ -70,10 +91,29 @@ const translations = {
         'role_label': 'CATÉGORIE DE RÔLE',
         'btn_login': 'ACCÉDER AU TABLEAU DE BORD',
         'btn_signup': 'CRÉER ET LANCER LE HUB',
-        'role_admin': 'Supérieur (Gouvernement/DRE)',
-        'role_engineer': 'Premium (Ingénieur SIG)',
-        'role_student': 'Académique (Étudiant)',
-        'role_farmer': 'Utilisateur de terrain (Agriculteur)',
+        'btn_committee': 'ACCÈS COMITÉ / INVITÉ',
+        'social_google': 'Google',
+        'social_microsoft': 'Microsoft',
+        // Sector roles
+        'role_anrh_sub': 'Ressources Hydrauliques',
+        'role_ade_sub': 'Algérienne des Eaux',
+        'role_dre_sub': 'Direction Wilaya',
+        'role_ona_sub': 'Assainissement',
+        'role_engineer_short': 'Expert',
+        'role_engineer_sub': 'SIG / Hydrologie',
+        'role_student_short': 'Académique',
+        'role_student_sub': 'Université',
+        'role_farmer_short': 'Terrain',
+        'role_farmer_sub': 'Agriculture',
+        // Welcome
+        'welcome_ANRH':     '🌊 ANRH — Agence Nationale des Ressources Hydrauliques. Accès complet activé.',
+        'welcome_ADE':      '🚿 ADE — Algérienne des Eaux. Accès monitoring & alertes activé.',
+        'welcome_DRE':      '🏛 DRE — Direction des Ressources en Eau. Supervision régionale activée.',
+        'welcome_ONA':      '♻️ ONA — Office National de l\'Assainissement. Couches environnementales activées.',
+        'welcome_ENGINEER': '🛰️ Ingénieur Premium — Outils SIG & avancés déverrouillés.',
+        'welcome_STUDENT':  '📚 Accès Académique — Recherche & analyses activées.',
+        'welcome_FARMER':   '🌾 Utilisateur Terrain — Interface simplifiée activée.',
+        // Nav
         'nav_dashboard': 'Tableau de Bord',
         'nav_map': 'Vue Carte',
         'nav_layers': 'Couches SIG',
@@ -83,6 +123,8 @@ const translations = {
         'nav_assets': 'Inventaire Équipements',
         'nav_library': 'Bibliothèque',
         'nav_qgis': 'Plateforme QGIS',
+        'nav_admin': 'Panneau Admin',
+        // UI
         'search_placeholder': 'Rechercher Nom, ID...',
         'neural_btn': 'Analyse Neuronale',
         'total_wells': 'PUITS TOTAUX',
@@ -91,10 +133,6 @@ const translations = {
         'efficiency': 'EFFICACITÉ',
         'recent_activity': 'Activité Récente',
         'well_passport': 'Passeport du Puits',
-        'lng_toast': 'Langue: Français',
-        'social_google': 'Google',
-        'social_microsoft': 'Microsoft',
-        'btn_committee': 'ACCÈS COMITÉ / INVITÉ',
         'wqi_report': 'Rapport WQI',
         'methodology': 'Méthodologie',
         'refresh': 'Actualiser',
@@ -102,7 +140,7 @@ const translations = {
         'wqi_score': 'Score WQI',
         'status': 'Statut',
         'trend': 'Tendance (12M)',
-        'ai_insight': 'Aperçu AI',
+        'ai_insight': 'Aperçu IA',
         'select_wells': 'Sélectionner Puits:',
         'analytics_wilaya': 'Wilaya',
         'analytics_daira': 'Daïra',
@@ -110,9 +148,12 @@ const translations = {
         'analyze': 'Analyser',
         'street_map': 'Carte Rue',
         'satellite_view': 'Vue Satellite',
-        'earth_view': 'Terre'
+        'earth_view': 'Terre',
+        'lng_toast': 'Langue: Français',
+        'settings': 'Paramètres',
     },
     'ar': {
+        // Auth
         'brand': 'جيوبئر | GEOWELL',
         'tagline': 'المنصة الذكية لإدارة الموارد المائية',
         'sign_in': 'تسجيل الدخول',
@@ -123,11 +164,30 @@ const translations = {
         'inst_label': 'المؤسسة / الشركة',
         'role_label': 'فئة الدور',
         'btn_login': 'الدخول للمنصة',
-        'btn_signup': 'تشغيل منصة الابتكار',
-        'role_admin': 'مسؤول (إدارة/وزارة)',
-        'role_engineer': 'خبير (مهندس جيولوجي)',
-        'role_student': 'أكاديمي (طالب)',
-        'role_farmer': 'مستخدم ميداني (فلاح)',
+        'btn_signup': 'إنشاء حساب والإطلاق',
+        'btn_committee': 'دخول اللجنة / زائر',
+        'social_google': 'جـوجـل',
+        'social_microsoft': 'مايكروسوفت',
+        // Sector roles
+        'role_anrh_sub': 'الموارد المائية',
+        'role_ade_sub': 'الجزائرية للمياه',
+        'role_dre_sub': 'مديرية الولاية',
+        'role_ona_sub': 'التطهير',
+        'role_engineer_short': 'خبير',
+        'role_engineer_sub': 'مهندس GIS',
+        'role_student_short': 'أكاديمي',
+        'role_student_sub': 'جامعة',
+        'role_farmer_short': 'ميداني',
+        'role_farmer_sub': 'زراعة',
+        // Welcome
+        'welcome_ANRH':     '🌊 ANRH — الوكالة الوطنية للموارد المائية. صلاحية القراءة والكتابة الكاملة مفعّلة.',
+        'welcome_ADE':      '🚿 ADE — الجزائرية للمياه. مراقبة الشبكة واستقبال الإنذارات مفعّلة.',
+        'welcome_DRE':      '🏛 DRE — مديرية الموارد المائية الولائية. الإشراف الإقليمي مفعّل.',
+        'welcome_ONA':      '♻️ ONA — الديوان الوطني للتطهير. طبقات الحماية البيئية مفعّلة.',
+        'welcome_ENGINEER': '🛰️ مهندس GIS — الأدوات المتقدمة وطبقات SIG مفعّلة.',
+        'welcome_STUDENT':  '📚 وصول أكاديمي — التحليلات والمحتوى البحثي متاح.',
+        'welcome_FARMER':   '🌾 مستخدم ميداني — الواجهة المبسطة جاهزة.',
+        // Nav
         'nav_dashboard': 'لوحة التحكم',
         'nav_map': 'عرض الخارطة',
         'nav_layers': 'طبقات البيانات',
@@ -137,6 +197,8 @@ const translations = {
         'nav_assets': 'المعدات والأصول',
         'nav_library': 'المكتبة العلمية',
         'nav_qgis': 'بث QGIS المباشر',
+        'nav_admin': 'لوحة الإدارة',
+        // UI
         'search_placeholder': 'البحث بالاسم، المعرف...',
         'neural_btn': 'التحليل العصبي المباشر',
         'total_wells': 'إجمالي الآبار',
@@ -145,10 +207,6 @@ const translations = {
         'efficiency': 'كفاءة النظام',
         'recent_activity': 'آخر النشاطات',
         'well_passport': 'بطاقة هوية البئر',
-        'lng_toast': 'تم تغيير اللغة للعربية',
-        'social_google': 'جـوجـل',
-        'social_microsoft': 'مايكروسوفت',
-        'btn_committee': 'دخول اللجنة / زائر',
         'wqi_report': 'تقرير مؤشر الجودة (WQI)',
         'methodology': 'المنهجية العلمية',
         'refresh': 'تحديث البيانات',
@@ -164,44 +222,44 @@ const translations = {
         'analyze': 'تحليل البيانات',
         'street_map': 'خريطة الشارع',
         'satellite_view': 'قمر صناعي',
-        'earth_view': 'الأرض'
+        'earth_view': 'الأرض',
+        'lng_toast': 'تم تغيير اللغة للعربية',
+        'settings': 'الإعدادات',
     }
 };
 
 window.currentLang = localStorage.getItem('geo_lang') || 'en';
 
+// ── Apply translation to single element ──────────────────────
 window.applyTranslationToElement = function(el) {
     const key = el.getAttribute('data-i18n');
     const dict = translations[window.currentLang];
     if (!dict || !dict[key]) return;
-
     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
         el.placeholder = dict[key];
     } else if (el.tagName === 'OPTION') {
         el.text = dict[key];
     } else {
-        // Logic to preserve Icons while translating text
         const icon = el.querySelector('i');
         if (icon) {
-            const iconHtml = icon.outerHTML;
-            el.innerHTML = iconHtml + ' ' + `<span class="i18n-text">${dict[key]}</span>`;
+            el.innerHTML = icon.outerHTML + ' <span class="i18n-text">' + dict[key] + '</span>';
         } else {
             el.innerText = dict[key];
         }
     }
 };
 
+// ── Main init ────────────────────────────────────────────────
 window.i18nInit = function(lang) {
     const selectedLang = lang || window.currentLang;
     window.currentLang = selectedLang;
     localStorage.setItem('geo_lang', selectedLang);
 
-    // Global Initial Pass
     document.querySelectorAll('[data-i18n]').forEach(el => {
         window.applyTranslationToElement(el);
     });
 
-    // Handle RTL and Fonts
+    // Handle RTL & font
     const html = document.documentElement;
     if (selectedLang === 'ar') {
         html.setAttribute('dir', 'rtl');
@@ -213,18 +271,23 @@ window.i18nInit = function(lang) {
         html.style.fontFamily = "'Outfit', sans-serif";
     }
 
-    console.log(`[i18n Global] Lang synced: ${selectedLang}`);
+    // Re-render role card subs on language change
+    document.querySelectorAll('.role-card-sub[data-i18n]').forEach(el => {
+        window.applyTranslationToElement(el);
+    });
+    document.querySelectorAll('.role-card-name[data-i18n]').forEach(el => {
+        window.applyTranslationToElement(el);
+    });
+
+    console.log('[i18n] Lang synced:', selectedLang);
 };
 
-/**
- * THE OBSERVER: The "Secret Weapon" for perfect UI sync
- * This watches for ANY element with data-i18n being added to the DOM
- */
+// ── MutationObserver for dynamic content ─────────────────────
 const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
         if (mutation.type === 'childList') {
             mutation.addedNodes.forEach((node) => {
-                if (node.nodeType === 1) { // Element
+                if (node.nodeType === 1) {
                     if (node.hasAttribute('data-i18n')) window.applyTranslationToElement(node);
                     node.querySelectorAll('[data-i18n]').forEach(el => window.applyTranslationToElement(el));
                 }
@@ -232,16 +295,19 @@ const observer = new MutationObserver((mutations) => {
         }
     });
 });
-
 observer.observe(document.body, { childList: true, subtree: true });
 
-/**
- * Compatibility Aliases
- */
+// ── Helpers ───────────────────────────────────────────────────
 window.getText = (key) => (translations[window.currentLang] || translations['en'])[key] || key;
 window.applyTranslations = () => window.i18nInit(window.currentLang);
 
-// Run on boot
+// ── Welcome message per sector/role ──────────────────────────
+window.getRoleWelcomeMessage = function(role, name) {
+    const key = 'welcome_' + role;
+    const msg = window.getText(key);
+    return msg + (name ? ` — ${name}` : '');
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     window.i18nInit(window.currentLang);
 });
