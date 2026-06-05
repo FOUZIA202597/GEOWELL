@@ -621,6 +621,7 @@ window.setLang = function(lang) {
 // ── Pricing modal ─────────────────────────────────────────────
 window.openPricingModal = function() { document.getElementById('modal-pricing')?.classList.add('active'); };
 window.closeInnovationModal = function(id) { document.getElementById(id)?.classList.remove('active'); };
+window.openInnovationModal = function(id) { document.getElementById(id)?.classList.add('active'); };
 
 window.simulateRoleChange = function(newRole) {
     const plan = window.mockData?.subscriptionPlans?.find(p => p.role === newRole);
