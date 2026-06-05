@@ -2195,17 +2195,29 @@
                     </div>
                     <div style="padding: 0 1rem;">
                         <div class="sup-tabs-bar">
-                            <div class="sup-tab active" data-role="ADMIN" onclick="renderSupervisionPage('ADMIN')">
-                                <i class="fa-solid fa-landmark"></i> المديريات الحكومية
+                            <!-- Institutional Tabs -->
+                            <div class="sup-tab active" data-role="ANRH" onclick="renderSupervisionPage('ANRH')" style="border-color:#00d4ff44;">
+                                <i class="fa-solid fa-water" style="color:#00d4ff"></i> ANRH
                             </div>
+                            <div class="sup-tab" data-role="ADE" onclick="renderSupervisionPage('ADE')" style="border-color:#3498db44;">
+                                <i class="fa-solid fa-faucet-drip" style="color:#3498db"></i> ADE
+                            </div>
+                            <div class="sup-tab" data-role="DRE" onclick="renderSupervisionPage('DRE')" style="border-color:#9b59b644;">
+                                <i class="fa-solid fa-building-columns" style="color:#9b59b6"></i> DRE
+                            </div>
+                            <div class="sup-tab" data-role="ONA" onclick="renderSupervisionPage('ONA')" style="border-color:#27ae6044;">
+                                <i class="fa-solid fa-recycle" style="color:#27ae60"></i> ONA
+                            </div>
+                            <div style="width:1px;background:rgba(255,255,255,0.1);margin:0 4px;"></div>
+                            <!-- General Role Tabs -->
                             <div class="sup-tab" data-role="ENGINEER" onclick="renderSupervisionPage('ENGINEER')">
-                                <i class="fa-solid fa-drafting-compass"></i> مكاتب الخبراء
+                                <i class="fa-solid fa-drafting-compass"></i> الخبراء
                             </div>
                             <div class="sup-tab" data-role="STUDENT" onclick="renderSupervisionPage('STUDENT')">
-                                <i class="fa-solid fa-graduation-cap"></i> القطاع الأكاديمي
+                                <i class="fa-solid fa-graduation-cap"></i> الأكاديميون
                             </div>
                             <div class="sup-tab" data-role="FARMER" onclick="renderSupervisionPage('FARMER')">
-                                <i class="fa-solid fa-tractor"></i> مستخدمو الميدان
+                                <i class="fa-solid fa-tractor"></i> الميدان
                             </div>
                         </div>
                         <div id="supervision-users-list" style="padding-bottom:1rem;">
@@ -2241,14 +2253,15 @@
                                 <tr>
                                     <th>المعرف</th>
                                     <th>التوقيت</th>
-                                    <th>المسؤول</th>
+                                    <th>المنفّذ / الهيئة</th>
+                                    <th>المؤسسة</th>
                                     <th>الإجراء</th>
                                     <th>الهدف</th>
                                     <th>التفاصيل</th>
                                 </tr>
                             </thead>
                             <tbody id="audit-log-body">
-                                <tr><td colspan="6" style="text-align:center;padding:2rem;color:#666;">جارٍ التحميل...</td></tr>
+                                <tr><td colspan="7" style="text-align:center;padding:2rem;color:#666;">جارٍ التحميل...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -2282,26 +2295,60 @@
             </div>
 
             <!-- MODAL: User Security Record -->
+            <!-- MODAL: User Security Record (Extended with Sector) -->
             <div id="modal-user-record" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('active')">
-                <div class="modal-box" style="max-width:550px;direction:rtl;">
+                <div class="modal-box" style="max-width:580px;direction:rtl;">
                     <div class="modal-header">
                         <h3><i class="fa-solid fa-shield-halved"></i> السجل الأمني للمستخدم</h3>
                         <button class="modal-close" onclick="document.getElementById('modal-user-record').classList.remove('active')">✕</button>
                     </div>
-                    <div style="padding:1.5rem;">
+                    <div style="padding:1.5rem;overflow-y:auto;max-height:75vh;">
                         <div class="record-grid">
                             <div class="record-item"><label>الاسم الكامل</label><span id="record-name">—</span></div>
                             <div class="record-item"><label>المعرف</label><span id="record-id" style="color:var(--accent-primary);">—</span></div>
-                            <div class="record-item"><label>الدور</label><span id="record-role">—</span></div>
-                            <div class="record-item"><label>البريد الإلكتروني</label><span id="record-email">—</span></div>
+                            <div class="record-item"><label>الدور / الهيئة</label><span id="record-role">—</span></div>
+                            <div class="record-item"><label>البريد الإلكتروني</label><span id="record-email" style="font-size:0.85rem;">—</span></div>
                             <div class="record-item"><label>المؤسسة</label><span id="record-inst">—</span></div>
                             <div class="record-item"><label>الحالة</label><span id="record-status">—</span></div>
                             <div class="record-item"><label>الموقع</label><span id="record-location">—</span></div>
                             <div class="record-item"><label>آخر دخول</label><span id="record-lastlogin">—</span></div>
                         </div>
+                        <!-- Sector Tasks (shown for institutional users) -->
+                        <div id="record-sector-section" style="display:none;border:1px solid rgba(0,212,255,0.2);border-radius:8px;padding:0.8rem 1rem;margin-bottom:1rem;background:rgba(0,212,255,0.04);">
+                            <h4 style="margin:0 0 0.5rem;color:var(--accent-primary);font-size:0.8rem;text-transform:uppercase;">
+                                <i class="fa-solid fa-list-check"></i> مهام الهيئة — <span id="record-sector-name"></span>
+                            </h4>
+                            <ul id="record-tasks" style="margin:0;padding-right:1.2rem;color:#ccc;font-size:0.82rem;line-height:1.8;"></ul>
+                        </div>
                         <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:1rem;">
-                            <h4 style="margin:0 0 0.7rem;color:var(--text-muted);font-size:0.8rem;text-transform:uppercase;">آخر الأنشطة الأمنية</h4>
+                            <h4 style="margin:0 0 0.7rem;color:var(--text-muted);font-size:0.8rem;text-transform:uppercase;">
+                                <i class="fa-solid fa-clock-rotate-left"></i> آخر الأنشطة الأمنية
+                            </h4>
                             <div id="record-audit"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL: Sector Permissions Editor -->
+            <div id="modal-sector-perms" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('active')">
+                <div class="modal-box" style="max-width:520px;direction:rtl;">
+                    <div class="modal-header">
+                        <h3 id="sector-perms-title"><i class="fa-solid fa-sliders"></i> صلاحيات الهيئة</h3>
+                        <button class="modal-close" onclick="document.getElementById('modal-sector-perms').classList.remove('active')">✕</button>
+                    </div>
+                    <div style="padding:1.5rem;">
+                        <p style="color:var(--text-muted);font-size:0.82rem;margin-bottom:1rem;">
+                            يمكنك تفعيل أو تعطيل كل صلاحية لهذه الهيئة تحديداً. التغيير يُطبَّق فورياً ويُسجَّل في Audit Log.
+                        </p>
+                        <div id="sector-perms-grid" style="display:flex;flex-direction:column;gap:0.7rem;max-height:55vh;overflow-y:auto;"></div>
+                        <div style="margin-top:1.2rem;display:flex;justify-content:flex-end;gap:0.7rem;">
+                            <button class="action-btn" onclick="document.getElementById('modal-sector-perms').classList.remove('active')" style="background:rgba(255,255,255,0.08);color:#ccc;">
+                                إغلاق
+                            </button>
+                            <button class="action-btn" onclick="saveSectorPermissions()" style="background:var(--accent-primary);color:#000;font-weight:700;">
+                                <i class="fa-solid fa-floppy-disk"></i> حفظ وتطبيق
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2792,10 +2839,9 @@
         function initAdminDashboard() {
             setTimeout(() => {
                 if (typeof updateKPIs === 'function') updateKPIs();
-                if (typeof renderSupervisionPage === 'function') renderSupervisionPage('ADMIN');
+                if (typeof renderSupervisionPage === 'function') renderSupervisionPage('ANRH');
                 if (typeof renderPermissionsMatrix === 'function') renderPermissionsMatrix();
                 if (typeof renderAuditLog === 'function') renderAuditLog();
-                // Update pending badge
                 const pending = (window.mockUsers || []).filter(u => u.status === 'PENDING').length;
                 const badge = document.getElementById('admin-pending-badge');
                 if (badge) badge.textContent = pending;
@@ -2808,7 +2854,7 @@
 
         function refreshAdminData() {
             if (typeof updateKPIs === 'function') updateKPIs();
-            if (typeof renderSupervisionPage === 'function') renderSupervisionPage(window._currentSupPage || 'ADMIN');
+            if (typeof renderSupervisionPage === 'function') renderSupervisionPage(window._currentSupPage || 'ANRH');
             if (typeof renderAuditLog === 'function') renderAuditLog();
             showToast('🔄 تم تحديث بيانات لوحة الإدارة', 'info');
         }
@@ -2817,7 +2863,7 @@
             try {
                 localStorage.setItem('geowell_permissions', JSON.stringify(window.permissionsMatrix));
                 if (typeof logAuditEvent === 'function') {
-                    logAuditEvent('PERMISSIONS_SAVED', 'ALL_ROLES', 'Permissions matrix saved to database');
+                    logAuditEvent('PERMISSIONS_SAVED', 'ALL', 'Matrice de permissions sauvegardée et synchronisée');
                 }
                 if (typeof applyRolePermissions === 'function') applyRolePermissions();
                 showToast('✅ تم حفظ وتطبيق مصفوفة الصلاحيات بنجاح', 'success');
@@ -2826,21 +2872,36 @@
             }
         }
 
+        function saveSectorPermissions() {
+            try {
+                localStorage.setItem('geowell_permissions', JSON.stringify(window.permissionsMatrix));
+                if (typeof logAuditEvent === 'function') {
+                    logAuditEvent('SECTOR_PERMISSIONS_SAVED', window._currentSectorEdit || '?',
+                        'Permissions sectorielles sauvegardées et synchronisées');
+                }
+                document.getElementById('modal-sector-perms').classList.remove('active');
+                if (typeof renderPermissionsMatrix === 'function') renderPermissionsMatrix();
+                showToast('✅ تم حفظ صلاحيات الهيئة بنجاح وتطبيقها فورياً', 'success');
+            } catch(e) {
+                showToast('❌ فشل الحفظ', 'error');
+            }
+        }
+
         function exportAuditLog() {
             const log = window.auditLog || [];
             if (!log.length) { showToast('لا توجد سجلات للتصدير', 'warning'); return; }
-            let csv = 'ID,Timestamp,Admin,Action,Target,Details\n';
+            let csv = 'ID,Timestamp,Admin,Sector,Institution,Action,Target,Details\n';
             log.forEach(e => {
-                csv += `"${e.id}","${e.timestamp}","${e.adminId}","${e.action}","${e.target}","${e.details}"\n`;
+                csv += `"${e.id}","${e.timestamp}","${e.adminId}","${e.sector||''}","${e.institution||''}","${e.action}","${e.target}","${e.details}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `GeoWell_AuditLog_${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = `GeoWell_AuditLog_Sectoriel_${new Date().toISOString().split('T')[0]}.csv`;
             a.click();
-            if (typeof logAuditEvent === 'function') logAuditEvent('AUDIT_EXPORTED', 'CSV', `${log.length} entries exported`);
-            showToast('📥 تم تصدير سجلات المراجعة بنجاح', 'success');
+            if (typeof logAuditEvent === 'function') logAuditEvent('AUDIT_EXPORTED', 'CSV', `${log.length} entrées exportées`);
+            showToast('📥 تم تصدير سجلات المراجعة القطاعية بنجاح', 'success');
         }
 
         function toggleGISSubmenu(e) {

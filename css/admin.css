@@ -343,3 +343,90 @@
     color: var(--text-muted);
 }
 .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.4; }
+
+/* ── Sector Header Card ───────────────────────────────────── */
+.sector-header-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 1.2rem;
+    animation: fadeSlideIn 0.3s ease;
+}
+@keyframes fadeSlideIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
+.sector-hdr-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+}
+.sector-icon-lg {
+    width: 60px; height: 60px;
+    border-radius: 14px;
+    border: 2px solid;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.sector-tasks ul { column-count: 2; }
+@media (max-width: 600px) { .sector-tasks ul { column-count: 1; } }
+
+/* ── Domain & Access Badges ──────────────────────────────── */
+.domain-badge {
+    display: inline-block;
+    font-family: monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 5px;
+    border: 1px solid;
+    margin-right: 6px;
+    margin-top: 6px;
+}
+.access-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+}
+.sector-tag {
+    display: inline-block;
+    margin-top: 3px;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+/* ── Permission Chips (sector header summary) ─────────────── */
+.sector-perms-mini {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0.8rem 0;
+}
+.perm-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.perm-chip.on  { background: rgba(46,204,113,0.12); color: #2ecc71; border: 1px solid rgba(46,204,113,0.25); }
+.perm-chip.off { background: rgba(150,150,150,0.08); color: #555; border: 1px solid rgba(150,150,150,0.15); }
+
+/* ── Sector Perm Row (in modal) ───────────────────────────── */
+.sector-perm-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 7px;
+    transition: background 0.15s;
+}
+.sector-perm-row:hover { background: rgba(0,212,255,0.05); }
+.sector-perm-row span { font-size: 0.85rem; color: #ccc; flex: 1; }
