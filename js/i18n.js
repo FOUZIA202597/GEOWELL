@@ -77,6 +77,16 @@ const translations = {
         'earth_view': 'Earth',
         'lng_toast': 'Language set to English',
         'settings': 'Settings',
+        'confirm_pass': 'CONFIRM PASSWORD',
+        'forgot_pass': 'Forgot password?',
+        'choose_plan': 'Choose your subscription plan to continue',
+        'plan_note': 'You can change your plan at any time from Settings.',
+        'recommended': 'Recommended',
+        'free': 'FREE',
+        'month': 'mo',
+        'hello_prefix': '👋 Welcome',
+        'start_free': 'Start Free',
+        'choose_plan_btn': 'Choose Plan',
     },
     'fr': {
         // Auth
@@ -151,6 +161,16 @@ const translations = {
         'earth_view': 'Terre',
         'lng_toast': 'Langue: Français',
         'settings': 'Paramètres',
+        'confirm_pass': 'CONFIRMER LE MOT DE PASSE',
+        'forgot_pass': 'Mot de passe oublié?',
+        'choose_plan': 'Choisissez votre abonnement pour continuer',
+        'plan_note': 'Vous pouvez changer d\'abonnement depuis les paramètres.',
+        'recommended': 'Recommandé',
+        'free': 'GRATUIT',
+        'month': 'mois',
+        'hello_prefix': '👋 Bienvenue',
+        'start_free': 'Commencer Gratuit',
+        'choose_plan_btn': 'Choisir ce Plan',
     },
     'ar': {
         // Auth
@@ -225,6 +245,16 @@ const translations = {
         'earth_view': 'الأرض',
         'lng_toast': 'تم تغيير اللغة للعربية',
         'settings': 'الإعدادات',
+        'confirm_pass': 'تأكيد كلمة المرور',
+        'forgot_pass': 'نسيت كلمة المرور؟',
+        'choose_plan': 'اختر خطة الاشتراك للمتابعة',
+        'plan_note': 'يمكنك تغيير الخطة في أي وقت من الإعدادات.',
+        'recommended': 'الأنسب',
+        'free': 'مجاني',
+        'month': 'شهر',
+        'hello_prefix': '👋 أهلاً',
+        'start_free': 'ابدأ مجاناً',
+        'choose_plan_btn': 'اختر هذه الخطة',
     }
 };
 

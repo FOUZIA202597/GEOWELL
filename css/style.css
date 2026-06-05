@@ -2633,3 +2633,254 @@ input:checked + .slider:before {
 .role-badge.role-ade  { background: rgba(52,152,219,0.15); color: #3498db; border: 1px solid #3498db33; }
 .role-badge.role-dre  { background: rgba(155,89,182,0.15); color: #9b59b6; border: 1px solid #9b59b633; }
 .role-badge.role-ona  { background: rgba(39,174,96,0.15);  color: #27ae60; border: 1px solid #27ae6033; }
+
+/* ============================================================
+   PROFESSIONAL AUTH v4 — Input Icons, Pass Strength, Plans
+   ============================================================ */
+
+/* Auth card layout */
+.auth-logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 0.08em; color: #fff; font-family: 'Orbitron', sans-serif; margin-bottom: 0.4rem; }
+.auth-tagline { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 2rem; }
+.auth-forgot { text-align: center; margin-top: 0.6rem; }
+.auth-forgot a { color: var(--text-muted); font-size: 0.75rem; text-decoration: none; }
+.auth-forgot a:hover { color: var(--accent-primary); }
+.auth-version { font-size: 0.6rem; color: rgba(255,255,255,0.18); margin-top: 1.5rem; text-align: center; }
+.btn-committee { margin-top:0.8rem; background: rgba(0,212,255,0.07); border: 1px dashed var(--accent-primary); color: var(--accent-primary); }
+
+/* Input with icon */
+.input-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.input-icon-wrap input {
+    padding-left: 2.5rem !important;
+    padding-right: 2.5rem !important;
+}
+.input-icon {
+    position: absolute;
+    left: 0.9rem;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 1;
+}
+[dir="rtl"] .input-icon { left: auto; right: 0.9rem; }
+[dir="rtl"] .input-icon-wrap input { padding-left: 2.5rem !important; padding-right: 2.5rem !important; }
+
+.toggle-pass {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.3);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+    padding: 0;
+    z-index: 2;
+}
+.toggle-pass:hover { color: var(--accent-primary); }
+
+/* Password Strength */
+.pass-strength {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+.pass-strength-fill {
+    height: 100%;
+    width: 0;
+    transition: width 0.4s ease, background 0.3s;
+    border-radius: 2px;
+}
+.pass-strength-label, .pass-match-label {
+    display: block;
+    font-size: 0.7rem;
+    margin-top: 3px;
+    font-weight: 600;
+    min-height: 1rem;
+}
+
+/* Primary Auth Button */
+.btn-primary-auth {
+    background: linear-gradient(135deg, #0ea5e9, #0077ff) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    box-shadow: 0 8px 24px rgba(2,132,199,0.4);
+}
+.btn-primary-auth:hover {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(2,132,199,0.5);
+}
+
+/* -- Subscription Screen ----------------------------------- */
+.auth-plan-card {
+    max-width: 820px !important;
+    width: 96vw !important;
+    padding: 2rem !important;
+}
+.plan-step-header {
+    margin-bottom: 1.5rem;
+}
+.plan-user-hello {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.plan-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid #00d4ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.3s, background 0.3s;
+}
+.plan-subtitle {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.plan-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.plan-card {
+    background: rgba(255,255,255,0.03);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 1.5rem 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    overflow: hidden;
+}
+.plan-card:hover {
+    border-color: rgba(0,212,255,0.4);
+    background: rgba(0,212,255,0.05);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+}
+.plan-card.plan-recommended {
+    border-color: rgba(0,212,255,0.5);
+    background: rgba(0,212,255,0.06);
+    box-shadow: 0 0 24px rgba(0,212,255,0.12);
+}
+.plan-card.plan-selected {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 30px rgba(0,212,255,0.25);
+}
+.plan-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg,#0ea5e9,#9b59b6);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.plan-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.4rem;
+    transition: transform 0.2s;
+}
+.plan-card:hover .plan-icon { transform: scale(1.1); }
+.plan-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 0.6rem;
+}
+.plan-price {
+    margin-bottom: 1rem;
+}
+.plan-free {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #2ecc71;
+    font-family: 'Orbitron', sans-serif;
+}
+.plan-amount {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+}
+.plan-currency {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: 'Outfit', sans-serif;
+}
+.plan-period {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: block;
+}
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.2rem;
+    text-align: left;
+}
+.plan-features li {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding: 3px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.plan-features li i { color: #2ecc71; font-size: 0.65rem; }
+.btn-plan {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+}
+.btn-plan:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+.btn-plan-primary {
+    background: linear-gradient(135deg, #0ea5e9, #0077ff);
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(2,132,199,0.4);
+}
+.btn-plan-primary:hover {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    box-shadow: 0 6px 20px rgba(2,132,199,0.5);
+    transform: translateY(-1px);
+}
