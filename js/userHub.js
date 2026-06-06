@@ -30,6 +30,23 @@ const SECTOR_INSTITUTIONS = {
 // ── Session store (temp) ──────────────────────────────────────
 window._pendingUser = null;
 
+// ── OAuth Simulation ────────────────────────────────────────────
+window.simulateOAuth = function(provider) {
+    const emailInput = document.getElementById('login-email');
+    const passInput = document.getElementById('login-pass');
+    if (!emailInput || !passInput) return;
+    
+    emailInput.value = `oauth.${provider.toLowerCase()}@example.com`;
+    passInput.value = `oauth-secret-${Math.random().toString(36).substr(2, 9)}`;
+    
+    const loginBtn = document.querySelector('.btn-login');
+    if (loginBtn) {
+        window.handleAuthAction({ currentTarget: loginBtn });
+    } else {
+        window.handleLogin({ currentTarget: document.createElement('button') });
+    }
+};
+
 // ── Init ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     updateUserUI();
