@@ -2663,61 +2663,61 @@
         <div id="modal-pricing" class="modal-overlay">
             <div class="modal-content" style="width: 1000px; max-width: 95vw;">
                 <div class="modal-header">
-                    <h3><i class="fa-solid fa-gem"></i> GeoWell Innovation Tiers</h3>
+                    <h3 data-i18n="pricing_title"><i class="fa-solid fa-gem"></i> GeoWell Innovation Tiers</h3>
                     <button class="close-btn" onclick="closeInnovationModal('modal-pricing')">&times;</button>
                 </div>
                 <div class="pricing-grid">
                     <!-- Academic -->
                     <div class="price-card">
                         <div class="price-header">
-                            <h4>Academic</h4>
-                            <div class="price-tag">Gratuit</div>
+                            <h4 data-i18n="plan_academic">Academic</h4>
+                            <div class="price-tag" data-i18n="free">Gratuit</div>
                         </div>
                         <ul class="price-features">
-                            <li><i class="fa-solid fa-check"></i> Map Visualization</li>
-                            <li><i class="fa-solid fa-check"></i> Library Access</li>
-                            <li><i class="fa-solid fa-xmark" style="color:var(--accent-danger)"></i> No Pro Exports</li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_map">Map Visualization</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_library">Library Access</span></li>
+                            <li><i class="fa-solid fa-xmark" style="color:var(--accent-danger)"></i> <span data-i18n="feat_no_export">No Pro Exports</span></li>
                         </ul>
-                        <button class="btn-save" style="width:100%;" onclick="simulateRoleChange('STUDENT')">Join for Free</button>
+                        <button class="btn-save" style="width:100%;" onclick="simulateRoleChange('STUDENT')" data-i18n="join_free">Join for Free</button>
                     </div>
                     <!-- Premium -->
                     <div class="price-card featured">
                         <div class="price-header">
-                            <h4>Premium</h4>
+                            <h4 data-i18n="plan_premium">Premium</h4>
                             <div class="price-tag">12,000 DZD</div>
                         </div>
                         <ul class="price-features">
-                            <li><i class="fa-solid fa-check"></i> High-Res GeoTIFF</li>
-                            <li><i class="fa-solid fa-check"></i> 3D Digital Twin</li>
-                            <li><i class="fa-solid fa-check"></i> BaridiMob Priority</li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_hires">High-Res GeoTIFF</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_3d">3D Digital Twin</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_baridimob">BaridiMob Priority</span></li>
                         </ul>
-                        <button class="btn-save" style="width:100%;" onclick="openBaridiMob()">Upgrade Now</button>
+                        <button class="btn-save" style="width:100%;" onclick="openBaridiMob()" data-i18n="upgrade_now">Upgrade Now</button>
                     </div>
                     <!-- Superior -->
                     <div class="price-card">
                         <div class="price-header">
-                            <h4>Superior</h4>
-                            <div class="price-tag">Gov/Contract</div>
+                            <h4 data-i18n="plan_superior">Superior</h4>
+                            <div class="price-tag" data-i18n="gov_contract">Gov/Contract</div>
                         </div>
                         <ul class="price-features">
-                            <li><i class="fa-solid fa-check"></i> State Sovereignty</li>
-                            <li><i class="fa-solid fa-check"></i> Regional Reports</li>
-                            <li><i class="fa-solid fa-check"></i> User Management</li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_sov">State Sovereignty</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_regional">Regional Reports</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_usermgt">User Management</span></li>
                         </ul>
-                        <button class="btn-save" style="width:100%;" onclick="simulateRoleChange('ADMIN')">Contact DRE</button>
+                        <button class="btn-save" style="width:100%;" onclick="simulateRoleChange('ADMIN')" data-i18n="contact_dre">Contact DRE</button>
                     </div>
                     <!-- Field -->
                     <div class="price-card">
                         <div class="price-header">
-                            <h4>Field User</h4>
+                            <h4 data-i18n="plan_field">Field User</h4>
                             <div class="price-tag">2,500 DZD</div>
                         </div>
                         <ul class="price-features">
-                            <li><i class="fa-solid fa-check"></i> Simplified Arabic UI</li>
-                            <li><i class="fa-solid fa-check"></i> Weather Alerts</li>
-                            <li><i class="fa-solid fa-check"></i> Local Rigs Support</li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_arabic">Simplified Arabic UI</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_weather">Weather Alerts</span></li>
+                            <li><i class="fa-solid fa-check"></i> <span data-i18n="feat_rigs">Local Rigs Support</span></li>
                         </ul>
-                        <button class="btn-save" style="width:100%;" onclick="simulateRoleChange('FARMER')">Activate</button>
+                        <button class="btn-save" style="width:100%;" onclick="simulateRoleChange('FARMER')" data-i18n="activate_plan">Activate</button>
                     </div>
                 </div>
             </div>
@@ -2807,14 +2807,14 @@
         <div id="modal-user-account" class="modal-overlay">
             <div class="modal-content account-modal" style="width:500px; max-width:95vw;">
                 <div class="modal-header">
-                    <h3><i class="fa-solid fa-id-badge"></i> Account Intelligence</h3>
+                    <h3><i class="fa-solid fa-id-badge"></i> <span data-i18n="acc_title">Account Intelligence</span></h3>
                     <button class="close-btn" onclick="closeInnovationModal('modal-user-account')">&times;</button>
                 </div>
                 
                 <div class="account-tabs-header" style="display:flex; border-bottom:1px solid #333; margin-bottom:1rem;">
-                    <button class="acc-tab-btn active" onclick="switchAccTab('acc-overview', this)" style="flex:1; background:transparent; border:none; color:#fff; padding:10px; cursor:pointer; border-bottom:2px solid var(--accent-primary);">Overview</button>
-                    <button class="acc-tab-btn" onclick="switchAccTab('acc-subscription', this)" style="flex:1; background:transparent; border:none; color:#888; padding:10px; cursor:pointer; border-bottom:2px solid transparent;">Subscription</button>
-                    <button class="acc-tab-btn" onclick="switchAccTab('acc-settings', this)" style="flex:1; background:transparent; border:none; color:#888; padding:10px; cursor:pointer; border-bottom:2px solid transparent;">Settings</button>
+                    <button class="acc-tab-btn active" onclick="switchAccTab('acc-overview', this)" style="flex:1; background:transparent; border:none; color:#fff; padding:10px; cursor:pointer; border-bottom:2px solid var(--accent-primary);" data-i18n="acc_tab_overview">Overview</button>
+                    <button class="acc-tab-btn" onclick="switchAccTab('acc-subscription', this)" style="flex:1; background:transparent; border:none; color:#888; padding:10px; cursor:pointer; border-bottom:2px solid transparent;" data-i18n="acc_tab_sub">Subscription</button>
+                    <button class="acc-tab-btn" onclick="switchAccTab('acc-settings', this)" style="flex:1; background:transparent; border:none; color:#888; padding:10px; cursor:pointer; border-bottom:2px solid transparent;" data-i18n="acc_tab_settings">Settings</button>
                 </div>
 
                 <div class="account-body">
@@ -2824,27 +2824,27 @@
                             <div class="ac-stat-box" style="background:#1a1d24; padding:15px; border-radius:10px; text-align:center;">
                                 <i class="fa-solid fa-bolt" style="color:var(--accent-primary); margin-bottom:5px;"></i>
                                 <div style="color:var(--accent-success); font-weight:bold; font-size:1.5rem;" id="modal-ac-credits">99</div>
-                                <label style="font-size:0.6rem; color:var(--text-muted);">CREDITS</label>
+                                <label style="font-size:0.6rem; color:var(--text-muted);" data-i18n="acc_credits">CREDITS</label>
                             </div>
                             <div class="ac-stat-box" style="background:#1a1d24; padding:15px; border-radius:10px; text-align:center;">
                                 <i class="fa-solid fa-hourglass-half" style="color:var(--accent-primary); margin-bottom:5px;"></i>
                                 <div style="color:var(--accent-primary); font-weight:bold; font-size:1.5rem;" id="modal-ac-days">30</div>
-                                <label style="font-size:0.6rem; color:var(--text-muted);">DAYS LEFT</label>
+                                <label style="font-size:0.6rem; color:var(--text-muted);" data-i18n="acc_days_left">DAYS LEFT</label>
                             </div>
                             <div class="ac-stat-box" style="background:#1a1d24; padding:15px; border-radius:10px; text-align:center;">
                                 <i class="fa-solid fa-shield-halved" style="color:var(--accent-primary); margin-bottom:5px;"></i>
                                 <div style="color:#fff; font-weight:bold; font-size:0.9rem; margin-top:5px;" id="modal-ac-role">Premium</div>
-                                <label style="font-size:0.6rem; color:var(--text-muted);">ROLE</label>
+                                <label style="font-size:0.6rem; color:var(--text-muted);" data-i18n="acc_role">ROLE</label>
                             </div>
                         </div>
                         
                         <div style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid var(--border-color);">
-                            <label style="font-size:0.7rem; color:var(--text-muted);">INSTITUTION / SECTOR</label>
+                            <label style="font-size:0.7rem; color:var(--text-muted);" data-i18n="acc_institution">INSTITUTION / SECTOR</label>
                             <div style="font-weight:bold; margin-top:5px; color:#fff;" id="modal-ac-inst">Bureau d'Études</div>
                         </div>
 
                         <button class="btn-save" style="width:100%; margin-top:1.5rem;" onclick="closeInnovationModal('modal-user-account'); openInnovationModal('modal-pricing');">
-                            <i class="fa-solid fa-gem"></i> UPGRADE HUB
+                            <i class="fa-solid fa-gem"></i> <span data-i18n="acc_upgrade_hub">UPGRADE HUB</span>
                         </button>
                     </div>
 
@@ -2852,47 +2852,47 @@
                     <div id="acc-subscription" class="acc-tab-content" style="display:none;">
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
                             <div style="padding:15px; background:rgba(255,255,255,0.03); border-radius:10px;">
-                                <label style="font-size:0.7rem; color:var(--text-muted);">SUBSCRIPTION PLAN</label>
+                                <label style="font-size:0.7rem; color:var(--text-muted);" data-i18n="acc_sub_plan">SUBSCRIPTION PLAN</label>
                                 <div style="font-weight:bold; margin-top:5px; color:#fff;" id="modal-ac-plan-name">Premium</div>
                             </div>
                             <div style="padding:15px; background:rgba(255,255,255,0.03); border-radius:10px;">
-                                <label style="font-size:0.7rem; color:var(--text-muted);">BILLING CYCLE</label>
+                                <label style="font-size:0.7rem; color:var(--text-muted);" data-i18n="acc_bill_cycle">BILLING CYCLE</label>
                                 <div style="font-weight:bold; margin-top:5px; color:var(--accent-primary);" id="modal-ac-cycle">Annual (سنوي)</div>
                             </div>
                         </div>
                         <div style="margin-top:10px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px;">
-                            <label style="font-size:0.7rem; color:var(--text-muted);">NEXT BILLING DATE</label>
+                            <label style="font-size:0.7rem; color:var(--text-muted);" data-i18n="acc_next_bill">NEXT BILLING DATE</label>
                             <div style="font-weight:bold; margin-top:5px; color:#fff;" id="modal-ac-billing">12 Oct 2026</div>
                         </div>
                         <div style="margin-top:10px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px;">
-                            <label style="font-size:0.7rem; color:var(--text-muted);">PAYMENT METHOD</label>
+                            <label style="font-size:0.7rem; color:var(--text-muted);" data-i18n="acc_payment_method">PAYMENT METHOD</label>
                             <div style="font-weight:bold; margin-top:5px; color:#fff;"><i class="fa-solid fa-credit-card"></i> BaridiMob ending in 1234</div>
                         </div>
                         <button class="btn-cancel" style="width:100%; margin-top:1.5rem; background:rgba(255,255,255,0.1); color:#fff; border:1px solid #444;">
-                            <i class="fa-solid fa-file-pdf"></i> Download Last Invoice
+                            <i class="fa-solid fa-file-pdf"></i> <span data-i18n="acc_download_invoice">Download Last Invoice</span>
                         </button>
                     </div>
 
                     <!-- SETTINGS & LOGOUT TAB -->
                     <div id="acc-settings" class="acc-tab-content" style="display:none;">
                         <div style="margin-top:10px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px;">
-                            <label style="font-size:0.7rem; color:var(--text-muted);">CHANGE PASSWORD</label>
-                            <input type="password" placeholder="New Password" style="width:100%; padding:8px; margin-top:5px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius:5px; font-family:inherit;">
-                            <input type="password" placeholder="Confirm Password" style="width:100%; padding:8px; margin-top:5px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius:5px; font-family:inherit;">
-                            <button class="btn-save" style="margin-top:10px; font-size:0.8rem; padding:5px 15px;">Update</button>
+                            <label style="font-size:0.7rem; color:var(--text-muted);" data-i18n="acc_change_pass">CHANGE PASSWORD</label>
+                            <input type="password" placeholder="New Password" data-i18n-placeholder="acc_new_pass" style="width:100%; padding:8px; margin-top:5px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius:5px; font-family:inherit;">
+                            <input type="password" placeholder="Confirm Password" data-i18n-placeholder="confirm_pass" style="width:100%; padding:8px; margin-top:5px; background:rgba(0,0,0,0.5); border:1px solid #333; color:#fff; border-radius:5px; font-family:inherit;">
+                            <button class="btn-save" style="margin-top:10px; font-size:0.8rem; padding:5px 15px;" data-i18n="acc_update">Update</button>
                         </div>
                         
                         <div style="margin-top:10px; padding:15px; background:rgba(255,255,255,0.03); border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
                             <div>
-                                <div style="font-weight:bold; color:#fff; font-size:0.9rem;">Enable 2FA</div>
-                                <div style="font-size:0.7rem; color:var(--text-muted);">Two-Factor Authentication</div>
+                                <div style="font-weight:bold; color:#fff; font-size:0.9rem;" data-i18n="acc_enable_2fa">Enable 2FA</div>
+                                <div style="font-size:0.7rem; color:var(--text-muted);" data-i18n="acc_2fa_desc">Two-Factor Authentication</div>
                             </div>
                             <input type="checkbox" checked style="accent-color:var(--accent-primary); transform:scale(1.2);">
                         </div>
 
                         <div style="margin-top:20px; border-top:1px solid #333; padding-top:20px;">
                             <button class="btn-logout-action" onclick="logoutAction()" style="width:100%; padding:12px; background:#e74c3c; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px; transition:0.2s;" onmouseover="this.style.background='#c0392b'" onmouseout="this.style.background='#e74c3c'">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i> LOG OUT SECURELY
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i> <span data-i18n="acc_logout">LOG OUT SECURELY</span>
                             </button>
                         </div>
                     </div>
@@ -3025,7 +3025,7 @@
     <script src="js/ai-analyst.js?v=6"></script>
     <script src="js/ai-ui.js?v=6"></script>
     
-    <script src="js/i18n.js?v=6"></script>
+    <script src="js/i18n.js?v=7"></script>
     <script src="js/assetInnovations.js?v=6"></script>
     <script src="js/userHub.js?v=7"></script>
     <script src="js/aiInsights.js?v=6"></script>
