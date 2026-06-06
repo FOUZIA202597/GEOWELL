@@ -1,4 +1,4 @@
-/**
+﻿/**
  * GeoWell Super-Multilingual Engine — v3.0 Sectorielle
  * EN / FR / AR — All roles, sectors, UI strings
  */
@@ -470,3 +470,4 @@ window.getRoleWelcomeMessage = function(role, name) {
 document.addEventListener('DOMContentLoaded', () => {
     window.i18nInit(window.currentLang);
 });
+

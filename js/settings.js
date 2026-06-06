@@ -1,6 +1,6 @@
 // Settings & Localization
 
-const translations = {
+const settingsTranslations = {
     en: {
         dashboard: "Dashboard",
         map_view: "Map View",
@@ -414,14 +414,14 @@ const translations = {
     }
 };
 
-let currentLang = 'en';
+let settingsCurrentLang = 'en';
 
-function getText(key) {
-    return translations[currentLang][key] || key;
+function getSettingsText(key) {
+    return settingsTranslations[settingsCurrentLang][key] || key;
 }
 
 function changeLanguage(lang) {
-    currentLang = lang;
+    settingsCurrentLang = lang;
     document.documentElement.lang = lang;
 
     // RTL Handling
@@ -437,8 +437,8 @@ function changeLanguage(lang) {
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-            el.innerText = translations[lang][key];
+        if (settingsTranslations[lang] && settingsTranslations[lang][key]) {
+            el.innerText = settingsTranslations[lang][key];
         }
     });
 
@@ -446,8 +446,8 @@ function changeLanguage(lang) {
     const inputs = document.querySelectorAll('[data-i18n-placeholder]');
     inputs.forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[lang] && translations[lang][key]) {
-            el.placeholder = translations[lang][key];
+        if (settingsTranslations[lang] && settingsTranslations[lang][key]) {
+            el.placeholder = settingsTranslations[lang][key];
         }
     });
 
@@ -474,7 +474,7 @@ function updateSidebarText(lang) {
     const navItems = document.querySelectorAll('.nav-item');
     const setNav = (view, textKey) => {
         const item = document.querySelector(`.nav-item[data-view="${view}"] span`);
-        if (item && translations[lang][textKey]) item.innerText = translations[lang][textKey];
+        if (item && settingsTranslations[lang][textKey]) item.innerText = settingsTranslations[lang][textKey];
     };
 
     setNav('dashboard', 'dashboard');
