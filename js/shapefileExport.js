@@ -164,19 +164,75 @@ window.executeShapefileExport = function(btn) {
             }
         });
         
-        const geojson = {
-            "type": "FeatureCollection",
-            "name": `GeoWell_${element}_Export`,
-            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-            "features": features
-        };
+        let geojson;
+        if (typeof turf !== 'undefined' && features.length > 3) {
+            try {
+                // 1. Create Point Collection
+                const pointCollection = turf.featureCollection(features);
+                
+                // 2. Determine BBox and expand slightly
+                const bbox = turf.bbox(pointCollection);
+                const expandedBbox = [bbox[0]-0.05, bbox[1]-0.05, bbox[2]+0.05, bbox[3]+0.05];
+                
+                // 3. Interpolate IDW Grid
+                const grid = turf.interpolate(pointCollection, 0.005, {
+                    gridType: 'point',
+                    property: 'Value_mgL',
+                    units: 'degrees',
+                    weight: 3,
+                    bbox: expandedBbox
+                });
+                
+                // 4. Calculate dynamic breaks
+                const values = features.map(f => f.properties.Value_mgL);
+                const min = Math.min(...values);
+                const max = Math.max(...values);
+                const step = (max - min) / 6 || 10;
+                
+                const breaks = [];
+                for (let i = Math.floor(min); i <= Math.ceil(max) + step; i += step) {
+                    breaks.push(parseFloat(i.toFixed(1)));
+                }
+                
+                // 5. Generate Isobands (Polygons)
+                const isobands = turf.isobands(grid, breaks, { zProperty: 'Value_mgL' });
+                
+                // 6. Clean up properties
+                isobands.features.forEach(f => {
+                    f.properties.Element = element.toUpperCase();
+                    f.properties.Concentration_Range = f.properties.Value_mgL; // Turf sets this to "min-max"
+                    delete f.properties.Value_mgL; // Remove the string version to prevent QGIS typing issues
+                });
+                
+                geojson = isobands;
+                geojson.name = `GeoWell_${element}_Heatmap`;
+                
+            } catch(e) {
+                console.error("Isobands generation failed:", e);
+                // Fallback to points
+                geojson = {
+                    "type": "FeatureCollection",
+                    "name": `GeoWell_${element}_Points`,
+                    "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                    "features": features
+                };
+            }
+        } else {
+            // Fallback to points if Turf is missing or not enough points
+            geojson = {
+                "type": "FeatureCollection",
+                "name": `GeoWell_${element}_Points`,
+                "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                "features": features
+            };
+        }
         
         const dataStr = JSON.stringify(geojson, null, 2);
         const blob = new Blob([dataStr], { type: 'application/geo+json' });
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.href = url;
-        anchor.download = `GeoWell_${element}_Analysis.geojson`;
+        anchor.download = `GeoWell_${element}_Heatmap.geojson`;
         document.body.appendChild(anchor);
         anchor.click();
         document.body.removeChild(anchor);
