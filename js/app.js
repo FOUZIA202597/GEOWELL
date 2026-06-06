@@ -990,8 +990,6 @@ window.startDrawExportArea = function() {
         // Cleanup UI cues if any
         const mapExport = document.getElementById('map-export');
         if(mapExport) mapExport.style.outline = "";
-        const guide = document.getElementById('drawGuideOverlay');
-        if(guide) guide.remove();
         if(window.drawToast) { try { document.body.removeChild(window.drawToast); } catch(e){} window.drawToast = null; }
         
         return; 
@@ -1007,12 +1005,6 @@ window.startDrawExportArea = function() {
         mapExport.style.outline = "6px solid var(--accent-warning)";
         mapExport.style.outlineOffset = "-10px";
         mapExport.style.cursor = "crosshair"; // Change cursor to crosshair
-        
-        const guide = document.createElement('div');
-        guide.id = "drawGuideOverlay";
-        guide.style.cssText = "position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,184,148,0.9); color:#fff; padding:20px 40px; border-radius:12px; z-index:2000; border:2px solid #fff; font-weight:bold; pointer-events:none; box-shadow:0 0 50px rgba(0,0,0,0.8); text-align:center; animation: pulse 1.5s infinite;";
-        guide.innerHTML = '<i class="fa-solid fa-pencil" style="font-size:2rem; display:block; margin-bottom:10px;"></i> DRAW STUDY AREA HERE <br> (Inside this Map) <br> ارسم منطقة الدراسة هـنـا <br> <small>(انقر لبدء الرسم)</small>';
-        mapExport.appendChild(guide);
     }
 
     // Clear instruction toast
@@ -1032,8 +1024,6 @@ window.startDrawExportArea = function() {
             if(window.drawToast) { try { document.body.removeChild(window.drawToast); } catch(e){} window.drawToast = null; }
             if(mapExport) {
                 mapExport.style.outline = "";
-                const guide = document.getElementById('drawGuideOverlay');
-                if(guide) mapExport.removeChild(guide);
             }
 
             // NEW: Show "Next Step" Prompt & Preview Contours
