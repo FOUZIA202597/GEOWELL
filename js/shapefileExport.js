@@ -174,12 +174,12 @@ window.executeShapefileExport = function(btn) {
                 const bbox = turf.bbox(pointCollection);
                 const expandedBbox = [bbox[0]-0.1, bbox[1]-0.1, bbox[2]+0.1, bbox[3]+0.1];
                 
-                // 3. Interpolate IDW Grid with high resolution (0.0015) for smooth curves
-                const grid = turf.interpolate(pointCollection, 0.0015, {
+                // 3. Interpolate IDW Grid with Ultra-High resolution (0.0005) and lower weight (2) for organic, smooth curves
+                const grid = turf.interpolate(pointCollection, 0.0005, {
                     gridType: 'point',
                     property: 'Value_mgL',
                     units: 'degrees',
-                    weight: 3,
+                    weight: 2,
                     bbox: expandedBbox
                 });
                 

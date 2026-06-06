@@ -1295,12 +1295,12 @@ window.exportToGIS = function (type, btn) {
                     bbox = turf.bbox(turf.buffer(hull, 0.1, {units: 'degrees'}));
                 }
                 
-                // Interpolate (IDW) High Resolution
-                const grid = turf.interpolate(points, 0.0015, {
+                // Interpolate (IDW) High Resolution (Ultra Smooth)
+                const grid = turf.interpolate(points, 0.0005, {
                     gridType: 'point', 
                     property: 'piezo',
                     units: 'degrees',
-                    weight: 3,
+                    weight: 2,
                     bbox: bbox // Pass explicit bbox
                 });
 
