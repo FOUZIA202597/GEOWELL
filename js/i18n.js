@@ -1,4 +1,4 @@
-﻿/**
+/**
  * GeoWell Super-Multilingual Engine — v3.0 Sectorielle
  * EN / FR / AR — All roles, sectors, UI strings
  */
@@ -49,7 +49,8 @@ const translations = {
         'nav_assets': 'Asset Inventory',
         'nav_library': 'Knowledge Hub',
         'nav_qgis': 'QGIS Live',
-        'nav_admin': 'Admin Panel',
+        'nav_admin': 'Admin Control',
+        'nav_community': 'Community Hub',
         // UI
         'search_placeholder': 'Search Name, ID...',
         'neural_btn': 'Neural Analysis',
@@ -176,7 +177,8 @@ const translations = {
         'nav_assets': 'Inventaire Équipements',
         'nav_library': 'Bibliothèque',
         'nav_qgis': 'Plateforme QGIS',
-        'nav_admin': 'Panneau Admin',
+        'nav_admin': 'Panneau d\'Administration',
+        'nav_community': 'Centre Communautaire',
         // UI
         'search_placeholder': 'Rechercher Nom, ID...',
         'neural_btn': 'Analyse Neuronale',
@@ -303,7 +305,9 @@ const translations = {
         'nav_assets': 'المعدات والأصول',
         'nav_library': 'المكتبة العلمية',
         'nav_qgis': 'بث QGIS المباشر',
+        'nav_qgis': 'بث QGIS المباشر',
         'nav_admin': 'لوحة الإدارة',
+        'nav_community': 'مركز المجتمع والخبرات',
         // UI
         'search_placeholder': 'البحث بالاسم، المعرف...',
         'neural_btn': 'التحليل العصبي المباشر',
