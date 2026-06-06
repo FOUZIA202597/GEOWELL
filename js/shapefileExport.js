@@ -170,12 +170,12 @@ window.executeShapefileExport = function(btn) {
                 // 1. Create Point Collection
                 const pointCollection = turf.featureCollection(features);
                 
-                // 2. Determine BBox and expand slightly
+                // 2. Determine BBox and expand for a wide, realistic regional map
                 const bbox = turf.bbox(pointCollection);
-                const expandedBbox = [bbox[0]-0.05, bbox[1]-0.05, bbox[2]+0.05, bbox[3]+0.05];
+                const expandedBbox = [bbox[0]-0.1, bbox[1]-0.1, bbox[2]+0.1, bbox[3]+0.1];
                 
-                // 3. Interpolate IDW Grid
-                const grid = turf.interpolate(pointCollection, 0.005, {
+                // 3. Interpolate IDW Grid with high resolution (0.0015) for smooth curves
+                const grid = turf.interpolate(pointCollection, 0.0015, {
                     gridType: 'point',
                     property: 'Value_mgL',
                     units: 'degrees',
@@ -201,10 +201,13 @@ window.executeShapefileExport = function(btn) {
                 isobands.features.forEach(f => {
                     f.properties.Element = element.toUpperCase();
                     f.properties.Concentration_Range = f.properties.Value_mgL; // Turf sets this to "min-max"
-                    delete f.properties.Value_mgL; // Remove the string version to prevent QGIS typing issues
+                    delete f.properties.Value_mgL; 
                 });
                 
+                // 7. Merge original well points so QGIS shows BOTH the heatmap and the wells
                 geojson = isobands;
+                geojson.features = [...geojson.features, ...features];
+                
                 geojson.name = `GeoWell_${element}_Heatmap`;
                 
             } catch(e) {
