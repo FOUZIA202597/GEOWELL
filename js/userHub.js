@@ -430,7 +430,6 @@ window.confirmPlan = function(planId, e) {
         activateUserSession(user, planId);
     }, 800);
 };
-};
 
 // ── Phase 3: Activation & Redirect ────────────────────────────
 window.activateUserSession = function(user, planId) {
