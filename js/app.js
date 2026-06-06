@@ -1263,13 +1263,16 @@ window.exportToGIS = function (type, btn) {
         // 4. Generate GeoJSON or Contours
         let geojson;
         
-        if (type === 'piezo' && typeof turf !== 'undefined') {
+        if ((type === 'piezo' || type === 'phys') && typeof turf !== 'undefined') {
             try {
                 // Prepare points for Turf
                 const points = turf.featureCollection(
-                    filteredWells.map(w => turf.point([w.lng, w.lat], { 
-                        piezo: w.hydraulics ? w.hydraulics.piezometricLevel : 0 
-                    }))
+                    filteredWells.map(w => {
+                        let val = 0;
+                        if (type === 'piezo') val = w.hydraulics ? w.hydraulics.piezometricLevel : 0;
+                        if (type === 'phys') val = w.physical ? w.physical.conductivity : (Math.random() * 800 + 200);
+                        return turf.point([w.lng, w.lat], { piezo: val });
+                    })
                 );
 
                 // Determine Grid BBox
@@ -1305,11 +1308,11 @@ window.exportToGIS = function (type, btn) {
                 });
 
                 // Generate Isolines with logical intervals
-                const values = filteredWells.map(w => w.hydraulics ? w.hydraulics.piezometricLevel : 0);
+                const values = points.features.map(f => f.properties.piezo);
                 const min = Math.min(...values);
                 const max = Math.max(...values);
                 const breaks = [];
-                const interval = 5; // Logical 5m intervals
+                const interval = type === 'piezo' ? 5 : 100; // 5m for piezo, 100µS/cm for cond
                 const startBreak = Math.floor(min / interval) * interval;
                 const endBreak = Math.ceil(max / interval) * interval;
                 
@@ -1359,7 +1362,7 @@ window.exportToGIS = function (type, btn) {
                 // Merge points into isolines so wells appear!
                 geojson.features = [...geojson.features, ...points.features];
                 
-                geojson.name = `GeoWell_Contours_${selectedDaira}`;
+                geojson.name = `GeoWell_${type.toUpperCase()}_Contours_${selectedDaira}`;
                 
             } catch (err) {
                 console.error("Contour generation failed:", err);
