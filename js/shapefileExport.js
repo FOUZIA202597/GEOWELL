@@ -197,12 +197,33 @@ window.executeShapefileExport = function(btn) {
                 // 5. Generate Isobands (Polygons)
                 const isobands = turf.isobands(grid, breaks, { zProperty: 'Value_mgL' });
                 
-                // 6. Clean up properties
+                // 6. Clean up properties and Clip to Polygon/Hull
+                let clipPolygon;
+                if (window.exportPolygon) {
+                    clipPolygon = window.exportPolygon.toGeoJSON();
+                } else {
+                    const hull = turf.convex(pointCollection);
+                    clipPolygon = turf.buffer(hull, 0.05, {units: 'degrees'});
+                }
+
+                const clippedFeatures = [];
                 isobands.features.forEach(f => {
                     f.properties.Element = element.toUpperCase();
                     f.properties.Concentration_Range = f.properties.Value_mgL; // Turf sets this to "min-max"
                     delete f.properties.Value_mgL; 
+                    
+                    try {
+                        const intersection = turf.intersect(f, clipPolygon);
+                        if (intersection) {
+                            intersection.properties = f.properties;
+                            clippedFeatures.push(intersection);
+                        }
+                    } catch(e) {
+                        clippedFeatures.push(f); // Fallback on error
+                    }
                 });
+                
+                isobands.features = clippedFeatures;
                 
                 // 7. Merge original well points so QGIS shows BOTH the heatmap and the wells
                 geojson = isobands;

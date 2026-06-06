@@ -1291,12 +1291,12 @@ window.exportToGIS = function (type, btn) {
                     ];
                 } else {
                     // Auto-calculated from points + buffer
-                    bbox = turf.bbox(points);
-                    bbox = [bbox[0]-0.05, bbox[1]-0.05, bbox[2]+0.05, bbox[3]+0.05];
+                    const hull = turf.convex(points);
+                    bbox = turf.bbox(turf.buffer(hull, 0.1, {units: 'degrees'}));
                 }
                 
-                // Interpolate (IDW)
-                const grid = turf.interpolate(points, 0.005, {
+                // Interpolate (IDW) High Resolution
+                const grid = turf.interpolate(points, 0.0015, {
                     gridType: 'point', 
                     property: 'piezo',
                     units: 'degrees',
@@ -1319,20 +1319,46 @@ window.exportToGIS = function (type, btn) {
 
                 const isolines = turf.isolines(grid, breaks, {zProperty: 'piezo'});
                 
-                // Add properties & Style
+                // Define Clipping Polygon
+                let clipPolygon;
+                if (window.exportPolygon) {
+                    clipPolygon = window.exportPolygon.toGeoJSON();
+                } else {
+                    const hull = turf.convex(points);
+                    clipPolygon = turf.buffer(hull, 0.05, {units: 'degrees'});
+                }
+                
+                const clippedFeatures = [];
+                // Add properties & Clip
                 isolines.features.forEach(f => {
-                    // Add smoother styling properties for aesthetics
                     f.properties.stroke = "#00d4ff";
                     f.properties["stroke-width"] = 2;
                     f.properties["stroke-opacity"] = 0.8;
                     f.properties.level = f.properties.piezo;
+                    
+                    try {
+                        const intersection = turf.intersect(f, clipPolygon);
+                        if (intersection) {
+                            intersection.properties = f.properties;
+                            clippedFeatures.push(intersection);
+                        }
+                    } catch(e) {
+                        clippedFeatures.push(f); // Fallback on error
+                    }
                 });
 
-                if (!isolines.features || isolines.features.length === 0) {
-                     throw new Error("No isolines generated (data range too small or grid failed)");
+                if (clippedFeatures.length === 0) {
+                     throw new Error("No isolines generated inside the selected area.");
                 }
 
-                geojson = isolines;
+                geojson = {
+                    "type": "FeatureCollection",
+                    "features": clippedFeatures
+                };
+                
+                // Merge points into isolines so wells appear!
+                geojson.features = [...geojson.features, ...points.features];
+                
                 geojson.name = `GeoWell_Contours_${selectedDaira}`;
                 
             } catch (err) {
