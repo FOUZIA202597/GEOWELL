@@ -415,37 +415,21 @@ window.confirmPlan = function(planId, e) {
     if (!user) return;
 
     const btn = e.currentTarget;
-    const plans = getPlansByRole(user.role, user.sector);
+    const plans = typeof getPlansByRole === 'function' ? getPlansByRole(user.role, user.sector) : [];
     const selectedPlan = plans.find(p => p.id === planId);
     if (!selectedPlan) return;
 
-    // Phase 2 Logic: State Sovereignty / Superior
-    if (planId === 'gov-enterprise') {
-        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-        btn.disabled = true;
-        setTimeout(() => {
-            showToast('✅ تم إرسال الطلب لمديرية الموارد المائية (DRE) للمراجعة', 'success');
-            btn.innerHTML = 'Request Sent';
-        }, 1200);
-        return; // Halt flow until admin approves
-    }
-
-    // Phase 2 Logic: Requires Payment
-    if (selectedPlan.price > 0) {
-        window._pendingPlanId = planId;
-        const priceEl = document.querySelector('.baridimob-container div[style*="font-size:1.8rem"]');
-        if (priceEl) priceEl.textContent = `${selectedPlan.price.toLocaleString()} DZD`;
-        openBaridiMob();
-        return;
-    }
-
-    // Phase 2 Logic: Free Plan -> Activate instantly
+    // Simulate instant activation for all plans (Committee Demo Mode)
     btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
     btn.disabled = true;
+
+    user.tier = selectedPlan.name;
+    user.credits = selectedPlan.price > 0 ? 5000 : 0;
 
     setTimeout(() => {
         activateUserSession(user, planId);
     }, 800);
+};
 };
 
 // ── Phase 3: Activation & Redirect ────────────────────────────
