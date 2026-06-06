@@ -250,8 +250,8 @@
 
             <!-- Social Login -->
             <div class="social-auth">
-                <button class="social-btn"><i class="fa-brands fa-google"></i> <span data-i18n="social_google">Google</span></button>
-                <button class="social-btn"><i class="fa-brands fa-microsoft"></i> <span data-i18n="social_microsoft">Microsoft</span></button>
+                <button type="button" class="social-btn" onclick="simulateOAuth('Google')"><i class="fa-brands fa-google"></i> <span data-i18n="social_google">Google</span></button>
+                <button type="button" class="social-btn" onclick="simulateOAuth('Microsoft')"><i class="fa-brands fa-microsoft"></i> <span data-i18n="social_microsoft">Microsoft</span></button>
             </div>
             <button class="btn-auth btn-committee" onclick="handleCommitteeBypass()" data-i18n="btn_committee">COMMITTEE / GUEST ACCESS</button>
             <p class="auth-version">V.2026.06 &bull; Secure Encrypted Session &bull; TLS 1.3</p>
@@ -4377,6 +4377,7 @@ georeference_map("${fileName}", "${outputName}.tif", control_points)
     </div>
 </body>
 </html>
+
 
 
 
