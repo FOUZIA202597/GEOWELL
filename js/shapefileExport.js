@@ -116,13 +116,13 @@ function updateShapefileSelectionCount() {
 }
 
 window.executeShapefileExport = function(btn) {
-    const count = document.querySelectorAll('.sh-well-checkbox:checked').length;
+    const checkedBoxes = document.querySelectorAll('.sh-well-checkbox:checked');
+    if (checkedBoxes.length === 0) return;
+    
     const element = document.getElementById('sh-element').value;
     
-    if (count === 0) return;
-    
     const origHtml = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> GENERATING SHAPEFILE...';
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> GENERATING GIS FILE...';
     btn.disabled = true;
     
     setTimeout(() => {
@@ -130,18 +130,60 @@ window.executeShapefileExport = function(btn) {
         btn.disabled = false;
         closeShapefileExportModal();
         
-        // Simulate download
-        const dummyContent = "Simulated Shapefile Binary Content";
-        const blob = new Blob([dummyContent], { type: 'application/zip' });
+        const features = [];
+        checkedBoxes.forEach(cb => {
+            const wellId = cb.value;
+            const well = window.mockData.rigs.find(w => String(w.id) === String(wellId));
+            if (well) {
+                // Generate realistic chemical value based on element
+                let chemValue = 0;
+                let quality = "Safe";
+                
+                if (element === 'nitrate') { chemValue = (Math.random() * 80); quality = chemValue > 50 ? "Critical" : chemValue > 25 ? "Warning" : "Safe"; }
+                else if (element === 'calcium') { chemValue = (Math.random() * 200); quality = chemValue > 150 ? "Warning" : "Safe"; }
+                else if (element === 'sulfate') { chemValue = (Math.random() * 400); quality = chemValue > 250 ? "Warning" : "Safe"; }
+                else { chemValue = (Math.random() * 100); }
+                
+                features.push({
+                    "type": "Feature",
+                    "properties": {
+                        "Station_ID": well.id || 'W-XX',
+                        "Name": well.name || 'Unknown',
+                        "State": well.state || 'Unknown',
+                        "District": well.district || 'Unknown',
+                        "Depth_m": well.hydraulics?.depth || 100,
+                        "Element": element.toUpperCase(),
+                        "Value_mgL": parseFloat(chemValue.toFixed(2)),
+                        "Water_Qual": quality
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [well.lng, well.lat]
+                    }
+                });
+            }
+        });
+        
+        const geojson = {
+            "type": "FeatureCollection",
+            "name": `GeoWell_${element}_Export`,
+            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+            "features": features
+        };
+        
+        const dataStr = JSON.stringify(geojson, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/geo+json' });
         const url = URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.href = url;
-        anchor.download = `GeoWell_${element}_Shapefile.zip`;
+        anchor.download = `GeoWell_${element}_Analysis.geojson`;
         document.body.appendChild(anchor);
         anchor.click();
         document.body.removeChild(anchor);
         URL.revokeObjectURL(url);
         
-        showToast(`✅ Successfully generated Shapefile for ${count} wells.`, 'success');
-    }, 2000);
+        if (typeof showToast === 'function') {
+            showToast(`✅ Generated GIS data for ${features.length} wells. Drag it into QGIS!`, 'success');
+        }
+    }, 1500);
 };
