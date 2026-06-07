@@ -307,9 +307,20 @@ function handleWellSubmit(e) {
     }
 
     // Validate WGS84 boundaries to prevent Map Crash
-    if (isNaN(finalLat) || isNaN(finalLng) || Math.abs(finalLat) > 90 || Math.abs(finalLng) > 180) {
-        alert("⚠️ Invalid Coordinates! Latitude must be between -90 and 90, and Longitude between -180 and 180. If you are entering UTM coordinates, please make sure to select 'UTM (Meters)' from the Coordinate System dropdown!");
-        return; // Stop submission
+    if (isNaN(finalLat) || isNaN(finalLng)) {
+        const sys = document.getElementById('coordSystem').value;
+        if (sys === 'dms') {
+            alert('⚠️ يرجى إدخال الدرجات والدقائق والثواني لخط العرض وخط الطول!');
+        } else if (sys === 'utm') {
+            alert('⚠️ يرجى إدخال إحداثيات UTM (Easting و Northing) ورقم المنطقة (Zone)!');
+        } else {
+            alert('⚠️ يرجى إدخال خط العرض (Latitude) وخط الطول (Longitude)!');
+        }
+        return;
+    }
+    if (Math.abs(finalLat) > 90 || Math.abs(finalLng) > 180) {
+        alert('⚠️ الإحداثيات خارج النطاق الصحيح! تأكد من أن خط العرض بين -90 و 90 وخط الطول بين -180 و 180.\nإذا كنت تستخدم إحداثيات UTM، اختر "UTM (Meters)" من القائمة.');
+        return;
     }
 
     const wellData = {
