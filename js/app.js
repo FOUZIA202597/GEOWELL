@@ -947,6 +947,7 @@ function switchView(viewId) {
                 if (window.mockData && window.mockData.rigs) {
                     window.exportWellsLayer = L.layerGroup().addTo(window.exportMap);
                     window.mockData.rigs.forEach(rig => {
+                        if (Math.abs(rig.lat) > 90 || Math.abs(rig.lng) > 180 || isNaN(rig.lat) || isNaN(rig.lng)) return;
                         L.circleMarker([rig.lat, rig.lng], {
                             radius: 5,
                             fillColor: "#ff4757",
@@ -1527,6 +1528,7 @@ function initFullMap() {
                 try {
                     const group = L.featureGroup();
                     window.mockData.rigs.forEach(r => {
+                        if (Math.abs(r.lat) > 90 || Math.abs(r.lng) > 180 || isNaN(r.lat) || isNaN(r.lng)) return;
                         group.addLayer(L.marker([r.lat, r.lng]));
                     });
                     window.fullMap.map.fitBounds(group.getBounds());
