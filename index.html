@@ -1245,10 +1245,21 @@
                                         <label>Location Sector</label>
                                         <input type="text" id="wellLocation" placeholder="Sector ref">
                                     </div>
-                                    <div class="form-group"><label>Latitude</label><input type="number" step="any"
-                                            id="wellLat" required></div>
-                                    <div class="form-group"><label>Longitude</label><input type="number" step="any"
-                                            id="wellLng" required></div>
+                                    <div class="form-group">
+                                        <label>Coordinate System</label>
+                                        <select id="coordSystem" onchange="window.toggleCoordSystem()">
+                                            <option value="wgs84">WGS 1984 (Decimal Degrees)</option>
+                                            <option value="utm">UTM (Meters)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="utmZoneGroup" style="display:none; max-width: 120px;">
+                                        <label>UTM Zone</label>
+                                        <input type="text" id="utmZone" placeholder="e.g. 31N">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group"><label id="lblLat">Latitude (Y)</label><input type="number" step="any" id="wellLat" required></div>
+                                    <div class="form-group"><label id="lblLng">Longitude (X)</label><input type="number" step="any" id="wellLng" required></div>
                                 </div>
                             </div>
                         </div>
@@ -3033,7 +3044,7 @@
     <script src="js/charts.js?v=6"></script>
     <script src="js/analytics.js?v=6"></script>
     <script src="js/ai_insights.js?v=6"></script>
-    <script src="js/wells.js?v=7"></script>
+    <script src="js/wells.js?v=8"></script>
     <script src="js/adminDashboard.js?v=1"></script>
     <script>
         // ═══ ADMIN DASHBOARD INIT ═══════════════════════════════

@@ -174,8 +174,14 @@ function openWellModal(mode = 'create', wellId = null) {
         document.getElementById('wellId').value = '';
         document.getElementById('wellDisplayId').value = "R-" + Math.floor(100 + Math.random() * 900);
         updateStates("");
-        // Clear Chem Inputs
         document.querySelectorAll('.cation-input, .anion-input').forEach(i => i.value = '');
+        
+        // Reset coordinate system
+        const coordSys = document.getElementById('coordSystem');
+        if (coordSys) {
+            coordSys.value = 'wgs84';
+            window.toggleCoordSystem();
+        }
     } else {
         title.innerText = "Edit Well: " + wellId;
         const well = mockData.rigs.find(w => w.id === wellId);
@@ -193,6 +199,13 @@ function openWellModal(mode = 'create', wellId = null) {
             document.getElementById('wellLocation').value = well.location || '';
             document.getElementById('wellLat').value = well.lat || '';
             document.getElementById('wellLng').value = well.lng || '';
+            
+            // Reset coordinate system to wgs84 when editing to show lat/lng natively
+            const coordSys = document.getElementById('coordSystem');
+            if (coordSys) {
+                coordSys.value = 'wgs84';
+                window.toggleCoordSystem();
+            }
 
             document.getElementById('wellType').value = well.wellType || '';
             document.getElementById('pumpType').value = well.pumpType || '';
@@ -244,6 +257,34 @@ function handleWellSubmit(e) {
         if (i.value) anions[i.getAttribute('data-ion')] = parseFloat(i.value);
     });
 
+    // Handle Coordinate Conversion (UTM -> WGS84)
+    let finalLat = parseFloat(document.getElementById('wellLat').value);
+    let finalLng = parseFloat(document.getElementById('wellLng').value);
+    
+    if (document.getElementById('coordSystem').value === 'utm' && typeof proj4 !== 'undefined') {
+        const zoneStr = document.getElementById('utmZone').value;
+        const match = zoneStr ? zoneStr.match(/(\d+)([NnSs]?)/) : null;
+        if (match) {
+            const zoneNum = match[1];
+            // Default to North if hemisphere letter is missing
+            const hemisphere = match[2] ? match[2].toUpperCase() : 'N';
+            const utmProj = `+proj=utm +zone=${zoneNum} ${hemisphere==='S'?'+south':''} +datum=WGS84 +units=m +no_defs`;
+            try {
+                // Proj4 converts [Easting(X), Northing(Y)] -> [Lng, Lat]
+                const [convertedLng, convertedLat] = proj4(utmProj, 'WGS84', [finalLng, finalLat]);
+                finalLng = convertedLng;
+                finalLat = convertedLat;
+            } catch(e) {
+                console.error("Proj4 UTM conversion error", e);
+                alert("⚠️ Error converting UTM coordinates. Please check your UTM Zone and inputs.");
+                return; // Stop submission
+            }
+        } else {
+            alert("⚠️ Please enter a valid UTM Zone (e.g. 31N) or select WGS84.");
+            return;
+        }
+    }
+
     const wellData = {
         id: wellIdToSave,
         name: document.getElementById('wellName').value,
@@ -251,8 +292,8 @@ function handleWellSubmit(e) {
         state: document.getElementById('wellState').value,
         district: document.getElementById('wellDistrict').value,
         location: document.getElementById('wellLocation').value,
-        lat: parseFloat(document.getElementById('wellLat').value),
-        lng: parseFloat(document.getElementById('wellLng').value),
+        lat: finalLat,
+        lng: finalLng,
         wellType: document.getElementById('wellType').value,
         pumpType: document.getElementById('pumpType').value,
         usage: document.getElementById('wellUsage').value,
@@ -610,6 +651,62 @@ window.openMeasurementFromMap = function(id) {
     if(document.getElementById('logDay')) document.getElementById('logDay').value = now.getDate();
     
     document.getElementById('logModal').classList.add('active');
+};
+
+// --- UTM <-> WGS84 UI TOGGLE ---
+window.toggleCoordSystem = function() {
+    const sys = document.getElementById('coordSystem').value;
+    const zoneGroup = document.getElementById('utmZoneGroup');
+    const lblLat = document.getElementById('lblLat');
+    const lblLng = document.getElementById('lblLng');
+    const latInput = document.getElementById('wellLat');
+    const lngInput = document.getElementById('wellLng');
+    const zoneInput = document.getElementById('utmZone');
+
+    if (sys === 'utm') {
+        zoneGroup.style.display = 'block';
+        lblLat.innerText = 'Northing (Y)';
+        lblLng.innerText = 'Easting (X)';
+        
+        // Auto-convert Lat/Lng -> UTM if values exist
+        if (latInput.value && lngInput.value && typeof proj4 !== 'undefined' && !zoneInput.value) {
+            const lng = parseFloat(lngInput.value);
+            const lat = parseFloat(latInput.value);
+            const zoneNum = Math.floor((lng + 180) / 6) + 1;
+            const hemisphere = lat >= 0 ? 'N' : 'S';
+            zoneInput.value = `${zoneNum}${hemisphere}`;
+            
+            const utmProj = `+proj=utm +zone=${zoneNum} ${hemisphere==='S'?'+south':''} +datum=WGS84 +units=m +no_defs`;
+            try {
+                const [x, y] = proj4('WGS84', utmProj, [lng, lat]);
+                lngInput.value = x.toFixed(2);
+                latInput.value = y.toFixed(2);
+            } catch(e) { console.error("Proj4 conversion error", e); }
+        }
+    } else {
+        zoneGroup.style.display = 'none';
+        lblLat.innerText = 'Latitude (Y)';
+        lblLng.innerText = 'Longitude (X)';
+        
+        // Auto-convert UTM -> Lat/Lng if values exist
+        const zoneStr = zoneInput.value;
+        if (latInput.value && lngInput.value && zoneStr && typeof proj4 !== 'undefined') {
+            const match = zoneStr.match(/(\d+)([NnSs]?)/);
+            if (match) {
+                const zoneNum = match[1];
+                const hemisphere = match[2] ? match[2].toUpperCase() : 'N';
+                const utmProj = `+proj=utm +zone=${zoneNum} ${hemisphere==='S'?'+south':''} +datum=WGS84 +units=m +no_defs`;
+                try {
+                    const x = parseFloat(lngInput.value);
+                    const y = parseFloat(latInput.value);
+                    const [convertedLng, convertedLat] = proj4(utmProj, 'WGS84', [x, y]);
+                    lngInput.value = convertedLng.toFixed(6);
+                    latInput.value = convertedLat.toFixed(6);
+                    zoneInput.value = ""; // Clear zone after converting back
+                } catch(e) { console.error("Proj4 conversion error", e); }
+            }
+        }
+    }
 };
 
 // Handle Well Image Upload
