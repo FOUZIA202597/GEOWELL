@@ -77,12 +77,14 @@ class wellMap {
         const bounds = [];
 
         mockData.rigs.forEach(rig => {
-            const icon = getIcon(rig.status);
-            const lat = parseFloat(rig.lat);
-            const lng = parseFloat(rig.lng);
-            
-            if (isNaN(lat) || isNaN(lng)) return;
-            bounds.push([lat, lng]);
+            if (!rig) return;
+            try {
+                const icon = getIcon(rig.status);
+                const lat = parseFloat(rig.lat);
+                const lng = parseFloat(rig.lng);
+                
+                if (isNaN(lat) || isNaN(lng)) return;
+                bounds.push([lat, lng]);
 
             // Popup Content with Details
             const h = rig.hydraulics || {};
@@ -151,7 +153,10 @@ class wellMap {
                 }
             });
 
-            this.markerLayer.addLayer(marker);
+                this.markerLayer.addLayer(marker);
+            } catch (err) {
+                console.error("Error rendering well marker:", rig, err);
+            }
         });
 
         // Auto-Zoom to data if markers exist and map is visible

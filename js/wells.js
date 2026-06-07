@@ -119,15 +119,17 @@ function renderWellsTable(searchTerm = "") {
 
     const term = searchTerm.toLowerCase();
     const filteredWells = mockData.rigs.filter(well => {
-        return (
-            well.id.toLowerCase().includes(term) ||
-            well.name.toLowerCase().includes(term) ||
-            (well.state && well.state.toLowerCase().includes(term)) ||
-            (well.district && well.district.toLowerCase().includes(term))
-        );
+        if (!well) return false;
+        const idMatch = well.id ? well.id.toLowerCase().includes(term) : false;
+        const nameMatch = well.name ? well.name.toLowerCase().includes(term) : false;
+        const stateMatch = well.state ? well.state.toLowerCase().includes(term) : false;
+        const distMatch = well.district ? well.district.toLowerCase().includes(term) : false;
+        return idMatch || nameMatch || stateMatch || distMatch;
     });
     filteredWells.forEach(well => {
-        const status = (well.status || 'operational').toLowerCase();
+        if (!well) return;
+        try {
+            const status = (well.status || 'operational').toLowerCase();
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><span class="id-badge">${well.id}</span></td>
@@ -147,6 +149,9 @@ function renderWellsTable(searchTerm = "") {
             </td>
         `;
         tbody.appendChild(tr);
+        } catch (err) {
+            console.error("Error rendering table row for well:", well, err);
+        }
     });
 }
 
