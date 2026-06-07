@@ -1252,6 +1252,7 @@ window.exportToGIS = function (type, btn) {
         
         // 4. Generate GeoJSON or Contours
         let geojson;
+        let exportedPoints = null;
         
         if ((type === 'piezo' || type === 'phys') && typeof turf !== 'undefined') {
             try {
@@ -1264,6 +1265,7 @@ window.exportToGIS = function (type, btn) {
                         return turf.point([w.lng, w.lat], { piezo: val });
                     })
                 );
+                exportedPoints = points;
 
                 // Determine Grid BBox
                 let bbox;
@@ -1349,9 +1351,6 @@ window.exportToGIS = function (type, btn) {
                     "features": clippedFeatures
                 };
                 
-                // Merge points into isolines so wells appear!
-                geojson.features = [...geojson.features, ...points.features];
-                
                 geojson.name = `GeoWell_${type.toUpperCase()}_Contours_${selectedDaira}`;
                 
             } catch (err) {
@@ -1404,6 +1403,26 @@ window.exportToGIS = function (type, btn) {
         anchor.click();
         document.body.removeChild(anchor);
         URL.revokeObjectURL(url);
+
+        // Trigger SECOND download for points if this was a contour map
+        if (exportedPoints) {
+            const ptsGeojson = {
+                "type": "FeatureCollection",
+                "name": `GeoWell_${type.toUpperCase()}_Wells`,
+                "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                "features": exportedPoints.features
+            };
+            const ptsDataStr = JSON.stringify(ptsGeojson, null, 2);
+            const ptsBlob = new Blob([ptsDataStr], { type: 'application/geo+json' });
+            const ptsUrl = URL.createObjectURL(ptsBlob);
+            const ptsAnchor = document.createElement('a');
+            ptsAnchor.href = ptsUrl;
+            ptsAnchor.download = `geowell_${selectedDaira}_${type}_wells.geojson`;
+            document.body.appendChild(ptsAnchor);
+            ptsAnchor.click();
+            document.body.removeChild(ptsAnchor);
+            URL.revokeObjectURL(ptsUrl);
+        }
 
         // 7. Add to History
         addToExportHistory(anchor.download, geojson.features.length, dataStr);

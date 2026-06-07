@@ -224,11 +224,7 @@ window.executeShapefileExport = function(btn) {
                 });
                 
                 isobands.features = clippedFeatures;
-                
-                // 7. Merge original well points so QGIS shows BOTH the heatmap and the wells
                 geojson = isobands;
-                geojson.features = [...geojson.features, ...features];
-                
                 geojson.name = `GeoWell_${element}_Heatmap`;
                 
             } catch(e) {
@@ -261,6 +257,24 @@ window.executeShapefileExport = function(btn) {
         anchor.click();
         document.body.removeChild(anchor);
         URL.revokeObjectURL(url);
+        
+        // Trigger SECOND download for the raw well points
+        const ptsGeojson = {
+            "type": "FeatureCollection",
+            "name": `GeoWell_${element}_Wells`,
+            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+            "features": features
+        };
+        const ptsDataStr = JSON.stringify(ptsGeojson, null, 2);
+        const ptsBlob = new Blob([ptsDataStr], { type: 'application/geo+json' });
+        const ptsUrl = URL.createObjectURL(ptsBlob);
+        const ptsAnchor = document.createElement('a');
+        ptsAnchor.href = ptsUrl;
+        ptsAnchor.download = `GeoWell_${element}_Wells.geojson`;
+        document.body.appendChild(ptsAnchor);
+        ptsAnchor.click();
+        document.body.removeChild(ptsAnchor);
+        URL.revokeObjectURL(ptsUrl);
         
         if (typeof showToast === 'function') {
             showToast(`✅ Generated GIS data for ${features.length} wells. Drag it into QGIS!`, 'success');
