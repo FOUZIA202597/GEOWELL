@@ -92,8 +92,8 @@ function updateStates(country) {
     stateSelect.innerHTML = '<option value="">Select State</option>';
     districtSelect.innerHTML = '<option value="">Select District</option>';
 
-    if (country && geographicData.states[country]) {
-        geographicData.states[country].forEach(state => {
+    if (country && window.geographicData && window.geographicData.states && window.geographicData.states[country]) {
+        window.geographicData.states[country].forEach(state => {
             stateSelect.innerHTML += `<option value="${state}">${state}</option>`;
         });
     }
@@ -104,8 +104,8 @@ function updateDistricts(state) {
     if (!districtSelect) return;
     districtSelect.innerHTML = '<option value="">Select District</option>';
 
-    if (state && geographicData.districts[state]) {
-        geographicData.districts[state].forEach(district => {
+    if (state && window.geographicData && window.geographicData.districts && window.geographicData.districts[state]) {
+        window.geographicData.districts[state].forEach(district => {
             districtSelect.innerHTML += `<option value="${district}">${district}</option>`;
         });
     }
@@ -173,7 +173,10 @@ function openWellModal(mode = 'create', wellId = null) {
         form.reset();
         document.getElementById('wellId').value = '';
         document.getElementById('wellDisplayId').value = "R-" + Math.floor(100 + Math.random() * 900);
-        updateStates("");
+        
+        // Default to Algeria
+        document.getElementById('wellCountry').value = 'Algeria';
+        updateStates("Algeria");
         document.querySelectorAll('.cation-input, .anion-input').forEach(i => i.value = '');
         
         // Reset coordinate system
