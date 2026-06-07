@@ -645,12 +645,12 @@ window.handleWellImageUpload = function(event) {
 
 // --- PERSISTENCE HELPERS ---
 function saveToLocalStorage() {
-    localStorage.setItem('geoWell_rigs', JSON.stringify(mockData.rigs));
+    localStorage.setItem('geoWell_rigs_v2', JSON.stringify(mockData.rigs));
     console.log("[Storage] Well data saved to localStorage.");
 }
 
 function loadFromLocalStorage() {
-    const saved = localStorage.getItem('geoWell_rigs');
+    const saved = localStorage.getItem('geoWell_rigs_v2');
     if (saved) {
         try {
             const data = JSON.parse(saved);
