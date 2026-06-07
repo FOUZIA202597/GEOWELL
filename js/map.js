@@ -36,14 +36,6 @@ class wellMap {
             });
 
             this.renderMarkers();
-            
-            // Initial fit to data if no QGIS data yet
-            const group = L.featureGroup();
-            window.mockData.rigs.forEach(r => {
-                group.addLayer(L.marker([r.lat, r.lng]));
-            });
-            this.map.fitBounds(group.getBounds());
-            
         } else {
             console.error("[Leaflet] window.mockData is missing!");
         }
@@ -223,10 +215,7 @@ class wellMap {
             maxNativeZoom: 20
         }).addTo(this.map);
 
-        // Ensure markers stay on top
-        if (this.markerLayer) {
-            this.markerLayer.bringToFront();
-        }
+        // Leaflet automatically handles pane ordering (markers above tiles).
     }
 
     // Support for QGIS Layers (Missing in original map.js)
