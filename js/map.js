@@ -84,6 +84,11 @@ class wellMap {
                 const lng = parseFloat(rig.lng);
                 
                 if (isNaN(lat) || isNaN(lng)) return;
+                // Prevent Leaflet projection crash from invalid coordinates (e.g. accidentally saved UTM)
+                if (Math.abs(lat) > 90 || Math.abs(lng) > 180) {
+                    console.warn(`[Map] Invalid coordinates for well ${rig.id}: [${lat}, ${lng}]. Skipping to prevent crash.`);
+                    return;
+                }
                 bounds.push([lat, lng]);
 
             // Popup Content with Details
