@@ -1249,6 +1249,7 @@
                                         <label>Coordinate System</label>
                                         <select id="coordSystem" onchange="window.toggleCoordSystem()">
                                             <option value="wgs84">WGS 1984 (Decimal Degrees)</option>
+                                            <option value="dms">DMS (Degrees ° Minutes ' Seconds ")</option>
                                             <option value="utm">UTM (Meters)</option>
                                         </select>
                                     </div>
@@ -1257,9 +1258,29 @@
                                         <input type="text" id="utmZone" placeholder="e.g. 31N">
                                     </div>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group"><label id="lblLat">Latitude (Y)</label><input type="number" step="any" id="wellLat" required></div>
-                                    <div class="form-group"><label id="lblLng">Longitude (X)</label><input type="number" step="any" id="wellLng" required></div>
+
+                                <!-- WGS84 Decimal Degrees Row -->
+                                <div class="form-row" id="wgs84Row">
+                                    <div class="form-group"><label id="lblLat">Latitude</label><input type="number" step="any" id="wellLat" placeholder="e.g. 31.5324" required></div>
+                                    <div class="form-group"><label id="lblLng">Longitude</label><input type="number" step="any" id="wellLng" placeholder="e.g. 5.3210" required></div>
+                                </div>
+
+                                <!-- DMS Row (hidden by default) -->
+                                <div id="dmsRow" style="display:none;">
+                                    <div class="form-row" style="margin-bottom:6px;">
+                                        <div style="flex:1; color: var(--accent-primary); font-weight:600; font-size:12px; padding: 4px 0;">📍 Latitude (خط العرض)</div>
+                                        <div style="flex:1; color: var(--accent-primary); font-weight:600; font-size:12px; padding: 4px 0;">📍 Longitude (خط الطول)</div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group" style="max-width:70px;"><label>°</label><input type="number" id="latDeg" placeholder="32" min="0" max="90"></div>
+                                        <div class="form-group" style="max-width:70px;"><label>'</label><input type="number" id="latMin" placeholder="45" min="0" max="59"></div>
+                                        <div class="form-group" style="max-width:80px;"><label>"</label><input type="number" id="latSec" placeholder="30.5" step="any" min="0" max="60"></div>
+                                        <div class="form-group" style="max-width:70px;"><label>Hemisphere</label><select id="latHem"><option value="N">N</option><option value="S">S</option></select></div>
+                                        <div class="form-group" style="max-width:70px;"><label>°</label><input type="number" id="lngDeg" placeholder="5" min="0" max="180"></div>
+                                        <div class="form-group" style="max-width:70px;"><label>'</label><input type="number" id="lngMin" placeholder="19" min="0" max="59"></div>
+                                        <div class="form-group" style="max-width:80px;"><label>"</label><input type="number" id="lngSec" placeholder="22.5" step="any" min="0" max="60"></div>
+                                        <div class="form-group" style="max-width:70px;"><label>Hemisphere</label><select id="lngHem"><option value="E">E</option><option value="W">W</option></select></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -260,9 +260,27 @@ function handleWellSubmit(e) {
         if (i.value) anions[i.getAttribute('data-ion')] = parseFloat(i.value);
     });
 
-    // Handle Coordinate Conversion (UTM -> WGS84)
-    let finalLat = parseFloat(document.getElementById('wellLat').value);
-    let finalLng = parseFloat(document.getElementById('wellLng').value);
+    // Handle Coordinate Conversion
+    let finalLat, finalLng;
+
+    if (document.getElementById('coordSystem').value === 'dms') {
+        // DMS -> Decimal Degrees conversion
+        const latDeg = parseFloat(document.getElementById('latDeg').value) || 0;
+        const latMin = parseFloat(document.getElementById('latMin').value) || 0;
+        const latSec = parseFloat(document.getElementById('latSec').value) || 0;
+        const latHem = document.getElementById('latHem').value;
+        const lngDeg = parseFloat(document.getElementById('lngDeg').value) || 0;
+        const lngMin = parseFloat(document.getElementById('lngMin').value) || 0;
+        const lngSec = parseFloat(document.getElementById('lngSec').value) || 0;
+        const lngHem = document.getElementById('lngHem').value;
+
+        finalLat = (latDeg + latMin / 60 + latSec / 3600) * (latHem === 'S' ? -1 : 1);
+        finalLng = (lngDeg + lngMin / 60 + lngSec / 3600) * (lngHem === 'W' ? -1 : 1);
+
+    } else {
+        finalLat = parseFloat(document.getElementById('wellLat').value);
+        finalLng = parseFloat(document.getElementById('wellLng').value);
+    }
     
     if (document.getElementById('coordSystem').value === 'utm' && typeof proj4 !== 'undefined') {
         const zoneStr = document.getElementById('utmZone').value;
@@ -662,7 +680,7 @@ window.openMeasurementFromMap = function(id) {
     document.getElementById('logModal').classList.add('active');
 };
 
-// --- UTM <-> WGS84 UI TOGGLE ---
+// --- COORDINATE SYSTEM UI TOGGLE ---
 window.toggleCoordSystem = function() {
     const sys = document.getElementById('coordSystem').value;
     const zoneGroup = document.getElementById('utmZoneGroup');
@@ -671,8 +689,20 @@ window.toggleCoordSystem = function() {
     const latInput = document.getElementById('wellLat');
     const lngInput = document.getElementById('wellLng');
     const zoneInput = document.getElementById('utmZone');
+    const wgs84Row = document.getElementById('wgs84Row');
+    const dmsRow = document.getElementById('dmsRow');
 
-    if (sys === 'utm') {
+    // Hide all then show relevant
+    wgs84Row.style.display = 'none';
+    dmsRow.style.display = 'none';
+    zoneGroup.style.display = 'none';
+
+    if (sys === 'dms') {
+        dmsRow.style.display = 'block';
+        lblLat.innerText = 'Latitude (DMS)';
+        lblLng.innerText = 'Longitude (DMS)';
+    } else if (sys === 'utm') {
+        wgs84Row.style.display = 'flex';
         zoneGroup.style.display = 'block';
         lblLat.innerText = 'Northing (Y)';
         lblLng.innerText = 'Easting (X)';
@@ -684,7 +714,6 @@ window.toggleCoordSystem = function() {
             const zoneNum = Math.floor((lng + 180) / 6) + 1;
             const hemisphere = lat >= 0 ? 'N' : 'S';
             zoneInput.value = `${zoneNum}${hemisphere}`;
-            
             const utmProj = `+proj=utm +zone=${zoneNum} ${hemisphere==='S'?'+south':''} +datum=WGS84 +units=m +no_defs`;
             try {
                 const [x, y] = proj4('WGS84', utmProj, [lng, lat]);
@@ -693,12 +722,13 @@ window.toggleCoordSystem = function() {
             } catch(e) { console.error("Proj4 conversion error", e); }
         }
     } else {
-        zoneGroup.style.display = 'none';
-        lblLat.innerText = 'Latitude (Y)';
-        lblLng.innerText = 'Longitude (X)';
+        // WGS84 Decimal Degrees
+        wgs84Row.style.display = 'flex';
+        lblLat.innerText = 'Latitude';
+        lblLng.innerText = 'Longitude';
         
         // Auto-convert UTM -> Lat/Lng if values exist
-        const zoneStr = zoneInput.value;
+        const zoneStr = zoneInput ? zoneInput.value : '';
         if (latInput.value && lngInput.value && zoneStr && typeof proj4 !== 'undefined') {
             const match = zoneStr.match(/(\d+)([NnSs]?)/);
             if (match) {
@@ -711,7 +741,7 @@ window.toggleCoordSystem = function() {
                     const [convertedLng, convertedLat] = proj4(utmProj, 'WGS84', [x, y]);
                     lngInput.value = convertedLng.toFixed(6);
                     latInput.value = convertedLat.toFixed(6);
-                    zoneInput.value = ""; // Clear zone after converting back
+                    if (zoneInput) zoneInput.value = '';
                 } catch(e) { console.error("Proj4 conversion error", e); }
             }
         }
