@@ -377,6 +377,9 @@
         <main class="main-content">
             <!-- Header -->
             <header class="top-header">
+                <button id="global-back-btn" class="icon-btn" onclick="goBack()" style="display: none; margin: 0 15px; background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); color: #00d4ff; border-radius: 8px; width: 40px; height: 40px; align-items: center; justify-content: center; transition: 0.3s; cursor: pointer;" title="رجوع">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
                 <div class="header-search">
                     <i class="fa-solid fa-search"></i>
                     <input type="text" id="globalSearch" data-i18n-placeholder="search_placeholder"
@@ -2407,8 +2410,8 @@
                             <i class="fa-solid fa-floppy-disk"></i> حفظ وتطبيق
                         </button>
                     </div>
-                    <div style="padding: 1rem; overflow-x: auto;" id="permissions-matrix-grid">
-                        <!-- Rendered by JS -->
+                    <div class="perms-matrix-scroll" style="padding: 0.5rem 1rem 1rem;" id="permissions-matrix-grid">
+                        <!-- Rendered by JS — يشمل كل أقسام المنصة -->
                     </div>
                 </div>
 

@@ -27,10 +27,30 @@ window.SECTORS = {
             'تصدير خرائط الطبقات الجيومكانية'
         ],
         permissions: {
-            wells_read: true, wells_write: true, gis_read: true, gis_write: true,
-            analytics: true, export_shp: true, neural_ai: true, qgis: true,
-            audit_view: true, piezo_monitoring: true, wqi_monitoring: true,
-            alert_receive: true, alert_send: true
+            // 🗺️ الخريطة
+            map_view: true, map_edit: true,
+            // 📊 التحليلات
+            analytics: true,
+            // 🔔 التنبيهات
+            alert_receive: true, alert_send: true,
+            // 💧 إدارة الآبار
+            wells_read: true, wells_write: true,
+            // ⚙️ الأصول والمعدات
+            assets_view: true, assets_edit: true,
+            // 📚 المكتبة العلمية
+            library_view: true, library_upload: true, library_delete: true,
+            // 👥 مركز المجتمع والخبراء
+            community_view: true, community_post: true, experts_contact: true,
+            // 🗂️ طبقات GIS
+            gis_read: true, gis_write: true, export_shp: true,
+            // 🤖 الذكاء الاصطناعي
+            neural_ai: true,
+            // 🔭 QGIS
+            qgis: true,
+            // 📡 البيزومتري وجودة المياه
+            piezo_monitoring: true, wqi_monitoring: true,
+            // 🔐 الإدارة
+            audit_view: true
         }
     },
     ADE: {
@@ -52,10 +72,18 @@ window.SECTORS = {
             'إجراءات الضخ أو القطع الطارئ'
         ],
         permissions: {
-            wells_read: true, wells_write: false, gis_read: true, gis_write: false,
-            analytics: true, export_shp: false, neural_ai: false, qgis: false,
-            audit_view: false, piezo_monitoring: true, wqi_monitoring: true,
-            alert_receive: true, alert_send: false
+            map_view: true,  map_edit: false,
+            analytics: true,
+            alert_receive: true, alert_send: false,
+            wells_read: true, wells_write: false,
+            assets_view: true, assets_edit: false,
+            library_view: true, library_upload: false, library_delete: false,
+            community_view: true, community_post: false, experts_contact: false,
+            gis_read: true, gis_write: false, export_shp: false,
+            neural_ai: false,
+            qgis: false,
+            piezo_monitoring: true, wqi_monitoring: true,
+            audit_view: false
         }
     },
     DRE: {
@@ -77,10 +105,18 @@ window.SECTORS = {
             'التنسيق مع الإدارة المركزية'
         ],
         permissions: {
-            wells_read: true, wells_write: true, gis_read: true, gis_write: false,
-            analytics: true, export_shp: true, neural_ai: false, qgis: true,
-            audit_view: false, piezo_monitoring: true, wqi_monitoring: false,
-            alert_receive: true, alert_send: true
+            map_view: true,  map_edit: false,
+            analytics: true,
+            alert_receive: true, alert_send: true,
+            wells_read: true, wells_write: true,
+            assets_view: true, assets_edit: false,
+            library_view: true, library_upload: false, library_delete: false,
+            community_view: true, community_post: false, experts_contact: true,
+            gis_read: true, gis_write: false, export_shp: true,
+            neural_ai: false,
+            qgis: true,
+            piezo_monitoring: true, wqi_monitoring: false,
+            audit_view: false
         }
     },
     ONA: {
@@ -102,10 +138,18 @@ window.SECTORS = {
             'طبقات الحماية البيئية (GIS)'
         ],
         permissions: {
-            wells_read: true, wells_write: false, gis_read: true, gis_write: true,
-            analytics: true, export_shp: true, neural_ai: false, qgis: true,
-            audit_view: false, piezo_monitoring: false, wqi_monitoring: true,
-            alert_receive: true, alert_send: true
+            map_view: true,  map_edit: false,
+            analytics: true,
+            alert_receive: true, alert_send: true,
+            wells_read: true, wells_write: false,
+            assets_view: true, assets_edit: false,
+            library_view: true, library_upload: true,  library_delete: false,
+            community_view: true, community_post: true,  experts_contact: true,
+            gis_read: true, gis_write: true, export_shp: true,
+            neural_ai: false,
+            qgis: true,
+            piezo_monitoring: false, wqi_monitoring: true,
+            audit_view: false
         }
     }
 };
@@ -201,12 +245,64 @@ window.mockUsers = window.mockUsers || [
 // EXTENDED PERMISSIONS MATRIX (per sector + per role)
 // ============================================================
 window.permissionsMatrix = window.permissionsMatrix || {
-    ADMIN:    { wells_read: true,  wells_write: true,  gis_read: true,  gis_write: true,  analytics: true,  export_shp: true,  neural_ai: true,  qgis: true,  audit_view: true,  piezo_monitoring: true,  wqi_monitoring: true,  alert_receive: true,  alert_send: true  },
-    ENGINEER: { wells_read: true,  wells_write: true,  gis_read: true,  gis_write: false, analytics: true,  export_shp: true,  neural_ai: true,  qgis: true,  audit_view: false, piezo_monitoring: true,  wqi_monitoring: true,  alert_receive: true,  alert_send: false },
-    STUDENT:  { wells_read: true,  wells_write: false, gis_read: true,  gis_write: false, analytics: true,  export_shp: false, neural_ai: false, qgis: false, audit_view: false, piezo_monitoring: true,  wqi_monitoring: false, alert_receive: false, alert_send: false },
-    FARMER:   { wells_read: false, wells_write: false, gis_read: false, gis_write: false, analytics: false, export_shp: false, neural_ai: false, qgis: false, audit_view: false, piezo_monitoring: false, wqi_monitoring: false, alert_receive: true,  alert_send: false },
+    ADMIN: {
+        map_view: true,  map_edit: true,
+        analytics: true,
+        alert_receive: true,  alert_send: true,
+        wells_read: true, wells_write: true,
+        assets_view: true, assets_edit: true,
+        library_view: true, library_upload: true, library_delete: true,
+        community_view: true, community_post: true, experts_contact: true,
+        gis_read: true, gis_write: true, export_shp: true,
+        neural_ai: true,
+        qgis: true,
+        piezo_monitoring: true, wqi_monitoring: true,
+        audit_view: true
+    },
+    ENGINEER: {
+        map_view: true,  map_edit: false,
+        analytics: true,
+        alert_receive: true,  alert_send: false,
+        wells_read: true, wells_write: true,
+        assets_view: true, assets_edit: true,
+        library_view: true, library_upload: true, library_delete: false,
+        community_view: true, community_post: true, experts_contact: true,
+        gis_read: true, gis_write: false, export_shp: true,
+        neural_ai: true,
+        qgis: true,
+        piezo_monitoring: true, wqi_monitoring: true,
+        audit_view: false
+    },
+    STUDENT: {
+        map_view: true,  map_edit: false,
+        analytics: true,
+        alert_receive: false, alert_send: false,
+        wells_read: true, wells_write: false,
+        assets_view: false, assets_edit: false,
+        library_view: true, library_upload: false, library_delete: false,
+        community_view: true, community_post: true, experts_contact: false,
+        gis_read: true, gis_write: false, export_shp: false,
+        neural_ai: false,
+        qgis: false,
+        piezo_monitoring: true, wqi_monitoring: false,
+        audit_view: false
+    },
+    FARMER: {
+        map_view: true,  map_edit: false,
+        analytics: false,
+        alert_receive: true,  alert_send: false,
+        wells_read: false, wells_write: false,
+        assets_view: false, assets_edit: false,
+        library_view: false, library_upload: false, library_delete: false,
+        community_view: true, community_post: false, experts_contact: false,
+        gis_read: false, gis_write: false, export_shp: false,
+        neural_ai: false,
+        qgis: false,
+        piezo_monitoring: false, wqi_monitoring: false,
+        audit_view: false
+    },
     // Sector-specific (override for ADMIN sub-roles)
-    ANRH: null,  // initialized below from SECTORS
+    ANRH: null,
     ADE:  null,
     DRE:  null,
     ONA:  null,
@@ -217,20 +313,58 @@ window.permissionsMatrix = window.permissionsMatrix || {
 });
 
 const permissionLabels = {
-    wells_read:       'قراءة بيانات الآبار',
-    wells_write:      'تعديل بيانات الآبار',
-    gis_read:         'عرض طبقات GIS / SIG',
-    gis_write:        'تعديل طبقات GIS',
-    analytics:        'التحليلات والمخططات',
-    export_shp:       'تصدير Shapefile / GeoTIFF',
-    neural_ai:        'النمذجة بالذكاء الاصطناعي',
-    qgis:             'منصة QGIS',
-    audit_view:       'عرض سجلات المراجعة',
-    piezo_monitoring: 'مراقبة الرصد البيزومتري',
-    wqi_monitoring:   'مؤشرات جودة المياه WQI',
-    alert_receive:    'استقبال إنذارات التلوث',
-    alert_send:       'إرسال تنبيهات الطوارئ',
+    // 🗺️ الخريطة
+    map_view:          '🗺️ عرض الخريطة التفاعلية',
+    map_edit:          '✏️ تعديل عناصر الخريطة',
+    // 📊 التحليلات
+    analytics:         '📊 التحليلات والمخططات',
+    // 🔔 التنبيهات
+    alert_receive:     '🔔 استقبال إنذارات التلوث',
+    alert_send:        '🚨 إرسال تنبيهات الطوارئ',
+    // 💧 إدارة الآبار
+    wells_read:        '💧 قراءة بيانات الآبار',
+    wells_write:       '✍️ تعديل بيانات الآبار',
+    // ⚙️ الأصول والمعدات
+    assets_view:       '⚙️ عرض الأصول والمعدات',
+    assets_edit:       '🔧 تعديل الأصول والمعدات',
+    // 📚 المكتبة العلمية
+    library_view:      '📚 تصفح المكتبة العلمية',
+    library_upload:    '📤 رفع وثائق للمكتبة',
+    library_delete:    '🗑️ حذف وثائق المكتبة',
+    // 👥 مركز المجتمع والخبراء
+    community_view:    '👥 عرض مركز المجتمع',
+    community_post:    '💬 النشر في مركز المجتمع',
+    experts_contact:   '🏅 التواصل مع الخبراء',
+    // 🗂️ طبقات GIS
+    gis_read:          '🗂️ عرض طبقات GIS / SIG',
+    gis_write:         '🖊️ تعديل طبقات GIS',
+    export_shp:        '📦 تصدير Shapefile / GeoTIFF',
+    // 🤖 الذكاء الاصطناعي
+    neural_ai:         '🤖 النمذجة بالذكاء الاصطناعي',
+    // 🔭 QGIS
+    qgis:              '🔭 منصة QGIS بيئة العمل',
+    // 📡 المراقبة
+    piezo_monitoring:  '📡 مراقبة الرصد البيزومتري',
+    wqi_monitoring:    '🧪 مؤشرات جودة المياه WQI',
+    // 🔐 الإدارة
+    audit_view:        '🔐 عرض سجلات المراجعة',
 };
+
+// Permission section grouping for display
+const permissionGroups = [
+    { key: 'map',       label: '🗺️ الخريطة',                  keys: ['map_view','map_edit'] },
+    { key: 'analytics', label: '📊 التحليلات',                 keys: ['analytics'] },
+    { key: 'alerts',    label: '🔔 التنبيهات والإنذارات',      keys: ['alert_receive','alert_send'] },
+    { key: 'wells',     label: '💧 إدارة الآبار',              keys: ['wells_read','wells_write'] },
+    { key: 'assets',    label: '⚙️ الأصول والمعدات',           keys: ['assets_view','assets_edit'] },
+    { key: 'library',   label: '📚 المكتبة العلمية',           keys: ['library_view','library_upload','library_delete'] },
+    { key: 'community', label: '👥 مركز المجتمع والخبراء',    keys: ['community_view','community_post','experts_contact'] },
+    { key: 'gis',       label: '🗂️ طبقات GIS / البيانات',    keys: ['gis_read','gis_write','export_shp'] },
+    { key: 'ai',        label: '🤖 الذكاء الاصطناعي',         keys: ['neural_ai'] },
+    { key: 'qgis',      label: '🔭 بيئة QGIS',                keys: ['qgis'] },
+    { key: 'monitoring',label: '📡 المراقبة والرصد',           keys: ['piezo_monitoring','wqi_monitoring'] },
+    { key: 'admin',     label: '🔐 الإدارة والمراجعة',         keys: ['audit_view'] },
+];
 
 // ============================================================
 // SUPERVISION TAB CONFIG
@@ -368,7 +502,7 @@ function renderUserCard(user, cfg) {
                 <button class="admin-action-btn suspend" onclick="suspendUser('${user.id}')">
                     <i class="fa-solid fa-ban"></i> إيقاف إجباري
                 </button>
-                <button class="admin-action-btn impersonate" onclick="startImpersonation('${user.role}')">
+                <button class="admin-action-btn impersonate" onclick="startImpersonation('${user.role}', '${user.sector || ''}')">
                     <i class="fa-solid fa-masks-theater"></i> محاكاة
                 </button>
             ` : ''}
@@ -414,10 +548,26 @@ window.openSectorPermissions = function(sectorId) {
 window.updateSectorPermission = function(sector, perm, value) {
     if (!window.permissionsMatrix[sector]) window.permissionsMatrix[sector] = {};
     window.permissionsMatrix[sector][perm] = value;
+    
+    // Sync the change back to the SECTORS object
+    if (window.SECTORS[sector] && window.SECTORS[sector].permissions) {
+        window.SECTORS[sector].permissions[perm] = value;
+        
+        // Re-render the supervision page to update the chips immediately behind the modal
+        if (window._currentSupPage === sector && typeof window.renderSupervisionPage === 'function') {
+            window.renderSupervisionPage(sector);
+        }
+    }
+    
     logAuditEvent('SECTOR_PERMISSION_CHANGED', sector,
         `${perm} → ${value ? 'ENABLED' : 'DISABLED'} pour ${sector}`,
         sector);
     showToast(`🔧 صلاحية "${permissionLabels[perm]}" للهيئة ${sector}: ${value ? '✅ مفعّلة' : '❌ معطّلة'}`, 'info');
+    
+    // التحديث الفوري للواجهة (Live Preview) في حالة المحاكاة أو الاستخدام المباشر
+    if (typeof window.applyRolePermissions === 'function') {
+        window.applyRolePermissions();
+    }
 };
 
 // ============================================================
@@ -429,55 +579,84 @@ window.renderPermissionsMatrix = function() {
 
     const institutionalCols = ['ANRH', 'ADE', 'DRE', 'ONA'];
     const roleCols          = ['ENGINEER', 'STUDENT', 'FARMER'];
-    const perms = Object.keys(permissionLabels);
+    const allCols           = [...institutionalCols, ...roleCols];
 
     const colHeader = (key, isInst) => {
         const cfg = tabConfig[key] || {};
-        return `<th style="min-width:90px;">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-                <i class="fa-solid ${cfg.icon}" style="color:${cfg.color};font-size:1rem;"></i>
-                <span style="color:${cfg.color};font-weight:700;font-size:0.78rem;">${key}</span>
-                ${isInst ? `<span style="font-size:0.62rem;color:#666;">قطاعي</span>` : `<span style="font-size:0.62rem;color:#666;">عام</span>`}
+        return `<th style="min-width:88px;position:sticky;top:0;z-index:2;background:#0d1520;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 2px;">
+                <i class="fa-solid ${cfg.icon}" style="color:${cfg.color};font-size:1.1rem;"></i>
+                <span style="color:${cfg.color};font-weight:700;font-size:0.76rem;letter-spacing:0.03em;">${key}</span>
+                <span style="font-size:0.58rem;color:#555;background:rgba(255,255,255,0.05);padding:1px 6px;border-radius:4px;">${isInst ? 'قطاعي' : 'عام'}</span>
             </div>
         </th>`;
     };
 
+    // Build rows grouped by section
+    const bodyRows = permissionGroups.map(group => {
+        const groupHeader = `
+        <tr class="perm-group-row">
+            <td colspan="${allCols.length + 1}" style="
+                background: linear-gradient(90deg,rgba(0,212,255,0.10),rgba(0,212,255,0.03),transparent);
+                color:#00d4ff; font-weight:700; font-size:0.78rem;
+                padding: 8px 14px; letter-spacing:0.05em;
+                border-top: 1px solid rgba(0,212,255,0.15);
+                border-bottom: 1px solid rgba(0,212,255,0.08);
+            ">${group.label}</td>
+        </tr>`;
+
+        const permRows = group.keys.map(perm => {
+            if (!permissionLabels[perm]) return '';
+            return `
+            <tr class="perm-data-row" style="transition:background 0.15s;" onmouseover="this.style.background='rgba(0,212,255,0.04)'" onmouseout="this.style.background=''">
+                <td style="text-align:right;font-size:0.8rem;color:#cbd5e1;padding:7px 14px;white-space:nowrap;">${permissionLabels[perm]}</td>
+                ${allCols.map((col, idx) => {
+                    const matrix = window.permissionsMatrix[col] || {};
+                    const val    = matrix[perm];
+                    const isGov  = idx < institutionalCols.length;
+                    // No locked permissions - full control
+                    const isLocked = false;
+                    return `<td class="perm-cell" style="text-align:center;${isGov ? 'background:rgba(0,212,255,0.015);' : ''}">
+                        <label class="perm-toggle${isLocked ? ' locked' : ''}" title="${permissionLabels[perm]} — ${col}">
+                            <input type="checkbox"
+                                ${val ? 'checked' : ''}
+                                ${isLocked ? 'disabled' : ''}
+                                onchange="updatePermission('${col}','${perm}',this.checked)">
+                            <span class="perm-slider"></span>
+                        </label>
+                    </td>`;
+                }).join('')}
+            </tr>`;
+        }).join('');
+
+        return groupHeader + permRows;
+    }).join('');
+
     container.innerHTML = `
-        <table class="perms-table">
+        <table class="perms-table" style="width:100%;border-collapse:collapse;">
             <thead>
-                <tr>
-                    <th style="text-align:right;min-width:170px;">الصلاحية</th>
-                    <th colspan="${institutionalCols.length}" style="background:rgba(0,212,255,0.06);color:#00d4ff;text-align:center;font-size:0.75rem;letter-spacing:0.08em;">🏛 الهيئات الحكومية</th>
-                    <th colspan="${roleCols.length}" style="background:rgba(155,89,182,0.06);color:#9b59b6;text-align:center;font-size:0.75rem;letter-spacing:0.08em;">👤 المستخدمون العامون</th>
+                <tr style="background:#0a1220;">
+                    <th style="text-align:right;min-width:210px;padding:10px 14px;position:sticky;top:0;z-index:3;background:#0a1220;"
+                        rowspan="2">القسم / الصلاحية</th>
+                    <th colspan="${institutionalCols.length}" style="
+                        background:rgba(0,212,255,0.10);color:#00d4ff;
+                        text-align:center;font-size:0.72rem;letter-spacing:0.1em;
+                        padding:7px;border-bottom:2px solid rgba(0,212,255,0.3);
+                        position:sticky;top:0;z-index:3;
+                    ">🏛 الهيئات الحكومية</th>
+                    <th colspan="${roleCols.length}" style="
+                        background:rgba(155,89,182,0.10);color:#c39bd3;
+                        text-align:center;font-size:0.72rem;letter-spacing:0.1em;
+                        padding:7px;border-bottom:2px solid rgba(155,89,182,0.3);
+                        position:sticky;top:0;z-index:3;
+                    ">👤 المستخدمون العامون</th>
                 </tr>
                 <tr>
-                    <th></th>
                     ${institutionalCols.map(k => colHeader(k, true)).join('')}
                     ${roleCols.map(k => colHeader(k, false)).join('')}
                 </tr>
             </thead>
-            <tbody>
-                ${perms.map(perm => {
-                    const allCols = [...institutionalCols, ...roleCols];
-                    return `
-                    <tr>
-                        <td style="text-align:right;font-size:0.82rem;color:#ccc;">${permissionLabels[perm]}</td>
-                        ${allCols.map((col, idx) => {
-                            const matrix = window.permissionsMatrix[col] || {};
-                            const isLocked = col === 'ANRH' && ['wells_read','gis_read','piezo_monitoring'].includes(perm);
-                            return `<td class="perm-cell" style="${idx < institutionalCols.length ? 'background:rgba(0,212,255,0.02);' : ''}">
-                                <label class="perm-toggle ${isLocked ? 'locked' : ''}">
-                                    <input type="checkbox"
-                                        ${matrix[perm] ? 'checked' : ''}
-                                        ${isLocked ? 'disabled' : ''}
-                                        onchange="updatePermission('${col}','${perm}',this.checked)">
-                                    <span class="perm-slider"></span>
-                                </label>
-                            </td>`;
-                        }).join('')}
-                    </tr>`;
-                }).join('')}
-            </tbody>
+            <tbody>${bodyRows}</tbody>
         </table>`;
 };
 
@@ -485,10 +664,26 @@ window.updatePermission = function(col, perm, value) {
     if (!window.permissionsMatrix[col]) window.permissionsMatrix[col] = {};
     window.permissionsMatrix[col][perm] = value;
     const sector = ['ANRH','ADE','DRE','ONA'].includes(col) ? col : null;
+    
+    // Sync the change back to the SECTORS object so the mini-chips in the UI reflect the reality
+    if (sector && window.SECTORS[sector] && window.SECTORS[sector].permissions) {
+        window.SECTORS[sector].permissions[perm] = value;
+        
+        // Re-render the supervision page if it's currently open to update the chips immediately
+        if (window._currentSupPage === sector && typeof window.renderSupervisionPage === 'function') {
+            window.renderSupervisionPage(sector);
+        }
+    }
+    
     logAuditEvent('PERMISSION_CHANGED', col,
         `${permissionLabels[perm]} → ${value ? 'مفعّلة' : 'معطّلة'} للـ ${col}`,
         sector);
     showToast(`🔧 "${permissionLabels[perm]}" لـ ${col}: ${value ? '✅' : '❌'}`, 'info');
+    
+    // التحديث الفوري للواجهة (Live Preview) في حالة المحاكاة أو الاستخدام المباشر
+    if (typeof window.applyRolePermissions === 'function') {
+        window.applyRolePermissions();
+    }
 };
 
 // ============================================================
@@ -692,7 +887,7 @@ function getAuditColor(action) {
 window._impersonationActive = false;
 window._originalUser = null;
 
-window.startImpersonation = function(targetRole) {
+window.startImpersonation = function(targetRole, targetSector) {
     if (window._impersonationActive) {
         showToast('⚠️ وضع المحاكاة نشط مسبقاً.', 'warning'); return;
     }
@@ -702,14 +897,23 @@ window.startImpersonation = function(targetRole) {
     window._originalUser = JSON.parse(JSON.stringify(window.mockData.activeUser));
     window._impersonationActive = true;
     const roleNames = { ADMIN:'Superior', ENGINEER:'Premium', STUDENT:'Academic', FARMER:'Field User' };
+    
+    // Set both Role and Sector for accurate matrix lookup
     window.mockData.activeUser.role = targetRole;
-    window.mockData.activeUser.tier = roleNames[targetRole];
+    if (targetSector) {
+        window.mockData.activeUser.sector = targetSector;
+    } else {
+        delete window.mockData.activeUser.sector;
+    }
+    window.mockData.activeUser.tier = roleNames[targetRole] || targetRole;
+    
     document.getElementById('impersonation-banner').style.display = 'flex';
     document.getElementById('impersonation-banner').querySelector('span').textContent =
-        `👁️ تحاكي الآن دور: ${roleNames[targetRole]} — الشاشة تُظهر ما يراه هذا الدور فعلياً`;
+        `👁️ تحاكي الآن جهة: ${targetSector ? targetSector : (roleNames[targetRole] || targetRole)} — الشاشة تُظهر حقيقة الصلاحيات لهذه الفئة`;
+        
     applyRolePermissions();
     logAuditEvent('IMPERSONATION_START', targetRole,
-        `Admin démarre la simulation comme ${targetRole}`);
+        `Admin started impersonation as ${targetSector || targetRole}`);
     showToast(`👁️ تشاهد الآن واجهة ${roleNames[targetRole]}`, 'info');
     switchView('dashboard');
 };

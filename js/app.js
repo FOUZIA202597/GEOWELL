@@ -897,8 +897,31 @@ function setupNavigation() {
         });
     });
 }
+window.viewHistory = window.viewHistory || [];
 
-function switchView(viewId) {
+window.goBack = function() {
+    if (window.viewHistory.length > 0) {
+        const prevView = window.viewHistory.pop();
+        switchView(prevView, false);
+    }
+};
+
+function switchView(viewId, pushHistory = true) {
+    if (pushHistory) {
+        const currentActive = document.querySelector('.view-section.active');
+        if (currentActive) {
+            const currentId = currentActive.id.replace('view-', '');
+            if (currentId !== viewId && currentId) {
+                window.viewHistory.push(currentId);
+            }
+        }
+    }
+    
+    const backBtn = document.getElementById('global-back-btn');
+    if (backBtn) {
+        backBtn.style.display = window.viewHistory.length > 0 ? 'flex' : 'none';
+    }
+
     console.log("Switching view to:", viewId);
     // 1. Update Sidebar
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));

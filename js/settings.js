@@ -424,6 +424,11 @@ function changeLanguage(lang) {
     settingsCurrentLang = lang;
     document.documentElement.lang = lang;
 
+    // Trigger the new global i18n engine
+    if (typeof window.i18nInit === 'function') {
+        window.i18nInit(lang);
+    }
+
     // RTL Handling
     if (lang === 'ar') {
         document.documentElement.setAttribute('dir', 'rtl');
@@ -437,6 +442,7 @@ function changeLanguage(lang) {
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
+        // Only update if it exists in settings translations, otherwise i18nInit handled it
         if (settingsTranslations[lang] && settingsTranslations[lang][key]) {
             el.innerText = settingsTranslations[lang][key];
         }

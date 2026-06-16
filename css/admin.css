@@ -194,50 +194,187 @@
     border-collapse: collapse;
 }
 .perms-table th, .perms-table td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
 }
 .perms-table th {
-    background: rgba(0,212,255,0.05);
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    background: rgba(13,21,32,0.95);
+    color: #aabbcc;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-bottom: 2px solid rgba(0,212,255,0.2);
 }
-.perms-table td:first-child { text-align: right; color: #ccc; }
-.perms-table tr:hover td { background: rgba(0,212,255,0.03); }
+.perms-table td:first-child { text-align: right; color: #cbd5e1; white-space: nowrap; }
+.perms-table .perm-data-row:hover td { background: rgba(0,212,255,0.04); }
 
-/* ── Toggle Switch ────────────────────────────────────────── */
+/* ── Grouped section header rows ─────────────────────────── */
+.perm-group-row td {
+    background: linear-gradient(90deg, rgba(0,212,255,0.10), rgba(0,212,255,0.03), transparent) !important;
+    color: #00d4ff;
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 8px 14px;
+    letter-spacing: 0.05em;
+    border-top: 1px solid rgba(0,212,255,0.15);
+    border-bottom: 1px solid rgba(0,212,255,0.08);
+}
+.perm-group-row:hover td { background: linear-gradient(90deg, rgba(0,212,255,0.14), rgba(0,212,255,0.05), transparent) !important; }
+
+/* ── Perm cell centering ──────────────────────────────────── */
+.perm-cell {
+    vertical-align: middle;
+    padding: 6px 5px !important;
+}
+
+/* ── Matrix scroll wrapper ────────────────────────────────── */
+.perms-matrix-scroll {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 70vh;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,212,255,0.3) transparent;
+}
+.perms-matrix-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.perms-matrix-scroll::-webkit-scrollbar-track { background: transparent; }
+.perms-matrix-scroll::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.3); border-radius: 3px; }
+
+
+/* ══════════════════════════════════════════════════════════
+   PREMIUM TOGGLE SWITCH — مفاتيح التبديل
+   ══════════════════════════════════════════════════════════ */
 .perm-toggle {
     position: relative;
-    display: inline-block;
-    width: 44px; height: 24px;
+    display: inline-flex;
+    align-items: center;
+    width: 48px;
+    height: 26px;
     cursor: pointer;
+    flex-shrink: 0;
+    /* Ensure it doesn't collapse */
+    min-width: 48px;
+    min-height: 26px;
 }
-.perm-toggle input { opacity: 0; width: 0; height: 0; }
+
+/* Hide native checkbox completely */
+.perm-toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+/* The track */
 .perm-slider {
     position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255,255,255,0.1);
-    border-radius: 24px;
-    transition: 0.3s;
+    inset: 0;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: background 0.28s cubic-bezier(0.4,0,0.2,1),
+                border-color 0.28s ease,
+                box-shadow 0.28s ease;
+    /* No overflow:hidden — needed for knob to show */
 }
+
+/* The knob */
 .perm-slider::before {
     content: '';
     position: absolute;
-    height: 18px; width: 18px;
-    left: 3px; bottom: 3px;
-    background: #fff;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 3px;
+    transform: translateY(-50%);
     border-radius: 50%;
-    transition: 0.3s;
+    background: #8899aa;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1),
+                background 0.28s ease,
+                box-shadow 0.28s ease;
+    will-change: transform;
 }
-.perm-toggle input:checked + .perm-slider { background: var(--accent-primary); }
-.perm-toggle input:checked + .perm-slider::before { transform: translateX(20px); }
-.perm-toggle.locked .perm-slider { background: rgba(231,76,60,0.3); cursor: not-allowed; }
-.perm-toggle.locked input:checked + .perm-slider { background: rgba(0,212,255,0.4); }
+
+/* ── ON state ─────────────────────────────────────── */
+.perm-toggle input:checked + .perm-slider {
+    background: linear-gradient(135deg, #00b8d9, #00d4ff);
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow:
+        0 0 10px rgba(0, 212, 255, 0.35),
+        0 0 20px rgba(0, 212, 255, 0.15),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.perm-toggle input:checked + .perm-slider::before {
+    transform: translateY(-50%) translateX(22px);
+    background: #fff;
+    box-shadow:
+        0 2px 6px rgba(0, 180, 220, 0.5),
+        0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* ── Hover effects ────────────────────────────────── */
+.perm-toggle:hover .perm-slider {
+    border-color: rgba(0, 212, 255, 0.3);
+    background: rgba(255, 255, 255, 0.13);
+}
+.perm-toggle input:checked:hover + .perm-slider {
+    box-shadow:
+        0 0 14px rgba(0, 212, 255, 0.5),
+        0 0 28px rgba(0, 212, 255, 0.2),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+}
+
+/* ── LOCKED state (core permissions that can't be disabled) ── */
+.perm-toggle.locked {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+.perm-toggle.locked .perm-slider {
+    background: rgba(100, 100, 100, 0.15);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.perm-toggle.locked input:checked + .perm-slider {
+    background: linear-gradient(135deg, rgba(0,180,210,0.55), rgba(0,212,255,0.45));
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 8px rgba(0,212,255,0.2);
+}
+.perm-toggle.locked input:checked + .perm-slider::before {
+    transform: translateY(-50%) translateX(22px);
+    background: rgba(255,255,255,0.85);
+}
+
+/* ── Focus ring for accessibility ────────────────── */
+.perm-toggle input:focus-visible + .perm-slider {
+    outline: 2px solid #00d4ff;
+    outline-offset: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MATRIX CELL — خلايا المصفوفة
+   ══════════════════════════════════════════════════════════ */
+.perm-cell {
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 7px 6px !important;
+    /* Ensure cells have proper height */
+    height: 44px;
+}
+
+/* Center the toggle inside the cell */
+.perm-cell label.perm-toggle {
+    margin: 0 auto;
+    display: inline-flex;
+}
+
+
 
 /* ── Audit Log Table ──────────────────────────────────────── */
 .audit-log-table {

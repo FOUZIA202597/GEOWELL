@@ -557,17 +557,49 @@ window.applyRolePermissions = function() {
 
     updateUserUI();
 
-    // Nav visibility
-    document.querySelectorAll('.nav-item[data-role-access]').forEach(item => {
-        const access = item.getAttribute('data-role-access');
-        if (access === 'ALL') { item.style.display = ''; return; }
-        const allowed = access.split(',').map(r => r.trim());
-        const hasAccess = allowed.includes(role) || allowed.includes(sector);
+    // Dynamic Nav visibility based on Matrix Permissions
+    const viewToPermMap = {
+        'map': 'map_view',
+        'analytics': 'analytics',
+        'alerts': 'alert_receive',
+        'wells': 'wells_read',
+        'assets': 'assets_view',
+        'library': 'library_view',
+        'qgis': 'qgis',
+        'gis': 'gis_read',
+        'community': 'community_view',
+        'admin-supervision': 'admin_audit'
+    };
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const view = item.getAttribute('data-view');
+        if (!view) return; // Skip if no data-view
+        
+        let hasAccess = true; // Default to true for views not in map (e.g. dashboard)
+        
+        // Matrix Permission Check
+        if (viewToPermMap[view]) {
+            const requiredPerm = viewToPermMap[view];
+            hasAccess = sectorPerms[requiredPerm] !== false; // Hide only if explicitly false
+        }
+        
+        // Legacy role check as a fallback (mainly for admin-only views like settings)
+        const legacyAccess = item.getAttribute('data-role-access');
+        if (legacyAccess && legacyAccess !== 'ALL') {
+            const allowed = legacyAccess.split(',').map(r => r.trim());
+            if (!allowed.includes(role) && !allowed.includes(sector)) {
+                hasAccess = false;
+            }
+        }
+
         item.style.display = hasAccess ? '' : 'none';
+        
+        // If current active view loses access, switch back to dashboard
         if (!hasAccess) {
-            const view = item.getAttribute('data-view');
             const el = document.getElementById('view-' + view);
-            if (el && el.classList.contains('active') && typeof switchView === 'function') switchView('dashboard');
+            if (el && el.classList.contains('active') && typeof window.switchView === 'function') {
+                window.switchView('dashboard');
+            }
         }
     });
 
